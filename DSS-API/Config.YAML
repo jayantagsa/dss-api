@@ -1,0 +1,17 @@
+apikey: ZXZqQmxNRFFzaFVROjM3RHlTTlI2SmdJRw==
+apiurl: https://sandbox.e-signlive.com/api
+
+# Connection parameters
+connection:
+    apiaaakey: ZXZqQmxNRFFzaFVROjM3RHlTTlI2SmdJRw==
+    apiaaaurl: https://sandbox.e-signlive.com/api
+
+# Protocols
+protocols:
+   - http
+   - https
+
+# Users
+users:
+    tom: passwd
+    bob: passwd
