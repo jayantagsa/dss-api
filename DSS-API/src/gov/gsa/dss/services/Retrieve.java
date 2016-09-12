@@ -18,20 +18,10 @@ public class Retrieve {
 	// 
 	public Response downloaddocuments(@QueryParam ("PackageId") String strPackageId)    {
 
-		try{
+		
 			RetrieveController obj =new RetrieveController();
-			return Response.ok(obj.getZippedDocuments(strPackageId), MediaType.APPLICATION_JSON).build();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			ExceptionHandlerService ehs = new ExceptionHandlerService();
-			
-			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
-			return Response.status(404).type("text/plain")
-	                .entity(ehs.parseException(e)+"").build();
-			
-		}
+					
+		return obj.getZippedDocuments(strPackageId);
 
 	}
 

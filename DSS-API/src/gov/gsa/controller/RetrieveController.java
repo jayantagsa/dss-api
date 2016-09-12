@@ -1,5 +1,8 @@
 package gov.gsa.controller;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import org.apache.commons.codec.binary.Base64;
 
 import com.silanis.esl.sdk.DocumentPackage;
@@ -8,13 +11,14 @@ import com.silanis.esl.sdk.PackageId;
 import com.silanis.esl.sdk.PackageStatus;
 
 import gov.gsa.dss.helper.Authenticator;
+import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.Zipper;
 
 public class RetrieveController {
 
-	public String getZippedDocuments(String strPackageId) throws Exception
+	public Response getZippedDocuments(String strPackageId) 
 	{
-		
+		try{
 			
 			Authenticator auth = new Authenticator();
 			EslClient Client = auth.getAuth();
@@ -26,8 +30,7 @@ public class RetrieveController {
 			
 			System.out.println(DocPackage.getStatus());
 			
-			if(DocPackage.getStatus().equals(PackageStatus.COMPLETED))
-			{
+			
 			System.out.println(DocPackage.getStatus());;
 			//List <Document> Documents= DocPackage.getDocuments();
 			Zipper zipDocs = new Zipper();
@@ -35,11 +38,23 @@ public class RetrieveController {
 				
 				
 			String strJSON="{\"Package\":{\"Name\":\""+DocPackage.getName()+"\", \"Content\": \""+base64ZIP+"\"}}";;
-				
-			return (strJSON);
+			return Response.ok(strJSON, MediaType.APPLICATION_JSON).build();
+
+			//return (strJSON);
+			
 			}
-			else{
-				throw new Exception ("Validation Error: Package you are trying to download is incomplete");
+			catch (Exception e)
+			{
+				e.printStackTrace();
+				ExceptionHandlerService ehs = new ExceptionHandlerService();
+				
+				//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
+				String msg = ehs.parseException(e)+"";
+				;
+				int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
+				return Response.status(code).type("text/plain")
+		                .entity(ehs.parseException(e)+"").build();
+				
 			}
 	}
 	
