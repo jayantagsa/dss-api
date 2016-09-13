@@ -7,6 +7,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.silanis.esl.sdk.DocumentPackage;
 import com.silanis.esl.sdk.EslClient;
+import com.silanis.esl.sdk.EslException;
 import com.silanis.esl.sdk.PackageId;
 import com.silanis.esl.sdk.PackageStatus;
 
@@ -16,7 +17,7 @@ import gov.gsa.dss.helper.Zipper;
 
 public class RetrieveController {
 
-	public Response getZippedDocuments(String strPackageId) 
+	public Response getZippedDocuments(String strPackageId, String strOrgName) 
 	{
 		try{
 			
@@ -27,7 +28,9 @@ public class RetrieveController {
 
 
 			DocumentPackage DocPackage = Client.getPackage(packageId );
-			
+			System.out.println(DocPackage.getAttributes().getContents()+"");
+			if (DocPackage.getAttributes().getContents().get("orgName").toString().equals(strOrgName))
+			{
 			System.out.println(DocPackage.getStatus());
 			
 			
@@ -40,6 +43,13 @@ public class RetrieveController {
 			String strJSON="{\"Package\":{\"Name\":\""+DocPackage.getName()+"\", \"Content\": \""+base64ZIP+"\"}}";;
 			return Response.ok(strJSON, MediaType.APPLICATION_JSON).build();
 
+			}
+			else{
+				ExceptionHandlerService ehs = new ExceptionHandlerService();
+				String msg = ""+ehs.parseValidationErrors("Validation Error: Organization Name not provided or is empty.", 550,"Validation Error." );
+				return Response.status(550).type("text/plain")
+		                .entity(msg+"").build();
+			}
 			//return (strJSON);
 			
 			}

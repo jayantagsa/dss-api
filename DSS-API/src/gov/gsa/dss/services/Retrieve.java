@@ -10,18 +10,18 @@ import javax.ws.rs.core.Response;
 import gov.gsa.controller.RetrieveController;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 
-@Path("/retrieve/downloaddocuments")
+@Path("/retrieve")
 public class Retrieve {
-
+	@Path("downloaddocuments")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	// 
-	public Response downloaddocuments(@QueryParam ("PackageId") String strPackageId)    {
+	public Response downloaddocuments(@QueryParam ("PackageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
 
 		
 			RetrieveController obj =new RetrieveController();
 					
-		return obj.getZippedDocuments(strPackageId);
+		return obj.getZippedDocuments(strPackageId,strOrgName);
 
 	}
 
