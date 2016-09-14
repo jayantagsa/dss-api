@@ -14,6 +14,7 @@ import com.silanis.esl.sdk.PackageStatus;
 import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.Zipper;
+import gov.gsa.dss.model.RetrieveModel;
 
 public class RetrieveController {
 
@@ -28,9 +29,10 @@ public class RetrieveController {
 			PackageId packageId = new PackageId(strPackageId);
 
 
-			DocumentPackage DocPackage = Client.getPackage(packageId );
-			System.out.println(DocPackage.getAttributes().getContents()+"");
-			if (DocPackage.getAttributes().getContents().get("orgName").toString().equals(strOrgName))
+			DocumentPackage DocPackage = Client.getPackage(packageId);
+			System.out.println("pokj");
+			System.out.println(DocPackage.getAttributes().getContents());
+			if (DocPackage.getAttributes().getContents()!=null && DocPackage.getAttributes().getContents().get("orgName").toString().equals(strOrgName))
 			{
 			System.out.println(DocPackage.getStatus());
 			
@@ -40,8 +42,8 @@ public class RetrieveController {
 			Zipper zipDocs = new Zipper();
 			String base64ZIP = Base64.encodeBase64String(zipDocs.getZip(DocPackage, Client));
 				
-				
-			String strJSON="{\"Package\":{\"Name\":\""+DocPackage.getName()+"\", \"Content\": \""+base64ZIP+"\"}}";;
+			RetrieveModel obj = new RetrieveModel();	
+			String strJSON=obj.getJSONString(strPackageId, base64ZIP, DocPackage.getName());
 			return Response.ok(strJSON, MediaType.APPLICATION_JSON).build();
 
 			}
