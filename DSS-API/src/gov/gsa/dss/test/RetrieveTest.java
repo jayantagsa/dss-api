@@ -19,7 +19,7 @@ public class RetrieveTest {
 	 * This is the success path with a valid Package ID with Matching Package name
 	 */
 	@Test
-	public void testSuccessRetrieve() throws InterruptedException{
+	public void testSuccessRetrieveDownloadZippedDocs() throws InterruptedException{
 
 		Client client = ClientBuilder.newClient();
 		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloaddocuments?PackageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=RETA"); //...;
@@ -38,7 +38,7 @@ public class RetrieveTest {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void testFailureWrongPackageRetrieve() throws InterruptedException{
+	public void testFailureWrongPackageRetrieveDownloadZippedDocs() throws InterruptedException{
 
 		Client client = ClientBuilder.newClient();
 		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloaddocuments?PackageId=af5a31d6-9c0d-4367-bd93-&orgName=RETA"); //...;
@@ -56,7 +56,7 @@ public class RetrieveTest {
  * @throws InterruptedException
  */
 	@Test
-	public void testFailureWrongOrg() throws InterruptedException{
+	public void testFailureWrongOrgDownloadZippedDocs() throws InterruptedException{
 
 		Client client = ClientBuilder.newClient();
 		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloaddocuments?PackageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=BETA"); //...;
@@ -75,7 +75,7 @@ public class RetrieveTest {
 	 * this is failure path with a valid PackageID and orgname but the orgName doesn't match the orgname of the package
 	 */
 /*	@Test
-	public void testFailureCorrectPackageWrongOrg() throws InterruptedException{
+	public void testFailureCorrectPackageWrongOrgDownloadZippedDocs() throws InterruptedException{
 
 		Client client = ClientBuilder.newClient();
 		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloaddocuments?PackageId=http://localhost:8080/DSS-API/dss/retrieve/downloaddocuments?PackageId=46562836-566b-454b-90e4-c6e99f3f2314&orgName=BETA"); //...;
