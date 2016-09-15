@@ -1,7 +1,6 @@
 package gov.gsa.dss.test;
 import static org.junit.Assert.*;
 
-import java.util.Map;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -28,7 +27,7 @@ public class RetrieveTest {
 		// response.readEntity(Map.class);
 		assertEquals("Should return status 200", 200, response.getStatus());
 
-
+		response.getEntity();
 		response.close();
 
 	}
@@ -43,10 +42,11 @@ public class RetrieveTest {
 		Client client = ClientBuilder.newClient();
 		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloaddocuments?PackageId=af5a31d6-9c0d-4367-bd93-&orgName=RETA"); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
-
+		
+		
 		// response.readEntity(Map.class);
 		assertEquals("Should return status 404", 404, response.getStatus());
-
+		//String output = (String)
 
 		response.close();
 
@@ -63,7 +63,7 @@ public class RetrieveTest {
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
 
 		// response.readEntity(Map.class);
-		assertEquals("Should return status 550", 550, response.getStatus());
+		assertEquals("Should return status 551", 551, response.getStatus());
 
 
 		response.close();

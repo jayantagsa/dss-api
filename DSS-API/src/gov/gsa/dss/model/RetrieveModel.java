@@ -13,8 +13,8 @@ public class RetrieveModel {
 	public String getJSONString(String strPackageId ,String strBase64Zip,String strDocName)
 	{
 		this.strPackageId =strPackageId;
-		  this.strBase64Zip =strBase64Zip;
-		  this.strDocName = strDocName;
+		this.strBase64Zip =strBase64Zip;
+		this.strDocName = strDocName;
 		return  "{\"Package\":{\"id\":\""+strPackageId+"\"\"Name\":\""+strDocName+"\", \"Content\": \""+strBase64Zip+"\"}}";
 		
 	}

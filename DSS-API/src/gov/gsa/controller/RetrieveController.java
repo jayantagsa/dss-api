@@ -1,5 +1,7 @@
 package gov.gsa.controller;
 
+import java.util.Properties;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -12,6 +14,7 @@ import com.silanis.esl.sdk.PackageId;
 import com.silanis.esl.sdk.PackageStatus;
 
 import gov.gsa.dss.helper.Authenticator;
+import gov.gsa.dss.helper.ErrorMessages;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.Zipper;
 import gov.gsa.dss.model.RetrieveModel;
@@ -20,7 +23,9 @@ public class RetrieveController {
 
 	public Response getZippedDocuments(String strPackageId, String strOrgName) 
 	{
-		System.out.println();
+		//Properties emp = ErrorMessages.getProperties();
+		
+		
 		try{
 			
 			Authenticator auth = new Authenticator();
@@ -30,8 +35,8 @@ public class RetrieveController {
 
 
 			DocumentPackage DocPackage = Client.getPackage(packageId);
-			System.out.println("pokj");
-			System.out.println(DocPackage.getAttributes().getContents());
+			//System.out.println("pokj");
+			//System.out.println(DocPackage.getAttributes().getContents());
 			if (DocPackage.getAttributes().getContents()!=null && DocPackage.getAttributes().getContents().get("orgName").toString().equals(strOrgName))
 			{
 			System.out.println(DocPackage.getStatus());
@@ -49,8 +54,8 @@ public class RetrieveController {
 			}
 			else{
 				ExceptionHandlerService ehs = new ExceptionHandlerService();
-				String msg = ""+ehs.parseValidationErrors("Validation Error: Organization Name not provided or is empty.", 550,"Validation Error." );
-				return Response.status(550).type("text/plain")
+				String msg = ""+ehs.parseValidationErrors(ErrorMessages.getMessage("551"), 551,"Validation Error." );
+				return Response.status(551).type("text/plain")
 		                .entity(msg+"").build();
 			}
 			//return (strJSON);
