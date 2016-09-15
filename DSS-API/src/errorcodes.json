@@ -1,0 +1,19 @@
+{
+    "551": {"type": "Validation Error",
+        "message": "OrgName is incorrect or invalid"
+      }
+    ,
+    "404": {"type": "Resource not found.",
+        "message": " Please check the URL or the Package ID"
+      }
+    ,
+    "400": {
+        "type": "System Error.",
+        "message": "There was a system error. Please contact DSS team."
+      }
+    
+    "401": {
+        "type": "Authorization Error.",
+        "message": "There was a system error. Please contact DSS team."
+      }  
+}

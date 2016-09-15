@@ -11,16 +11,28 @@ import gov.gsa.controller.RetrieveController;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 
 @Path("/retrieve")
+
 public class Retrieve {
+	/**
+	 * Class retrieve
+	 */
+	
+	
 	@Path("downloaddocuments")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	// 
+	/**
+	 * 
+	 * @param strPackageId
+	 * @param strOrgName
+	 * @return Application JSON (Base64 encoded zipped docs+ evidence summary) and Package name
+	 */
 	public Response downloaddocuments(@QueryParam ("PackageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
-System.out.println();
-		
-			RetrieveController obj =new RetrieveController();
-					
+		System.out.println();
+
+		RetrieveController obj =new RetrieveController();
+
 		return obj.getZippedDocuments(strPackageId,strOrgName);
 
 	}

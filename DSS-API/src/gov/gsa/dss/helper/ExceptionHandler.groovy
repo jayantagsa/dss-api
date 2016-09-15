@@ -26,8 +26,8 @@ public class ExceptionHandlerService {
         }
         else {
             exc.printStackTrace();
-            message = exc.getMessage();
-            type = Arrays.toString(exc.getStackTrace());
+            message = exc.getCause();
+            type = ErrorMessages.getMessage("400");
             code =400;
             ResponseBuilder responseBuilder = new ResponseBuilder();
             response = responseBuilder.buildExceptionResponse(message,
