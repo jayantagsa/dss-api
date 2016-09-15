@@ -3,17 +3,14 @@ package gov.gsa.dss.helper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import com.silanis.esl.sdk.Document;
 import com.silanis.esl.sdk.DocumentPackage;
 import com.silanis.esl.sdk.EslClient;
-
-import java.util.zip.DataFormatException;
-import java.util.zip.Deflater;
-import java.util.zip.Inflater;
 public class Zipper {
 	
 	public  byte[] getZip(DocumentPackage docPackage,EslClient esl) throws IOException

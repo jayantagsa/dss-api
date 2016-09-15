@@ -8,7 +8,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import gov.gsa.controller.RetrieveController;
-import gov.gsa.dss.helper.ExceptionHandlerService;
 
 @Path("/retrieve")
 

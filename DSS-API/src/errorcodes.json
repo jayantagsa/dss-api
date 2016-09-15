@@ -10,7 +10,7 @@
     "400": {
         "type": "System Error.",
         "message": "There was a system error. Please contact DSS team."
-      }
+      },
     
     "401": {
         "type": "Authorization Error.",

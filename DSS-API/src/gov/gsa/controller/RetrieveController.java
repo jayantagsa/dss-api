@@ -1,7 +1,5 @@
 package gov.gsa.controller;
 
-import java.util.Properties;
-
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -9,9 +7,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.silanis.esl.sdk.DocumentPackage;
 import com.silanis.esl.sdk.EslClient;
-import com.silanis.esl.sdk.EslException;
 import com.silanis.esl.sdk.PackageId;
-import com.silanis.esl.sdk.PackageStatus;
 
 import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ErrorMessages;
