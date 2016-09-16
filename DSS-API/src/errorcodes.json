@@ -7,7 +7,7 @@
         "message": " Please check the URL or the Package ID"
       }
     ,
-    "400": {
+    "500": {
         "type": "System Error.",
         "message": "There was a system error. Please contact DSS team."
       },

@@ -15,7 +15,7 @@ public class RetrieveModel {
 		this.strPackageId =strPackageId;
 		this.strBase64Zip =strBase64Zip;
 		this.strDocName = strDocName;
-		return  "{\"Package\":{\"id\":\""+strPackageId+"\"\"Name\":\""+strDocName+"\", \"Content\": \""+strBase64Zip+"\"}}";
+		return  "{\"Package\":{\"id\":\""+strPackageId+"\",\"Name\":\""+strDocName+"\", \"Content\": \""+strBase64Zip+"\"}}";
 		
 	}
 	
