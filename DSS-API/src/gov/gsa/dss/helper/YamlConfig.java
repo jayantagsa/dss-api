@@ -17,6 +17,8 @@ public class YamlConfig {
 	
 	private  static String key;
 	private  static String url;
+	private static String jmsBrokerUrl;
+	private static String dssSupportEmail;
     public   YamlConfig () throws NamingException, FileNotFoundException {
         
   
@@ -48,12 +50,9 @@ public class YamlConfig {
         	key= yamlAsString.get("apikey");
         	url= yamlAsString.get("apiurl");
         	
+        	jmsBrokerUrl= yamlAsString.get("jmsBrokerUrl");
+        	dssSupportEmail=yamlAsString.get("dssSupportEmail");
        
-        
-        
-        
-        
-        
     }
 	public String getKey() {
 		// TODO Auto-generated method stub
@@ -66,5 +65,16 @@ public class YamlConfig {
 			{
 	        	return url;
 	        }	
-	}
+		}
+		
+		public String getJmsBrokerUrl() {
+			// TODO Auto-generated method stub
+		
+	        	return jmsBrokerUrl;
+	        }
+		public String getDssSupportEmail() {
+			// TODO Auto-generated method stub
+		
+	        	return dssSupportEmail;
+	        }
 }

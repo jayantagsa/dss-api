@@ -15,3 +15,9 @@ protocols:
 users:
     tom: passwd
     bob: passwd
+
+#JMS Active MQ Queue
+jmsBrokerUrl: tcp://52.205.146.11:61616
+
+#DSS Support email
+dssSupportEmail: dsstest@gsa.gov
