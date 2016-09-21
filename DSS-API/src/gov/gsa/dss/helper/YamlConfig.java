@@ -17,6 +17,8 @@ public class YamlConfig {
 	
 	private  static String key;
 	private  static String url;
+	private  static String strprop;
+	private static Map<String, String> strMap ;
     public   YamlConfig () throws NamingException, FileNotFoundException {
         
   
@@ -43,7 +45,7 @@ public class YamlConfig {
         	
         	@SuppressWarnings("unchecked")
 			Map <String, String> yamlAsString = (Map <String,String>) yaml.load(ios);
-
+        	strMap= yamlAsString;
         	
         	key= yamlAsString.get("apikey");
         	url= yamlAsString.get("apiurl");
@@ -55,6 +57,10 @@ public class YamlConfig {
         
         
     }
+    
+    
+    public String getProp(String prop)
+    {return strMap.get(prop);}
 	public String getKey() {
 		// TODO Auto-generated method stub
 	

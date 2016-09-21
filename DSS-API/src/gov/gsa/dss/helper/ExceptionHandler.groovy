@@ -1,6 +1,10 @@
 package gov.gsa.dss.helper
 
+import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
+
 import com.silanis.esl.sdk.internal.EslServerException
+
+import gov.gsa.dss.helper.staic.ErrorMessages;
 
 /**
  * Created by Sudhangi on 7/21/2016.
@@ -13,48 +17,63 @@ import com.silanis.esl.sdk.internal.EslServerException
  * 3.) Send it to ResponseBuilder to create a readable Map
  */
 public class ExceptionHandlerService {
-    String message;
-    int code;
-    String type;
-    def response;
+	String message;
+	int code;
+	String type;
+	def response;
 
-    /*This is to parse a generic Java exception*/
-    def parseException (Exception exc) {
+	/*This is to parse a generic Java exception*/
+	def parseException (Exception exc) {
 
-        if (exc instanceof EslServerException) {
-            response = parseEslServerException(exc);
-        }
-        else {
-            exc.printStackTrace();
-            message = exc.getCause();
-            type = ErrorMessages.getMessage("400");
-            code =400;
-            ResponseBuilder responseBuilder = new ResponseBuilder();
-            response = responseBuilder.buildExceptionResponse(message,
-                    code,
-                    type);
-        }
-        return response;
-    }
+		if (exc instanceof EslServerException) {
+			response = parseEslServerException(exc);
+		}
+		else if(exc instanceof CmisContentAlreadyExistsException)
+		{
+			
+			println exc.getMessage();
+			//+"...............";
+			//exc.printStackTrace();
+			message = exc.getMessage();;
+			type = ErrorMessages.getType("552");
+			code =552;
+			ResponseBuilder responseBuilder = new ResponseBuilder();
+			response = responseBuilder.buildExceptionResponse(message,
+					code,
+					type);
+		}
+		else
+		{
+			exc.printStackTrace();
+			message = exc.getMessage();
+			type = ErrorMessages.getType("400");
+			code =400;
+			ResponseBuilder responseBuilder = new ResponseBuilder();
+			response = responseBuilder.buildExceptionResponse(message,
+					code,
+					type);
+		}
+		return response;
+	}
 
-    /*This is to parse a ESL Server Exception*/
-    def parseEslServerException (EslServerException eslExc) {
-        eslExc.printStackTrace();
-        message = eslExc.getServerError().getMessage();
-        code = eslExc.getServerError().getCode();
-        type = eslExc.getServerError().getName();
-        ResponseBuilder responseBuilder = new ResponseBuilder();
-        response = responseBuilder.buildExceptionResponse(message,
-                                                code,
-                                                type);
-    }
+	/*This is to parse a ESL Server Exception*/
+	def parseEslServerException (EslServerException eslExc) {
+		eslExc.printStackTrace();
+		message = eslExc.getServerError().getMessage();
+		code = eslExc.getServerError().getCode();
+		type = eslExc.getServerError().getName();
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		response = responseBuilder.buildExceptionResponse(message,
+				code,
+				type);
+	}
 
-    /*This is to create a response for validation errors*/
-    def parseValidationErrors (String message, int code, String type) {
-        ResponseBuilder responseBuilder = new ResponseBuilder();
-        response = responseBuilder.buildExceptionResponse(message,
-                code,
-                type);
-    }
+	/*This is to create a response for validation errors*/
+	def parseValidationErrors (String message, int code, String type) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		response = responseBuilder.buildExceptionResponse(message,
+				code,
+				type);
+	}
 }
 

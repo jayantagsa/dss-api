@@ -29,7 +29,7 @@ public class Zipper {
 			zos.write(esl.downloadDocument(docPackage.getId(), doc.getId()+""));
 			zos.closeEntry();
 		}
-		ZipEntry entry = new ZipEntry("Evidence.pdf");
+		ZipEntry entry = new ZipEntry("Evidence Summary.pdf");
 		
 		entry.setSize(esl.downloadEvidenceSummary(docPackage.getId()).length);
 		zos.putNextEntry(entry);
@@ -38,6 +38,7 @@ public class Zipper {
 		zos.close();
 		return baos.toByteArray();
 	}
+	
 	public  byte[] getUnZip(byte[] data) throws IOException, DataFormatException 
 	
 	{

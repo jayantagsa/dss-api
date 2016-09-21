@@ -7,13 +7,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.client.ClientConfig;
 
 import gov.gsa.controller.AlfrescoController;
-import gov.gsa.controller.RetrieveController;
 
 
 @Path("/alfresco")
@@ -22,7 +23,8 @@ public class IacpPackageComplete {
 	/**
 	 * Class retrieve
 	 */
-	
+    @Context
+    UriInfo uriInfo;
 	
 	@Path("zipFileUpload")
 	@GET
@@ -34,10 +36,12 @@ public class IacpPackageComplete {
 	 * @param strOrgName
 	 * @return Application JSON (Base64 encoded zipped docs+ evidence summary) and Package name
 	 */
-	public Response downloaddocuments(@QueryParam ("PackageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
+	public Response downloaddocuments(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
+		System.out.println(uriInfo.getBaseUri());
+		
 		AlfrescoController obj =new AlfrescoController();
 
-		return obj.uploadPackagetoEDMS(strPackageId, strOrgName);
+		return obj.uploadPackagetoEDMS(strPackageId, strOrgName, uriInfo.getBaseUri()+"");
 		
 
 	}

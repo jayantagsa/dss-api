@@ -1,4 +1,4 @@
-package gov.gsa.dss.helper;
+package gov.gsa.dss.helper.staic;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -24,13 +24,13 @@ public class ErrorMessages
       StringBuilder out = new StringBuilder();
       String line;
       while ((line = reader.readLine()) != null) {
-    	  System.out.println(line);
+    	  //System.out.println(line);
           out.append(line);
           //break;
           
       }
       props = out.toString();
-      System.out.println("ssGJASJDJASDJGH"+out.toString()+"");   //Prints the string content read from input stream
+      //System.out.println("ssGJASJDJASDJGH"+out.toString()+"");   //Prints the string content read from input stream
       reader.close();
       //props = util.getPropertiesFromClasspath("errorcodes.properties");
     }
@@ -61,9 +61,15 @@ public class ErrorMessages
  
 
  
-  public static String getType()
+  public static String getType(String key) throws JSONException
   {
-    return "";
+	  
+	  JSONObject obj = new JSONObject(props);
+	  //System.out.println(obj.getJSONObject("errors"));
+	  ;
+	  
+    return obj.getJSONObject(key).getString("type");
+    //return "";
   }
  
   /**

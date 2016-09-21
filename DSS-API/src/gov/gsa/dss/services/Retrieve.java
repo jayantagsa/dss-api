@@ -17,7 +17,7 @@ public class Retrieve {
 	 */
 	
 	
-	@Path("downloaddocuments")
+	@Path("downloadDocuments")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	// 
@@ -27,7 +27,7 @@ public class Retrieve {
 	 * @param strOrgName
 	 * @return Application JSON (Base64 encoded zipped docs+ evidence summary) and Package name
 	 */
-	public Response downloaddocuments(@QueryParam ("PackageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
+	public Response downloaddocuments(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
 		System.out.println();
 
 		RetrieveController obj =new RetrieveController();

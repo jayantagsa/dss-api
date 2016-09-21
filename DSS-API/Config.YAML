@@ -1,6 +1,9 @@
 apikey: ZXZqQmxNRFFzaFVROjM3RHlTTlI2SmdJRw==
 apiurl: https://sandbox.e-signlive.com/api
-
+edmsURL: https://edms.acuitys.com/alfresco/api/-default-/public/cmis/versions/1.1/atom
+edmsuser: dssserviceaccnt
+edmspwd: ACPedms!23
+edmspath: /Sites/agency-concurrence-process/documentLibrary/Signed/
 # Connection parameters
 connection:
     apiaaakey: ZXZqQmxNRFFzaFVROjM3RHlTTlI2SmdJRw==

@@ -10,8 +10,10 @@ import java.util.Map;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.apache.chemistry.opencmis.client.api.Document;
 import org.apache.chemistry.opencmis.client.api.Folder;
@@ -27,65 +29,115 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import gov.gsa.dss.helper.ExceptionHandlerService;
+import gov.gsa.dss.helper.YamlConfig;
+import gov.gsa.dss.helper.staic.ErrorMessages;
 
 public class AlfrescoController {
-	public Response uploadPackagetoEDMS(String strPackageId, String strOrgName)   
+	protected static String fileName="";
+	protected static String strbaseURL="";
+	protected static byte [] base64File;
+	protected static String strOrgName;
+	protected static String strPackageID;
+	protected static int status;
+	//@Context
+    //UriInfo uriInfo;
+	public Response uploadPackagetoEDMS(String PackageId, String OrgName, String baseURL)    
 	{
+		
+		strbaseURL =baseURL;
+		strOrgName=OrgName;
+		strPackageID=PackageId;
 		try{
+			YamlConfig obj = new YamlConfig();
 			Map<String, String> sessionParameters = new HashMap<String, String>();
 
-			sessionParameters.put(SessionParameter.USER, "dssserviceaccnt");
-			sessionParameters.put(SessionParameter.PASSWORD, "ACPedms!23");
-			sessionParameters.put(SessionParameter.ATOMPUB_URL, "https://edms.acuitys.com/alfresco/api/-default-/public/cmis/versions/1.1/atom");
+			sessionParameters.put(SessionParameter.USER, obj.getProp("edmsuser"));
+			sessionParameters.put(SessionParameter.PASSWORD, obj.getProp("edmspwd"));
+			sessionParameters.put(SessionParameter.ATOMPUB_URL,obj.getProp("edmsURL") );
 			sessionParameters.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
 			SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
 			Session lSession = sessionFactory.getRepositories(sessionParameters).get(0).createSession();
 
 			Map<String, Object> lProperties = new HashMap<String, Object>();
-
-			Folder fol = (Folder) lSession.getObjectByPath("/Sites/agency-concurrence-process/documentLibrary/Signed/");
-			String name = "testdocument.zip";
+			ZippedPackage();
+			Folder fol = (Folder) lSession.getObjectByPath(obj.getProp("edmspath"));
+			String name = fileName;
+			System.out.println(fileName);
 			lProperties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
 			lProperties.put(PropertyIds.NAME, name);
-			byte[] content = getZippedPackage();
+			byte[] content = base64File;
 			InputStream stream = new ByteArrayInputStream(content);
 			ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
 			Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
 			System.out.println("Document created: " + newContent1.getId());
-			return Response.status(551).type("text/plain")
-					.entity("").build();
+			return Response.status(200).type(MediaType.TEXT_PLAIN)
+					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
 		}
 
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
-
+			
 			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
 			String msg = ehs.parseException(e)+"";
 			;
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
-			return Response.status(code).type("text/plain")
-					.entity(ehs.parseException(e)+"").build();
+			try {
+				if(status !=200 && ErrorMessages.getMessage(status+"")!=null)
+				{
+					//ExceptionHandlerService ehs = new ExceptionHandlerService();
+					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseValidationErrors(ErrorMessages.getMessage(""+status), 551,ErrorMessages.getType(""+status));
+					JSONObject json = new JSONObject(parseValidationErrors);
+					
+					
+					return Response.status(status).type(MediaType.TEXT_PLAIN).entity(json+"").build();
+				}
+				else{
+					
+					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
+					JSONObject json = new JSONObject(parseValidationErrors);
+				return Response.status(code).type(MediaType.TEXT_PLAIN)
+						.entity(json+"").build();
+				}
+			} catch (JSONException e1) {
+				
+				e1.printStackTrace();
+				Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e1);
+				JSONObject json = new JSONObject(parseValidationErrors);
+			return Response.status(code).type(MediaType.TEXT_PLAIN)
+					.entity(json+"").build();
+			}
 
 		}
 	}
+	
 
-
-	protected static byte[] getZippedPackage() throws Exception
+	protected static void ZippedPackage() throws Exception
 	{
+		String target =strbaseURL+"retrieve/downloadDocuments?packageId="+strPackageID+"&orgName="+strOrgName;
+	System.out.println(target);
 		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloaddocuments?PackageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=RETA"); //...;
+		WebTarget ret =client.target(target); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
+		status=response.getStatus();
+		if (status ==200){
 		String output = response.readEntity(String.class);
+		System.out.println(output);
 		JSONObject obj = new JSONObject(output);
 		String base64ZIP = obj.getJSONObject("Package").getString("Content");
-
+		fileName =obj.getJSONObject("Package").getString("Name")+"_"+obj.getJSONObject("Package").getString("id")+".zip";
 		//String base64ZIPevidence = obj.getJSONObject("Package").getString("Evidence");
 
-		byte[] decoded = Base64.getDecoder().decode(base64ZIP);
+		base64File = Base64.getDecoder().decode(base64ZIP);
+		}
+		else{
+			ErrorMessages.getMessage(status+"");
+			 
+			throw new Exception(ErrorMessages.getMessage(status+""));
+		}
 
-		return decoded;
+		//return decoded;
 	}
 
 }

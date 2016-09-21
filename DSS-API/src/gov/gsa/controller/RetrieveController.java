@@ -1,75 +1,91 @@
 package gov.gsa.controller;
 
+import java.util.Map;
+
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.codec.binary.Base64;
+import org.json.JSONObject;
 
 import com.silanis.esl.sdk.DocumentPackage;
 import com.silanis.esl.sdk.EslClient;
 import com.silanis.esl.sdk.PackageId;
 
 import gov.gsa.dss.helper.Authenticator;
-import gov.gsa.dss.helper.ErrorMessages;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.Zipper;
+import gov.gsa.dss.helper.staic.ErrorMessages;
+import gov.gsa.dss.helper.staic.OrgCodes;
 import gov.gsa.dss.model.RetrieveModel;
 
 public class RetrieveController {
 
 	public Response getZippedDocuments(String strPackageId, String strOrgName) 
 	{
-		//Properties emp = ErrorMessages.getProperties();
-		
-		
 		try{
+			OrgCodes.getOrg(strOrgName);
 			
+			if (strPackageId!=null && strOrgName!=null && OrgCodes.getOrg(strOrgName)!=null)
+			{
 			Authenticator auth = new Authenticator();
 			EslClient Client = auth.getAuth();
 
 			PackageId packageId = new PackageId(strPackageId);
-
-
+			System.out.println(1);
 			DocumentPackage DocPackage = Client.getPackage(packageId);
-			//System.out.println("pokj");
-			//System.out.println(DocPackage.getAttributes().getContents());
-			if (DocPackage.getAttributes().getContents()!=null && DocPackage.getAttributes().getContents().get("orgName").toString().equals(strOrgName))
+			
+			System.out.println(2);
+			//Check for valid orgnames
+			
+			if (DocPackage.getAttributes().getContents().get("orgName")!=null && DocPackage.getAttributes().getContents().get("orgName").toString().equals(strOrgName))
 			{
-			System.out.println(DocPackage.getStatus());
-			
-			
-			System.out.println(DocPackage.getStatus());;
-			//List <Document> Documents= DocPackage.getDocuments();
-			Zipper zipDocs = new Zipper();
-			String base64ZIP = Base64.encodeBase64String(zipDocs.getZip(DocPackage, Client));
+				Zipper zipDocs = new Zipper();
+				String base64ZIP = Base64.encodeBase64String(zipDocs.getZip(DocPackage, Client));	
+				RetrieveModel obj = new RetrieveModel();	
+				String strJSON=obj.getJSONString(strPackageId, base64ZIP, DocPackage.getName());
+				return Response.ok(strJSON, MediaType.TEXT_PLAIN).build();
+			}
+			else{
+				System.out.println(23);
+				ExceptionHandlerService ehs = new ExceptionHandlerService();
+				Map<String, String> parseValidationErrors = (Map<String, String>) ehs.parseValidationErrors(ErrorMessages.getMessage("551"), 551,ErrorMessages.getType("551") );
 				
-			RetrieveModel obj = new RetrieveModel();	
-			String strJSON=obj.getJSONString(strPackageId, base64ZIP, DocPackage.getName());
-			return Response.ok(strJSON, MediaType.APPLICATION_JSON).build();
+				JSONObject json = new JSONObject(parseValidationErrors);
 
+				String msg = ""+ehs.parseValidationErrors(ErrorMessages.getMessage("551"), 551,ErrorMessages.getType("551") );
+				System.out.println(msg+"\t"+json.toString());
+				
+				return Response.status(551).type(MediaType.TEXT_PLAIN).entity(json+"").build();
+			}
 			}
 			else{
 				ExceptionHandlerService ehs = new ExceptionHandlerService();
-				String msg = ""+ehs.parseValidationErrors(ErrorMessages.getMessage("551"), 551,"Validation Error." );
-				return Response.status(551).type("text/plain")
-		                .entity(msg+"").build();
-			}
-			//return (strJSON);
-			
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				ExceptionHandlerService ehs = new ExceptionHandlerService();
+				Map<String, String> parseValidationErrors = (Map<String, String>) ehs.parseValidationErrors(ErrorMessages.getMessage("553"), 551,ErrorMessages.getType("553") );
 				
-				//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
-				String msg = ehs.parseException(e)+"";
-				;
-				int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
-				return Response.status(code).type("text/plain")
-		                .entity(ehs.parseException(e)+"").build();
+				JSONObject json = new JSONObject(parseValidationErrors);
+				
+				
+				return Response.status(551).type(MediaType.TEXT_PLAIN).entity(json+"").build();
 				
 			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			ExceptionHandlerService ehs = new ExceptionHandlerService();
+			@SuppressWarnings("unchecked")
+			Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
+			JSONObject json = new JSONObject(parseValidationErrors);
+
+			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
+			String msg = ehs.parseException(e)+"";
+			;
+			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
+			return Response.status(code).type(MediaType.TEXT_PLAIN)
+					.entity(json+"").build();
+
+		}
 	}
-	
+
 }
