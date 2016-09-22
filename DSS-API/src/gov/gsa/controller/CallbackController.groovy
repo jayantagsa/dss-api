@@ -11,7 +11,8 @@ import org.apache.commons.lang3.StringUtils
 import com.silanis.esl.sdk.EslClient;
 import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.EmailContent;
-import gov.gsa.dss.helper.ExceptionHandlerService;;
+import gov.gsa.dss.helper.ExceptionHandlerService
+import gov.gsa.dss.services.RetaCallbackHandler;;;
 
 class CallbackController {
 
@@ -23,6 +24,7 @@ class CallbackController {
 			Authenticator auth = new Authenticator();
 			EslClient dssEslClient = auth.getAuth();
 			EmailContent emailContent = new EmailContent();
+			RetaCallbackHandler retaCallbackHandler = new RetaCallbackHandler();
 
 			def eventOccurred = mappedData.getAt("name");
 			println "Step 2";
@@ -51,7 +53,7 @@ class CallbackController {
 					println "RETA event: $eventOccurred"
 					println "Package Name: $packageName"
 					println "Package Id: $packageIdString"
-				//retaCallbackHandler.retaPublishToQueue(eventOccurred, packageIdString, packageName, orgName, documentPackage);
+				retaCallbackHandler.retaPublishToQueue(eventOccurred, packageIdString, packageName, orgName, documentPackage);
 				/*This genericCallbackHandler will not be used for RETA case.*/
 				/*genericCallbackHandler.handleCallback(sEvent)*/
 					break
