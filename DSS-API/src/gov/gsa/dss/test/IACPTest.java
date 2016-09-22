@@ -10,7 +10,7 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-public class RetrieveTest {
+public class IACPTest {
 	
 	/**
 	 * 
@@ -22,7 +22,7 @@ public class RetrieveTest {
 
 		
 		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloadDocuments?packageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=RETA"); //...;
+		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/alfresco/zipFileUpload?packageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=RETA"); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
 
 		// response.readEntity(Map.class);
@@ -41,7 +41,7 @@ public class RetrieveTest {
 	public void testFailureWrongPackageRetrieveDownloadZippedDocs() throws InterruptedException{
 
 		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloadDocuments?packageId=af5a31d6-9c0d-4367-bd93-&orgName=RETA"); //...;
+		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/alfresco/zipFileUpload?packageId=af5a31d6-9c0d-4367-bd93-&orgName=RETA"); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
 		
 		
@@ -60,7 +60,7 @@ public class RetrieveTest {
 	public void testFailureWrongOrgDownloadZippedDocs() throws InterruptedException{
 
 		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloadDocuments?packageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=BETA"); //...;
+		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/alfresco/zipFileUpload?packageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=BETA"); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
 
 		// response.readEntity(Map.class);

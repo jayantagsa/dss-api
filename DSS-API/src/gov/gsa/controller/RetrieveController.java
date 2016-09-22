@@ -44,7 +44,7 @@ public class RetrieveController {
 				String base64ZIP = Base64.encodeBase64String(zipDocs.getZip(DocPackage, Client));	
 				RetrieveModel obj = new RetrieveModel();	
 				String strJSON=obj.getJSONString(strPackageId, base64ZIP, DocPackage.getName());
-				return Response.ok(strJSON, MediaType.TEXT_PLAIN).build();
+				return Response.ok(strJSON, MediaType.APPLICATION_JSON).build();
 			}
 			else{
 				System.out.println(23);
@@ -56,7 +56,7 @@ public class RetrieveController {
 				String msg = ""+ehs.parseValidationErrors(ErrorMessages.getMessage("551"), 551,ErrorMessages.getType("551") );
 				System.out.println(msg+"\t"+json.toString());
 				
-				return Response.status(551).type(MediaType.TEXT_PLAIN).entity(json+"").build();
+				return Response.status(551).type(MediaType.APPLICATION_JSON).entity(json+"").build();
 			}
 			}
 			else{
@@ -66,7 +66,7 @@ public class RetrieveController {
 				JSONObject json = new JSONObject(parseValidationErrors);
 				
 				
-				return Response.status(551).type(MediaType.TEXT_PLAIN).entity(json+"").build();
+				return Response.status(551).type(MediaType.APPLICATION_JSON).entity(json+"").build();
 				
 			}
 		}
@@ -82,7 +82,7 @@ public class RetrieveController {
 			String msg = ehs.parseException(e)+"";
 			;
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
-			return Response.status(code).type(MediaType.TEXT_PLAIN)
+			return Response.status(code).type(MediaType.APPLICATION_JSON)
 					.entity(json+"").build();
 
 		}

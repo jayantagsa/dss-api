@@ -32,7 +32,7 @@ import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.YamlConfig;
 import gov.gsa.dss.helper.staic.ErrorMessages;
 
-public class AlfrescoController {
+public class IACPPackageController {
 	protected static String fileName="";
 	protected static String strbaseURL="";
 	protected static byte [] base64File;
@@ -70,7 +70,7 @@ public class AlfrescoController {
 			ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
 			Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
 			System.out.println("Document created: " + newContent1.getId());
-			return Response.status(200).type(MediaType.TEXT_PLAIN)
+			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
 		}
 
@@ -91,13 +91,13 @@ public class AlfrescoController {
 					JSONObject json = new JSONObject(parseValidationErrors);
 					
 					
-					return Response.status(status).type(MediaType.TEXT_PLAIN).entity(json+"").build();
+					return Response.status(status).type(MediaType.APPLICATION_JSON).entity(json+"").build();
 				}
 				else{
 					
 					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
 					JSONObject json = new JSONObject(parseValidationErrors);
-				return Response.status(code).type(MediaType.TEXT_PLAIN)
+				return Response.status(code).type(MediaType.APPLICATION_JSON)
 						.entity(json+"").build();
 				}
 			} catch (JSONException e1) {
@@ -105,7 +105,7 @@ public class AlfrescoController {
 				e1.printStackTrace();
 				Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e1);
 				JSONObject json = new JSONObject(parseValidationErrors);
-			return Response.status(code).type(MediaType.TEXT_PLAIN)
+			return Response.status(code).type(MediaType.APPLICATION_JSON)
 					.entity(json+"").build();
 			}
 

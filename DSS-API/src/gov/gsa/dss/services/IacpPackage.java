@@ -14,12 +14,14 @@ import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.client.ClientConfig;
 
-import gov.gsa.controller.AlfrescoController;
+import gov.gsa.controller.IACPPackageController;
+
+
 
 
 @Path("/alfresco")
 
-public class IacpPackageComplete {
+public class IacpPackage {
 	/**
 	 * Class retrieve
 	 */
@@ -39,7 +41,7 @@ public class IacpPackageComplete {
 	public Response downloaddocuments(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
 		System.out.println(uriInfo.getBaseUri());
 		
-		AlfrescoController obj =new AlfrescoController();
+		IACPPackageController obj =new IACPPackageController();
 
 		return obj.uploadPackagetoEDMS(strPackageId, strOrgName, uriInfo.getBaseUri()+"");
 		
