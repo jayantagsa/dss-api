@@ -28,8 +28,14 @@ import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.silanis.esl.sdk.DocumentPackage;
+import com.silanis.esl.sdk.EslClient;
+import com.silanis.esl.sdk.PackageId;
+
+import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.YamlConfig;
+import gov.gsa.dss.helper.Zipper;
 import gov.gsa.dss.helper.staic.ErrorMessages;
 
 public class IACPPackageController {
@@ -73,7 +79,7 @@ public class IACPPackageController {
 			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
 		}
-
+ 
 		catch (Exception e)
 		{
 			e.printStackTrace();
@@ -83,31 +89,15 @@ public class IACPPackageController {
 			String msg = ehs.parseException(e)+"";
 			;
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
-			try {
-				if(status !=200 && ErrorMessages.getMessage(status+"")!=null)
-				{
-					//ExceptionHandlerService ehs = new ExceptionHandlerService();
-					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseValidationErrors(ErrorMessages.getMessage(""+status), 551,ErrorMessages.getType(""+status));
-					JSONObject json = new JSONObject(parseValidationErrors);
-					
-					
-					return Response.status(status).type(MediaType.APPLICATION_JSON).entity(json+"").build();
-				}
-				else{
+			
+				
 					
 					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
 					JSONObject json = new JSONObject(parseValidationErrors);
 				return Response.status(code).type(MediaType.APPLICATION_JSON)
 						.entity(json+"").build();
-				}
-			} catch (JSONException e1) {
 				
-				e1.printStackTrace();
-				Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e1);
-				JSONObject json = new JSONObject(parseValidationErrors);
-			return Response.status(code).type(MediaType.APPLICATION_JSON)
-					.entity(json+"").build();
-			}
+			
 
 		}
 	}
@@ -115,27 +105,29 @@ public class IACPPackageController {
 
 	protected static void ZippedPackage() throws Exception
 	{
-		String target =strbaseURL+"retrieve/downloadDocuments?packageId="+strPackageID+"&orgName="+strOrgName;
-	System.out.println(target);
-		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target(target); //...;
-		Response response = ret.request(MediaType.APPLICATION_JSON).get();
-		status=response.getStatus();
-		if (status ==200){
-		String output = response.readEntity(String.class);
-		System.out.println(output);
-		JSONObject obj = new JSONObject(output);
-		String base64ZIP = obj.getJSONObject("Package").getString("Content");
-		fileName =obj.getJSONObject("Package").getString("Name")+"_"+obj.getJSONObject("Package").getString("id")+".zip";
+		Authenticator auth = new Authenticator();
+		EslClient Client = auth.getAuth();
+		PackageId packageId = new PackageId(strPackageID);
+		//System.out.println(1);
+		DocumentPackage DocPackage = Client.getPackage(packageId);
+		Zipper zipDocs = new Zipper();
+		
+		//String target =strbaseURL+"retrieve/downloadDocuments?packageId="+strPackageID+"&orgName="+strOrgName;
+		//System.out.println(target);
+		//Client client = ClientBuilder.newClient();
+		//WebTarget ret =client.target(target); //...;
+		//Response response = ret.request(MediaType.APPLICATION_JSON).get();
+		//status=response.getStatus();
+		
+		//String output = response.readEntity(String.class);
+		//System.out.println(output);
+		//JSONObject obj = new JSONObject(output);
+		//String base64ZIP = obj.getJSONObject("Package").getString("Content");
+		fileName =DocPackage.getName()+"_"+strPackageID+".zip";
 		//String base64ZIPevidence = obj.getJSONObject("Package").getString("Evidence");
 
-		base64File = Base64.getDecoder().decode(base64ZIP);
-		}
-		else{
-			ErrorMessages.getMessage(status+"");
-			 
-			throw new Exception(ErrorMessages.getMessage(status+""));
-		}
+		base64File = zipDocs.getZip(DocPackage, Client);
+		
 
 		//return decoded;
 	}

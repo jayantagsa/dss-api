@@ -19,12 +19,10 @@ import gov.gsa.controller.IACPPackageController;
 
 
 
-@Path("/alfresco")
+@Path("/edms")
 
 public class IacpPackage {
-	/**
-	 * Class retrieve
-	 */
+	
     @Context
     UriInfo uriInfo;
 	
@@ -38,7 +36,7 @@ public class IacpPackage {
 	 * @param strOrgName
 	 * @return Application JSON (Base64 encoded zipped docs+ evidence summary) and Package name
 	 */
-	public Response downloaddocuments(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
+	public Response uploadEDMS(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
 		System.out.println(uriInfo.getBaseUri());
 		
 		IACPPackageController obj =new IACPPackageController();
