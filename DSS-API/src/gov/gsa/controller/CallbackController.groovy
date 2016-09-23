@@ -25,7 +25,7 @@ class CallbackController {
 			EslClient dssEslClient = auth.getAuth();
 			EmailContent emailContent = new EmailContent();
 			RetaCallbackHandler retaCallbackHandler = new RetaCallbackHandler();
-
+			IACPPackageController iacpPackageController = new IACPPackageController();
 			def eventOccurred = mappedData.getAt("name");
 			println "Step 2";
 			String packageIdString = mappedData.getAt("packageId");
@@ -53,7 +53,7 @@ class CallbackController {
 					println "RETA event: $eventOccurred"
 					println "Package Name: $packageName"
 					println "Package Id: $packageIdString"
-				retaCallbackHandler.retaPublishToQueue(eventOccurred, packageIdString, packageName, orgName, documentPackage);
+					retaCallbackHandler.retaPublishToQueue(eventOccurred, packageIdString, packageName, orgName, documentPackage);
 				/*This genericCallbackHandler will not be used for RETA case.*/
 				/*genericCallbackHandler.handleCallback(sEvent)*/
 					break
@@ -61,6 +61,7 @@ class CallbackController {
 					println "IACP event: $eventOccurred"
 					println "Package Name: $packageName"
 					println "Package Id: $packageIdString"
+					iacpPackageController.uploadPackagetoEDMS(packageIdString,orgName)
 				//iacpCallbackHandler.handleCallback(sEvent)
 					break
 				default:

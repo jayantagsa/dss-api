@@ -88,9 +88,9 @@ public class IACPPackageController {
 			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
 			@SuppressWarnings("unchecked")
 			Map <String, String> msg = (Map<String, String>) ehs.parseException(e);
-			;
+
 			
-			System.out.println(msg);
+			//System.out.println(msg);
 				
 					
 					@SuppressWarnings("unchecked")
@@ -99,9 +99,6 @@ public class IACPPackageController {
 					JSONObject json = new JSONObject(parseValidationErrors);
 				return Response.status(code).type(MediaType.APPLICATION_JSON)
 						.entity(json+"").build();
-				
-			
-
 		}
 	}
 	
