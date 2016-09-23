@@ -47,10 +47,10 @@ public class IACPPackageController {
 	protected static int status;
 	//@Context
     //UriInfo uriInfo;
-	public Response uploadPackagetoEDMS(String PackageId, String OrgName, String baseURL)    
+	public Response uploadPackagetoEDMS(String PackageId, String OrgName)    
 	{
 		
-		strbaseURL =baseURL;
+		//strbaseURL =baseURL;
 		strOrgName=OrgName;
 		strPackageID=PackageId;
 		try{
@@ -82,17 +82,20 @@ public class IACPPackageController {
  
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			
 			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
-			String msg = ehs.parseException(e)+"";
+			@SuppressWarnings("unchecked")
+			Map <String, String> msg = (Map<String, String>) ehs.parseException(e);
 			;
-			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
 			
+			System.out.println(msg);
 				
 					
+					@SuppressWarnings("unchecked")
 					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
+					int code =  Integer.parseInt((String) msg.get("code"));
 					JSONObject json = new JSONObject(parseValidationErrors);
 				return Response.status(code).type(MediaType.APPLICATION_JSON)
 						.entity(json+"").build();

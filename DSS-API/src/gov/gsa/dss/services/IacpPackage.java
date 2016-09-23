@@ -41,7 +41,7 @@ public class IacpPackage {
 		
 		IACPPackageController obj =new IACPPackageController();
 
-		return obj.uploadPackagetoEDMS(strPackageId, strOrgName, uriInfo.getBaseUri()+"");
+		return obj.uploadPackagetoEDMS(strPackageId, strOrgName);
 		
 
 	}
