@@ -17,8 +17,13 @@ public class YamlConfig {
 	
 	private  static String key;
 	private  static String url;
+
 	private  static String strprop;
 	private static Map<String, String> strMap ;
+
+	private static String jmsBrokerUrl;
+	private static String dssSupportEmail;
+
     public   YamlConfig () throws NamingException, FileNotFoundException {
         
   
@@ -50,17 +55,16 @@ public class YamlConfig {
         	key= yamlAsString.get("apikey");
         	url= yamlAsString.get("apiurl");
         	
+        	jmsBrokerUrl= yamlAsString.get("jmsBrokerUrl");
+        	dssSupportEmail=yamlAsString.get("dssSupportEmail");
        
-        
-        
-        
-        
-        
     }
     
     
     public String getProp(String prop)
-    {return strMap.get(prop);}
+    {
+    	return strMap.get(prop);
+    }
 	public String getKey() {
 		// TODO Auto-generated method stub
 	
@@ -72,5 +76,16 @@ public class YamlConfig {
 			{
 	        	return url;
 	        }	
-	}
+		}
+		
+		public String getJmsBrokerUrl() {
+			// TODO Auto-generated method stub
+		
+	        	return jmsBrokerUrl;
+	        }
+		public String getDssSupportEmail() {
+			// TODO Auto-generated method stub
+		
+	        	return dssSupportEmail;
+	        }
 }
