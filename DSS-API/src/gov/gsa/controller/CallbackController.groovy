@@ -12,7 +12,7 @@ import com.silanis.esl.sdk.EslClient;
 import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.EmailContent;
 import gov.gsa.dss.helper.ExceptionHandlerService
-import gov.gsa.dss.services.RetaCallbackHandler;;;
+import gov.gsa.dss.services.integration.RetaCallbackHandler;;;;
 
 class CallbackController {
 

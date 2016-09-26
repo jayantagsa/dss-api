@@ -1,4 +1,4 @@
-package gov.gsa.dss.services;
+package gov.gsa.dss.services.common;
 
 import java.io.BufferedReader;
 
@@ -19,14 +19,14 @@ import gov.gsa.controller.IACPPackageController;
 
 
 
-@Path("/edms")
+@Path("/common")
 
 public class IacpPackage {
 	
     @Context
     UriInfo uriInfo;
 	
-	@Path("zipFileUpload")
+	@Path("uploadACPZip")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	// 

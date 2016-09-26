@@ -1,4 +1,4 @@
-package gov.gsa.dss.services;
+package gov.gsa.dss.services.integration;
 
 import javax.servlet.http.HttpServletRequest
 import javax.ws.rs.GET;
@@ -23,8 +23,9 @@ import gov.gsa.dss.helper.ExceptionHandlerService;
 import org.apache.commons.lang3.StringUtils
 
 
-@Path("/eslNotificationHandler")
+@Path ("/integration")
 public class Callback {
+	@Path("eslNotificationHandler")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
