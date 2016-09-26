@@ -23,9 +23,9 @@ import gov.gsa.dss.helper.ExceptionHandlerService;
 import org.apache.commons.lang3.StringUtils
 
 
-@Path ("/integration")
+@Path ("/eslNotificationHandler")
 public class Callback {
-	@Path("eslNotificationHandler")
+	//@Path("")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

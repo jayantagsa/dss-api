@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 
 import gov.gsa.controller.RetrieveController;
 
-@Path("/service")
+@Path("/retrieve")
 
 public class Retrieve {
 	/**

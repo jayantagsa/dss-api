@@ -19,7 +19,7 @@ import gov.gsa.controller.IACPPackageController;
 
 
 
-@Path("/common")
+@Path("/edms")
 
 public class IacpPackage {
 	
