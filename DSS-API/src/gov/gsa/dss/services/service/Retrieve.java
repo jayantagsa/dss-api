@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 
 import gov.gsa.controller.RetrieveController;
 
-@Path("/retrieve")
+@Path("/package")
 
 public class Retrieve {
 	/**
@@ -17,7 +17,7 @@ public class Retrieve {
 	 */
 	
 	
-	@Path("downloadDocuments")
+	@Path("retrieve")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	

@@ -75,7 +75,7 @@ public class IACPPackageController {
 			InputStream stream = new ByteArrayInputStream(content);
 			ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
 			Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
-			System.out.println("Document created: " + newContent1.getId());
+			//System.out.println("Document created: " + newContent1.getId());
 			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
 		}
@@ -97,7 +97,7 @@ public class IACPPackageController {
 					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
 					int code =  Integer.parseInt((String) msg.get("code"));
 					JSONObject json = new JSONObject(parseValidationErrors);
-				return Response.status(code).type(MediaType.APPLICATION_JSON)
+					return Response.status(code).type(MediaType.APPLICATION_JSON)
 						.entity(json+"").build();
 		}
 	}

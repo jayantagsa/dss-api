@@ -1,4 +1,4 @@
-package gov.gsa.dss.services.integration;
+package gov.gsa.dss.services.common;
 
 import javax.servlet.http.HttpServletRequest
 import javax.ws.rs.GET;

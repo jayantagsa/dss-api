@@ -35,10 +35,17 @@ public class RetrieveController {
 			System.out.println(1);
 			DocumentPackage DocPackage = Client.getPackage(packageId);
 			
-			System.out.println(2);
+			String orgName = DocPackage.getAttributes().getContents().get("orgName").toString();
+			if (orgName.equals("") || (orgName == "null")) {
+				if (DocPackage.getName().contains("ACP")) {
+					orgName="IACP";
+				}
+				else
+				{orgName=null;}
+			}
 			//Check for valid orgnames
 			
-			if (DocPackage.getAttributes().getContents().get("orgName")!=null && DocPackage.getAttributes().getContents().get("orgName").toString().equals(strOrgName))
+			if (orgName!=null && orgName.equals(strOrgName))
 			{
 				Zipper zipDocs = new Zipper();
 				String base64ZIP = Base64.encodeBase64String(zipDocs.getZip(DocPackage, Client));	
