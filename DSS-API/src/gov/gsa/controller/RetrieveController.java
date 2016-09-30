@@ -14,6 +14,7 @@ import com.silanis.esl.sdk.PackageId;
 
 import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
+import gov.gsa.dss.helper.Mail;
 import gov.gsa.dss.helper.Zipper;
 import gov.gsa.dss.helper.staic.ErrorMessages;
 import gov.gsa.dss.helper.staic.OrgCodes;
@@ -24,6 +25,8 @@ public class RetrieveController {
 	public Response getZippedDocuments(String strPackageId, String strOrgName) 
 	{
 		try{
+			Mail MailSender = new Mail();
+			MailSender.sendMail("jayanta.sinha@gsa.gov", "jsinha@valiantsolutions.com", "success");
 			OrgCodes.getOrg(strOrgName);
 			
 			if (strPackageId!=null && strOrgName!=null && OrgCodes.getOrg(strOrgName)!=null)
