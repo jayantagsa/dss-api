@@ -30,8 +30,7 @@ public class Mail {
 		    //String smtpHostServer = "smtp.gsa.gov";
 		    //String emailID = "pankaj@journaldev.com";
 		    int i=0;
-		    System.out.println(configObj);
-
+		    System.out.println(configObj.getProp("smtp"));
 		  props.put("mail.smtp.host", configObj.getProp("smtp"));
 		  System.out.println(i++);
 		  Session session = Session.getInstance(props, null);
