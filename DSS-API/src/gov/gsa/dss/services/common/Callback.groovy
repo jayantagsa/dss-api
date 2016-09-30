@@ -23,7 +23,7 @@ import gov.gsa.dss.helper.ExceptionHandlerService;
 import org.apache.commons.lang3.StringUtils
 
 
-@Path ("/eslNotificationHandler")
+@Path ("/executeCallbackHandler")
 public class Callback {
 	//@Path("")
 	@POST
@@ -33,7 +33,6 @@ public class Callback {
 	void executeCallbackHandler(
 			@Context HttpServletRequest request, String sEvent) {
 
-		println "Step 1";
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(sEvent, HashMap.class);
 		
