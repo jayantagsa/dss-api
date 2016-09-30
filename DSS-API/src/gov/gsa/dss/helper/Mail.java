@@ -12,7 +12,7 @@ import javax.activation.*;
 
 public class Mail {
 	protected YamlConfig configObj;
-	Properties props;
+	protected Properties props;
 	public Mail() throws FileNotFoundException, NamingException
 	{
 		configObj= new YamlConfig();
@@ -29,11 +29,11 @@ public class Mail {
 			
 		    //String smtpHostServer = "smtp.gsa.gov";
 		    //String emailID = "pankaj@journaldev.com";
-		    
-		    
+		    int i=0;
+		    System.out.println(configObj);
 
 		  props.put("mail.smtp.host", configObj.getProp("smtp"));
-
+		  System.out.println(i++);
 		  Session session = Session.getInstance(props, null);
 	      MimeMessage msg = new MimeMessage(session);
 	      //set message headers
@@ -45,14 +45,15 @@ public class Mail {
 
 	      //msg.setReplyTo(InternetAddress.parse(strReciever, false));
 
-	      msg.setSubject("DSS Blah Blah", "UTF-8");
+	      msg.setSubject(EmailMessages.getSubject(msgCode), "UTF-8");
 
-	      msg.setText(EmailMessages.getMessage("success"), "UTF-8");
+	      msg.setText(EmailMessages.getMessage(msgCode), "UTF-8");
+	      System.out.println(i++);
 
 	      msg.setSentDate(new Date());
 
 	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(strReciever, false));
-	      System.out.println("Message is ready");
+	      System.out.println("Message is ready\t"+EmailMessages.getMessage(msgCode));
    	  Transport.send(msg);  
 
 	      System.out.println("EMail Sent Successfully!!");

@@ -48,20 +48,27 @@ public class EmailMessages
   private  EmailMessages() 
   {
   }
- 
-  public static String getMessage(String key) 
+  public static String getSubject(String key) throws JSONException 
   {
-	  try{
+	 
 	  JSONObject obj = new JSONObject(props);
 	 // System.out.println(obj.getString(key)+"\tnnnnnnnnnnnnnn");
 	  ;
-	  return obj.getString(key);
-	  }
-	  catch(JSONException e)
-	  {
-		  e.printStackTrace();
-		  return null;
-	  }
+	  JSONObject subject = obj.getJSONObject("subject");
+	  return subject.getString(key);
+	 
+
+  }
+  public static String getMessage(String key) throws JSONException 
+  {
+	  
+	  JSONObject obj = new JSONObject(props);
+	  JSONObject subject = obj.getJSONObject("message");
+	 // System.out.println(obj.getString(key)+"\tnnnnnnnnnnnnnn");
+	  ;
+	  return subject.getString(key);
+	  
+	  
   }
    /**
    * loads properties file from classpath
