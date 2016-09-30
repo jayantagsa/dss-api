@@ -166,7 +166,11 @@ public class CreatePackageController {
                            .withFirstName(signersArray[j].getAt("signerFirstName"))
                            .withLastName(signersArray[j].getAt("signerLastName"));
                }
-               package1.withSigner(signer);
+			   
+				if ((signatureInsertionData.containsKey(signersArray[j].getAt("noteToSigner")))||(StringUtils.isNotEmpty(signersArray[j].getAt("noteToSigner")))) {
+					signer.withEmailMessage(signersArray[j].getAt("noteToSigner"));
+				}
+			   package1.withSigner(signer);
            }
            package1.withDocument(mydoc);
            tmpPDFFile.delete();
@@ -178,7 +182,11 @@ public class CreatePackageController {
                    .withAttribute("orgName", signatureInsertionData.orgName)
                    .build())
                    .build();
-	
+			
+			/*Add description to the package*/
+			if ((signatureInsertionData.containsKey(signatureInsertionData.packageDescription))||(StringUtils.isNotEmpty(signatureInsertionData.packageDescription))) {
+				completePackage.setDescription(signatureInsertionData.packageDescription);
+			}
            PackageId packageId = dssEslClient.createPackage(completePackage);
 
            if (signatureInsertionData.packageOption == "createSend") {
