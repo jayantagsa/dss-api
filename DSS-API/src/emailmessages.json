@@ -1,0 +1,10 @@
+{
+"message":{
+"failure":"Your Duffer Package failed. Its your fault",
+"success":"Your package is ugly, but we are awsome"
+},
+"subject":{
+"failure":"Your Duffer Package failed. Its your fault",
+"success":"Your package is ugly, but we are awsome"
+}
+}
