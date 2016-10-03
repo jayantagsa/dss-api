@@ -17,7 +17,7 @@ import com.silanis.esl.sdk.DocumentPackage
 import com.silanis.esl.sdk.DocumentPackageAttributes
 import com.silanis.esl.sdk.EslClient;
 import com.silanis.esl.sdk.PackageId
-import gov.gsa.controller.CallbackController
+import gov.gsa.controller.CallbackHandlerController
 import gov.gsa.controller.CreatePackageController;
 import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;

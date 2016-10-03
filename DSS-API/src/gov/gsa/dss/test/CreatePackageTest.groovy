@@ -4,7 +4,7 @@ import static org.junit.Assert.*
 import java.util.HashMap;
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.IOUtils
-import gov.gsa.controller.CallbackController
+import gov.gsa.controller.CallbackHandlerController
 import gov.gsa.controller.CreatePackageController
 import javax.naming.InitialContext
 import javax.ws.rs.client.Client;
@@ -57,7 +57,8 @@ class CreatePackageTest {
 			signerLastName   : "Two",
 			searchText       : "TextCDT",
 			signType         : "ClickToInitial",
-			signaturePosition: "TOPRIGHT"]
+			signaturePosition: "TOPRIGHT",
+			noteToSigner	 : "Please sign this document as soon as possible. This is high priority."]
 		signerMap2 = [signerEmail      : "dssdev13@gmail.com",
 			signerFirstName  : "Dss",
 			signerLastName   : "Three",
@@ -80,6 +81,7 @@ class CreatePackageTest {
 			packageName       : "UnitTestDssUnivConn",
 			enableSigningOrder: false,
 			packageOption     : "create",
+			packageDescription: "This is a high priority package.",
 			documents         : documents]
 		return allData;
 	}
@@ -151,5 +153,6 @@ class CreatePackageTest {
 //		System.out.println("Result for Test 2:" + result)
 
 	}
+	
 }
 

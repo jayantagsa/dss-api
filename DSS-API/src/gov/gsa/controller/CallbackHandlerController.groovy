@@ -13,9 +13,9 @@ import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.EmailContent;
 import gov.gsa.dss.helper.ExceptionHandlerService
 import gov.gsa.dss.helper.PackageOrgName;
-import gov.gsa.dss.services.integration.RetaCallbackHandler;;;;
+import gov.gsa.dss.services.integration.RetaCallbackHandler;
 
-class CallbackController {
+class CallbackHandlerController {
 
 
 	public Response routeCallback (HashMap<String,Object> mappedData, String sEvent){
@@ -71,7 +71,6 @@ class CallbackController {
 
 			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
 			String msg = ehs.parseException(e)+"";
-			;
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
 			return Response.status(code).type("text/plain")
 					.entity(ehs.parseException(e)+"").build();
