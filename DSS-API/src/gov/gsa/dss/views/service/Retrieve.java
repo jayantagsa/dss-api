@@ -1,4 +1,4 @@
-package gov.gsa.dss.services.service;
+package gov.gsa.dss.views.service;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

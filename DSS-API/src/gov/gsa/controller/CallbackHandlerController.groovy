@@ -13,7 +13,7 @@ import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.EmailContent;
 import gov.gsa.dss.helper.ExceptionHandlerService
 import gov.gsa.dss.helper.PackageOrgName;
-import gov.gsa.dss.services.integration.RetaCallbackHandler;
+import gov.gsa.dss.views.integration.RetaCallbackHandler;
 
 class CallbackHandlerController {
 

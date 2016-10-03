@@ -1,4 +1,4 @@
-package gov.gsa.dss.services.integration;
+package gov.gsa.dss.views.integration;
 
 import java.io.BufferedReader;
 

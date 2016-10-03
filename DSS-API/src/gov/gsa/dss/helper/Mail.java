@@ -19,7 +19,7 @@ public class Mail {
 		props = System.getProperties();
 	}
 
-   public boolean sendMail(String strSender, String strReciever, String msgCode)
+   public boolean sendMail(String senderEmailAddr, String receiverEmailAddr, String msgBody, String msgSubject)
    {    
       // Recipient's email ID needs to be mentioned.
 	   try
@@ -40,19 +40,19 @@ public class Mail {
 	      msg.addHeader("format", "flowed");
 	      msg.addHeader("Content-Transfer-Encoding", "8bit");
 
-	      msg.setFrom(new InternetAddress(strSender, strSender));
+	      msg.setFrom(new InternetAddress(senderEmailAddr, senderEmailAddr));
 
 	      //msg.setReplyTo(InternetAddress.parse(strReciever, false));
 
-	      msg.setSubject(EmailMessages.getSubject(msgCode), "UTF-8");
+	      msg.setSubject(msgSubject, "UTF-8");
 
-	      msg.setText(EmailMessages.getMessage(msgCode), "UTF-8");
+	      msg.setText(msgBody, "UTF-8");
 	      System.out.println(i++);
 
 	      msg.setSentDate(new Date());
 
-	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(strReciever, false));
-	      System.out.println("Message is ready\t"+EmailMessages.getMessage(msgCode));
+	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiverEmailAddr, false));
+	      //System.out.println("Message is ready\t"+EmailMessages.getMessage(msgCode));
    	  Transport.send(msg);  
 
 	      System.out.println("EMail Sent Successfully!!");

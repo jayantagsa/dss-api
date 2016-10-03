@@ -15,6 +15,7 @@ import com.silanis.esl.sdk.PackageId;
 import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.Mail;
+import gov.gsa.dss.helper.PackageOrgName;
 import gov.gsa.dss.helper.Zipper;
 import gov.gsa.dss.helper.staic.ErrorMessages;
 import gov.gsa.dss.helper.staic.OrgCodes;
@@ -22,43 +23,39 @@ import gov.gsa.dss.model.RetrieveModel;
 
 public class RetrieveController {
 
-	public Response getZippedDocuments(String strPackageId, String strOrgName) 
+	public Response getZippedDocuments(String paramPackageId, String paramOrgName) 
 	{
 		try{
-			Mail MailSender = new Mail();
-			MailSender.sendMail("jayanta.sinha@gsa.gov", "jsinha@valiantsolutions.com", "success");
-			OrgCodes.getOrg(strOrgName);
+			//Mail MailSender = new Mail();
+			//MailSender.sendMail("jayanta.sinha@gsa.gov", "jsinha@valiantsolutions.com", "success");
 			
-			if (strPackageId!=null && strOrgName!=null && OrgCodes.getOrg(strOrgName)!=null)
+			OrgCodes.getOrg(paramOrgName);
+			
+			if (paramPackageId!=null && paramOrgName!=null && OrgCodes.getOrg(paramOrgName)!=null)
 			{
 			Authenticator auth = new Authenticator();
 			EslClient Client = auth.getAuth();
 
-			PackageId packageId = new PackageId(strPackageId);
+			PackageId packageId = new PackageId(paramPackageId);
 			System.out.println(1);
 			DocumentPackage DocPackage = Client.getPackage(packageId);
+			PackageOrgName pOrg = new PackageOrgName();
+			String orgName =  pOrg.getOrgName(DocPackage).toString();
 			
-			String orgName = DocPackage.getAttributes().getContents().get("orgName").toString();
-			if (orgName.equals("") || (orgName == "null")) {
-				if (DocPackage.getName().contains("ACP")) {
-					orgName="IACP";
-				}
-				else
-				{orgName=null;}
-			}
 			//Check for valid orgnames
 			
-			if (orgName!=null && orgName.equals(strOrgName))
+			if (orgName!=null && orgName.equals(paramOrgName))
 			{
 				Zipper zipDocs = new Zipper();
 				String base64ZIP = Base64.encodeBase64String(zipDocs.getZip(DocPackage, Client));	
 				RetrieveModel obj = new RetrieveModel();	
-				String strJSON=obj.getJSONString(strPackageId, base64ZIP, DocPackage.getName());
+				String strJSON=obj.getJSONString(paramPackageId, base64ZIP, DocPackage.getName());
 				return Response.ok(strJSON, MediaType.APPLICATION_JSON).build();
 			}
 			else{
 				System.out.println(23);
 				ExceptionHandlerService ehs = new ExceptionHandlerService();
+				@SuppressWarnings("unchecked")
 				Map<String, String> parseValidationErrors = (Map<String, String>) ehs.parseValidationErrors(ErrorMessages.getMessage("551"), 551,ErrorMessages.getType("551") );
 				
 				JSONObject json = new JSONObject(parseValidationErrors);

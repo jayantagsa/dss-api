@@ -7,7 +7,7 @@
      <!-- Register resources and providers under com.vogella.jersey.first package. -->
     <init-param>
         <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>gov.gsa.dss.services.integration</param-value>
+        <param-value>gov.gsa.dss.views.integration</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -17,7 +17,7 @@
      <!-- Register resources and providers under com.vogella.jersey.first package. -->
     <init-param>
         <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>gov.gsa.dss.services.service</param-value>
+        <param-value>gov.gsa.dss.views.service</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -27,7 +27,7 @@
      <!-- Register resources and providers under com.vogella.jersey.first package. -->
     <init-param>
         <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>gov.gsa.dss.services.common</param-value>
+        <param-value>gov.gsa.dss.views.common</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>

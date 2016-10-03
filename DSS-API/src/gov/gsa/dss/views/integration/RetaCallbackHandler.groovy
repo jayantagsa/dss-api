@@ -1,4 +1,4 @@
-package gov.gsa.dss.services.integration
+package gov.gsa.dss.views.integration
 
 import com.silanis.esl.sdk.DocumentPackage
 import gov.gsa.dss.helper.DSSQueueManagement
