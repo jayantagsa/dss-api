@@ -12,9 +12,10 @@ import com.silanis.esl.sdk.EslClient;
 import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.EmailContent;
 import gov.gsa.dss.helper.ExceptionHandlerService
-import gov.gsa.dss.services.integration.RetaCallbackHandler;;;;
+import gov.gsa.dss.helper.PackageOrgName;
+import gov.gsa.dss.services.integration.RetaCallbackHandler;
 
-class CallbackController {
+class CallbackHandlerController {
 
 
 	public Response routeCallback (HashMap<String,Object> mappedData, String sEvent){
@@ -26,22 +27,14 @@ class CallbackController {
 			EmailContent emailContent = new EmailContent();
 			RetaCallbackHandler retaCallbackHandler = new RetaCallbackHandler();
 			IACPPackageController iacpPackageController = new IACPPackageController();
+			PackageOrgName packageOrgName = new PackageOrgName();
+			
 			def eventOccurred = mappedData.getAt("name");
-			println "Step 2";
 			String packageIdString = mappedData.getAt("packageId");
-			println "Step 3";
 			PackageId packageId = new PackageId(packageIdString)
 			DocumentPackage documentPackage = dssEslClient.getPackage(packageId);
-			DocumentPackageAttributes documentPackageAttributes = documentPackage.getAttributes();
+			def orgName = packageOrgName.getOrgName(documentPackage);
 			String packageName = documentPackage.getName();
-			println "Step 4";
-			def orgName = documentPackageAttributes.getContents().get("orgName").toString();
-			if ((StringUtils.isEmpty(orgName)) || (orgName == "null")) {
-				if (documentPackage.getName().contains('ACP')) {
-					orgName="IACP";
-				}
-			}
-			println "Step 5";
 
 			switch (orgName) {
 				/*TSP code has been commented out since it is now out of scope.
@@ -78,7 +71,6 @@ class CallbackController {
 
 			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
 			String msg = ehs.parseException(e)+"";
-			;
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
 			return Response.status(code).type("text/plain")
 					.entity(ehs.parseException(e)+"").build();

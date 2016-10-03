@@ -3,7 +3,7 @@ import static org.junit.Assert.*
 
 import java.util.HashMap;
 
-import gov.gsa.controller.CallbackController
+import gov.gsa.controller.CallbackHandlerController
 import javax.naming.InitialContext
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -13,7 +13,7 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-public class CallbackTest {
+public class CallbackHandlerTest {
 	
 	/**
 	 *
@@ -37,7 +37,7 @@ public class CallbackTest {
 	public void testSuccessCallbackRouting() throws InterruptedException{
 
 		String data = "{\"@class\":\"com.silanis.esl.packages.event.ESLProcessEvent\",\"name\":\"PACKAGE_CREATE\",\"sessionUser\":\"cxucq1b8ZzsC\",\"packageId\":\"70fcca8f-dfb3-4f69-aa3d-e6021c709cc6\",\"message\":null,\"documentId\":null}\"";
-		CallbackController callbackController = new CallbackController();
+		CallbackHandlerController callbackController = new CallbackHandlerController();
 		String sEvent = "PACKAGE_COMPLETE";
 		HashMap<String,Object> mappedData = new HashMap<String, Object>();
 		mappedData = testInit();
@@ -56,7 +56,7 @@ public class CallbackTest {
 	public void testDefaultsCallbackRouting() throws InterruptedException{
 		
 				String data = "{\"@class\":\"com.silanis.esl.packages.event.ESLProcessEvent\",\"name\":\"PACKAGE_CREATE\",\"sessionUser\":\"cxucq1b8ZzsC\",\"packageId\":\"70fcca8f-dfb3-4f69-aa3d-e6021c709cc6\",\"message\":null,\"documentId\":null}\"";
-				CallbackController callbackController = new CallbackController();
+				CallbackHandlerController callbackController = new CallbackHandlerController();
 				String sEvent = "PACKAGE_COMPLETE";
 				HashMap<String,Object> mappedData = new HashMap<String, Object>();
 				mappedData = testInit();
@@ -76,7 +76,7 @@ public class CallbackTest {
 	public void testExceptionCallbackRouting() throws InterruptedException{
 		
 				String data = "{\"@class\":\"com.silanis.esl.packages.event.ESLProcessEvent\",\"name\":\"PACKAGE_CREATE\",\"sessionUser\":\"cxucq1b8ZzsC\",\"packageId\":\"70fcca8f-dfb3-4f69-aa3d-e6021c709cc6\",\"message\":null,\"documentId\":null}\"";
-				CallbackController callbackController = new CallbackController();
+				CallbackHandlerController callbackController = new CallbackHandlerController();
 				String sEvent = "PACKAGE_COMPLETE";
 				HashMap<String,Object> mappedData = new HashMap<String, Object>();
 				mappedData = testInit();

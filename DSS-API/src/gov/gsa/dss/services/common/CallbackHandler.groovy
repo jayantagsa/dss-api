@@ -17,14 +17,14 @@ import com.silanis.esl.sdk.DocumentPackage
 import com.silanis.esl.sdk.DocumentPackageAttributes
 import com.silanis.esl.sdk.EslClient;
 import com.silanis.esl.sdk.PackageId
-import gov.gsa.controller.CallbackController
+import gov.gsa.controller.CallbackHandlerController
 import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import org.apache.commons.lang3.StringUtils
 
 
-@Path ("/eslNotificationHandler")
-public class Callback {
+@Path ("/executeCallbackHandler")
+public class CallbackHandler {
 	//@Path("")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -33,12 +33,11 @@ public class Callback {
 	void executeCallbackHandler(
 			@Context HttpServletRequest request, String sEvent) {
 
-		println "Step 1";
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(sEvent, HashMap.class);
 		
-		CallbackController callbackController = new CallbackController();
-		callbackController.routeCallback(mappedData, sEvent);		
+		CallbackHandlerController callbackHandlerController = new CallbackHandlerController();
+		callbackHandlerController.routeCallback(mappedData, sEvent);		
 		}
 			
 }

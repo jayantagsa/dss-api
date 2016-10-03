@@ -69,6 +69,16 @@ public class ExceptionHandlerService {
 	}
 
 	/*This is to create a response for validation errors*/
+	def parseValidationErrors (String code) {
+		ResponseBuilder responseBuilder = new ResponseBuilder();
+		String message = ErrorMessages.getMessage(code);
+		String type = ErrorMessages.getType(code);
+		response = responseBuilder.buildExceptionResponse(message,
+				code.toInteger(),
+				type);
+	}
+	
+	/*This is to create a response for validation errors*/
 	def parseValidationErrors (String message, int code, String type) {
 		ResponseBuilder responseBuilder = new ResponseBuilder();
 		response = responseBuilder.buildExceptionResponse(message,
