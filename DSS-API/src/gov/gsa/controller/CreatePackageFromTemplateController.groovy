@@ -28,18 +28,21 @@ public class CreatePackageFromTemplateController {
 
 		String successMessage;
 
-		/*Validate the Map signatureInsertionData that comes in.*/
+		/*Validate the Map templateData that comes in.*/
 		messageMap = validateData(templateData);
 
 		if (!(messageMap==null)) {
 			return messageMap
 		}
 
+		/*Get the template Id in PackageId format*/ 
 		String tempIdString = templateData.getAt("templateId");
 		PackageId tempPackageId = new PackageId(tempIdString);
 
 		Authenticator auth = new Authenticator();
 		EslClient dssEslClient = auth.getAuth();
+
+		/*Get the template document package from the templateId. Get the signature placeholders from the template*/
 		try{
 			DocumentPackage tempPack = dssEslClient.getPackageService().getPackage(tempPackageId);
 			placeholders = tempPack.getPlaceholders();
@@ -58,8 +61,7 @@ public class CreatePackageFromTemplateController {
 
 		for (int j = 0; j < signersArray.size(); j++) {
 
-			System.out.println(placeholders[j].getId());
-
+			/*Make sure the number of signers provided in the request match the number of signature placeholders in the template.*/
 			if ((signersArray.size()) != (placeholders.size())) {
 				messageMap = exceptionHandlerService.parseValidationErrors("564");
 				return messageMap;
@@ -85,8 +87,18 @@ public class CreatePackageFromTemplateController {
 					.build())
 					.build();
 
+			/*Add description to the package*/
+			if ((templateData.containsKey(templateData.packageDescription))||(StringUtils.isNotEmpty(templateData.packageDescription))) {
+				completePackage.setDescription(templateData.packageDescription);
+			}
+
 			PackageId packageId = dssEslClient.getTemplateService().createPackageFromTemplate(tempPackageId, completePackage);
-			successMessage = "Package created and available in the draft folder."
+			if (templateData.packageOption == "createSend") {
+				dssEslClient.sendPackage(packageId)
+				successMessage = "Package created and sent."
+			} else {
+				successMessage = "Package created and available in the draft folder."
+			}
 
 			messageMap = responseBuilder.buildSuccessResponse(successMessage, packageId.toString(), completePackage.getName())
 		}
