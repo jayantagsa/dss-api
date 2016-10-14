@@ -76,5 +76,13 @@
       "562": {
         "type": "Validation Error.",
         "message": "Document Name is invalid. The API accepts .pdf documents only."
+      },
+      "563": {
+        "type": "Validation Error.",
+        "message": "Tempplate Id not provided or is empty."
+      },
+      "564": {
+        "type": "Validation Error.",
+        "message": "Number of signers provided do not match the number of signature placeholders in the template."
       }
 }
