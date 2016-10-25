@@ -79,10 +79,14 @@
       },
       "563": {
         "type": "Validation Error.",
-        "message": "Tempplate Id not provided or is empty."
+        "message": "Template Id not provided or is empty."
       },
       "564": {
         "type": "Validation Error.",
         "message": "Number of signers provided do not match the number of signature placeholders in the template."
+      },
+      "565": {
+        "type": "Validation Error.",
+        "message": "Document layout name not provided or is empty."
       }
 }
