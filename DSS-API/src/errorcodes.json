@@ -1,8 +1,7 @@
 {
     "551": {"type": "Validation Error",
         "message": "OrgName provided does not match the package org name"
-      }
-    ,
+      },
     "552": {"type": "Validation Error",
         "message": "Package exist in EDMS"
       },
@@ -12,8 +11,7 @@
       },
     "404": {"type": "Resource not found.",
         "message": " Please check the URL or the Package ID"
-      }
-    ,
+      },
     "500": {
         "type": "System Error.",
         "message": "There was a system error. Please contact DSS team."
@@ -22,10 +20,69 @@
     "401": {
         "type": "Authorization Error.",
         "message": "There was a system error. Please contact DSS team."
-      } 
-      ,
+      },
     "400": {
         "type": "System Error.",
         "message": "There was a system error. Please contact DSS team."
-      } 
+      },
+    "550": {
+        "type": "Validation Error.",
+        "message": "Organization Name not provided or is empty."
+      },
+     "540": {
+        "type": "Validation Error.",
+        "message": "Package Name not provided or is empty."
+      },
+      "541": {
+        "type": "Validation Error.",
+        "message": "Sender email not provided or is empty."
+      },
+      "542": {
+        "type": "Validation Error.",
+        "message": "Sender email address not provided or is invalid."
+      },
+      "543": {
+        "type": "Validation Error.",
+        "message": "Package Option not provided or is empty. Valid values are ‘Create’ or ‘CreateSend’."
+      },
+      "544": {
+        "type": "Validation Error.",
+        "message": "Document Name not provided or is empty."
+      },
+      "545": {
+        "type": "Validation Error.",
+        "message": "Document Content not provide or is empty. The API accepts Document Content as base64Encoded String."
+      },
+      "546": {
+        "type": "Validation Error.",
+        "message": "Signer email not provided or is empty."
+      },
+      "547": {
+        "type": "Validation Error.",
+        "message": "Signer email not provided or is invalid."
+      },
+      "548": {
+        "type": "Validation Error.",
+        "message": "Signer First Name not provided or is empty."
+      },
+       "549": {
+        "type": "Validation Error.",
+        "message": "Signer Last Name not provided or is empty."
+      },
+      "561": {
+        "type": "Validation Error.",
+        "message": "Search text not provided or is empty."
+      },
+      "562": {
+        "type": "Validation Error.",
+        "message": "Document Name is invalid. The API accepts .pdf documents only."
+      },
+      "563": {
+        "type": "Validation Error.",
+        "message": "Tempplate Id not provided or is empty."
+      },
+      "564": {
+        "type": "Validation Error.",
+        "message": "Number of signers provided do not match the number of signature placeholders in the template."
+      }
 }

@@ -1,4 +1,4 @@
-package gov.gsa.dss.services;
+package gov.gsa.dss.views.integration;
 
 import java.io.BufferedReader;
 
@@ -26,7 +26,7 @@ public class IacpPackage {
     @Context
     UriInfo uriInfo;
 	
-	@Path("zipFileUpload")
+	@Path("uploadACPZip")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	// 

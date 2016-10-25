@@ -1,0 +1,13 @@
+{
+"message":{
+"failure":"The Package was not Sent due to errors",
+"success":"The Package was approved and filed",
+"testsuccess":"This is a test mail"
+},
+"subject":{
+"failure":"Package delivery Failed",
+"success":"Package delivery Successful",
+"testsuccess":"This is a test mail"
+}
+
+}

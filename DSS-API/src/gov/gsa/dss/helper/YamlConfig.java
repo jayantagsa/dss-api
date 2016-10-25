@@ -18,7 +18,7 @@ public class YamlConfig {
 	private  static String key;
 	private  static String url;
 
-	private  static String strprop;
+	//private  static String strprop;
 	private static Map<String, String> strMap ;
 
 	private static String jmsBrokerUrl;
@@ -31,7 +31,7 @@ public class YamlConfig {
         InitialContext initialContext = new InitialContext();
         Context environmentContext = (Context) initialContext.lookup("java:/comp/env");
         String connectionURL = (String) environmentContext.lookup("config");
-        System.out.println(connectionURL);
+        //System.out.println(connectionURL);
        
         
         
@@ -63,8 +63,11 @@ public class YamlConfig {
     
     public String getProp(String prop)
     {
+    	//System.out.println("pppp"+strMap.get("connection"));
     	return strMap.get(prop);
     }
+    
+    
 	public String getKey() {
 		// TODO Auto-generated method stub
 	
@@ -74,6 +77,7 @@ public class YamlConfig {
 		public String getURL() {
 			// TODO Auto-generated method stub
 			{
+		    	//System.out.println("pppp"+strMap.get("connection"));
 	        	return url;
 	        }	
 		}

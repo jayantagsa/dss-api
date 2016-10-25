@@ -1,4 +1,4 @@
-package gov.gsa.dss.services;
+package gov.gsa.dss.views.service;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 
 import gov.gsa.controller.RetrieveController;
 
-@Path("/retrieve")
+@Path("/package")
 
 public class Retrieve {
 	/**
@@ -17,7 +17,7 @@ public class Retrieve {
 	 */
 	
 	
-	@Path("downloadDocuments")
+	@Path("retrieve")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	
@@ -27,7 +27,7 @@ public class Retrieve {
 	 * @param strOrgName
 	 * @return Application JSON (Base64 encoded zipped docs+ evidence summary) and Package name
 	 */
-	public Response downloaddocuments(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
+	public Response downloadDocuments(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
 		System.out.println();
 
 		RetrieveController obj =new RetrieveController();
