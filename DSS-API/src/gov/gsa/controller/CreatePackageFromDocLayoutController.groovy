@@ -55,6 +55,7 @@ public class CreatePackageFromDocLayoutController {
 		package1.withSenderInfo(SenderInfoBuilder.newSenderInfo(docLayoutData.senderEmail));
 
 		def documentsMap = docLayoutData.documents;
+		def numOfDocs = documentsMap.size();
 		for (int i = 0; i < documentsMap.size(); i++) {
 			docName = (documentsMap[i].getAt("document").getAt("documentName"));
 			docLayoutName = (documentsMap[i].getAt("document").getAt("layoutName"));
@@ -67,10 +68,10 @@ public class CreatePackageFromDocLayoutController {
 				if (myLayout.getName() == docLayoutName) {
 					def docLayoutId = myLayout.getId();
 					listLayoutIds.add(docLayoutId.toString());
-					placeholders = myLayout.getPlaceholders();
+//					placeholders = myLayout.getPlaceholders();
 				}
 			}
-
+		
 			/*Convert base64 encoded file String into InputStream*/
 			InputStream bufferedInputStream = null;
 			try {
@@ -78,9 +79,7 @@ public class CreatePackageFromDocLayoutController {
 			}
 			catch (Exception e) {
 				/*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
-				messageMap = exceptionHandlerService.parseValidationErrors("File could not be decoded.",
-						564,
-						"Validation Error");
+				messageMap = exceptionHandlerService.parseValidationErrors(567);
 				return messageMap
 			}
 			File tmpPDFFile = createPackageContoller.writePDFFileToLocalDisk(bufferedInputStream)
@@ -120,6 +119,13 @@ public class CreatePackageFromDocLayoutController {
 					.withAttribute("orgName", docLayoutData.orgName)
 					.build())
 					.build();
+					
+			/*Make sure the number of layouts and number of documents is the same. Because if the user gives incorrect layout name this count will differ.*/		
+			def numOfLayouts = listLayoutIds.size();
+			if (numOfLayouts != numOfDocs) {
+				messageMap = exceptionHandlerService.parseValidationErrors("566");
+				return messageMap;
+			}
 
 			/*Add description to the package*/
 			if ((docLayoutData.containsKey(docLayoutData.packageDescription))||(StringUtils.isNotEmpty(docLayoutData.packageDescription))) {
@@ -127,12 +133,13 @@ public class CreatePackageFromDocLayoutController {
 			}
 			PackageId packageId = dssEslClient.createPackage(completePackage);
 
-			List<com.silanis.esl.sdk.Document> packageDocuments= dssEslClient.getPackage(packageId).getDocuments();
+			List<com.silanis.esl.sdk.Document> packageDocuments= dssEslClient.getPackage(packageId).getDocuments();		
+
 			for (int k = 1; k < packageDocuments.size(); k++) {
 				docId = packageDocuments[k].getId().toString();
 				dssEslClient.getLayoutService().applyLayout(packageId, docId, listLayoutIds[k-1]);
 			}
-
+			
 			if (docLayoutData.packageOption == "createSend") {
 				dssEslClient.sendPackage(packageId)
 				successMessage = "Package created and sent."

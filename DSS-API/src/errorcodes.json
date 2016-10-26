@@ -88,5 +88,13 @@
       "565": {
         "type": "Validation Error.",
         "message": "Document layout name not provided or is empty."
+      },
+      "566": {
+        "type": "Validation Error.",
+        "message": "Document layout name provided is incorrect."
+      },
+      "567": {
+        "type": "Validation Error.",
+        "message": "File could not be decoded."
       }
 }
