@@ -56,6 +56,7 @@ public class CreatePackageFromDocLayoutController {
 
 		def documentsMap = docLayoutData.documents;
 		def numOfDocs = documentsMap.size();
+		int signersequence = 0;//initialize inner loop, so that counter for signer sequence doesn't get reset
 		for (int i = 0; i < documentsMap.size(); i++) {
 			docName = (documentsMap[i].getAt("document").getAt("documentName"));
 			docLayoutName = (documentsMap[i].getAt("document").getAt("layoutName"));
@@ -91,13 +92,16 @@ public class CreatePackageFromDocLayoutController {
 					.build();
 
 			def signersArray = documentsMap[i].getAt("document").getAt("signers");
-			for (int j = 0; j < signersArray.size(); j++) {
+			for ( int j = 0; j < signersArray.size(); j++) {
 
+				//println(docLayoutData.enableSigningOrder);
+				
 				if (docLayoutData.enableSigningOrder == true) {
+					//println(signersArray[j].getAt("signerFirstName")+"\t" +signersequence);
 					signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
 							.withFirstName(signersArray[j].getAt("signerFirstName"))
 							.withLastName(signersArray[j].getAt("signerLastName"))
-							.signingOrder(j);
+							.signingOrder(signersequence++);
 				} else {
 					signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
 							.withFirstName(signersArray[j].getAt("signerFirstName"))

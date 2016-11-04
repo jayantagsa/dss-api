@@ -21,7 +21,7 @@ class CallbackHandlerController {
 	public Response routeCallback (HashMap<String,Object> mappedData, String sEvent){
 
 		try {
-
+			
 			Authenticator auth = new Authenticator();
 			EslClient dssEslClient = auth.getAuth();
 			EmailContent emailContent = new EmailContent();
@@ -35,7 +35,7 @@ class CallbackHandlerController {
 			DocumentPackage documentPackage = dssEslClient.getPackage(packageId);
 			def orgName = packageOrgName.getOrgName(documentPackage);
 			String packageName = documentPackage.getName();
-
+			//println("PackageID:\t"+packageIdString+"|\tPackage Name:\t"+ packageName);
 			switch (orgName) {
 				/*TSP code has been commented out since it is now out of scope.
 				 case "TSP":

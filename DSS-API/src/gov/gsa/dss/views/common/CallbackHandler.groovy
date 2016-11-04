@@ -1,5 +1,7 @@
 package gov.gsa.dss.views.common;
 
+import java.text.SimpleDateFormat;
+
 import javax.servlet.http.HttpServletRequest
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -31,13 +33,25 @@ public class CallbackHandler {
 	@Produces(MediaType.APPLICATION_JSON)
 	//
 	void executeCallbackHandler(
+		
 			@Context HttpServletRequest request, String sEvent) {
-
+			SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");;//dd/MM/yyyy
+    Date now = new Date();
+    String strDate = sdfDate.format(now);
+			//println();
+			//println("Start===========Logs for eSignLive");
+			//println ("received package_complete notification from esignlive at:\t"+ sdfDate.format(now));
+			long startTime = System.currentTimeMillis();
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(sEvent, HashMap.class);
-		
+		println(mappedData);
+		println(sEvent);
 		CallbackHandlerController callbackHandlerController = new CallbackHandlerController();
-		callbackHandlerController.routeCallback(mappedData, sEvent);		
+		callbackHandlerController.routeCallback(mappedData, sEvent);	
+		Date endnow = new Date();
+		 strDate = sdfDate.format(endnow);
+		//println ("received package_complete notification from esignlive at:\t"+ strDate);
+		//println("End===========Logs for eSignLive");
 		}
 			
 }
