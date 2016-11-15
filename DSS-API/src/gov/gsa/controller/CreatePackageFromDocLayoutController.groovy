@@ -56,12 +56,14 @@ public class CreatePackageFromDocLayoutController {
 
 		def documentsMap = docLayoutData.documents;
 		def numOfDocs = documentsMap.size();
+		int signersequence = 0;//initialize inner loop, so that counter for signer sequence doesn't get reset
+		
 		for (int i = 0; i < documentsMap.size(); i++) {
 			docName = (documentsMap[i].getAt("document").getAt("documentName"));
 			docLayoutName = (documentsMap[i].getAt("document").getAt("layoutName"));
 
 			/*Iterate through all the layouts*/
-			List<DocumentPackage> layouts = dssEslClient.getLayoutService().getLayouts(Direction.DESCENDING, new PageRequest(itr, 20));
+			List<DocumentPackage> layouts = dssEslClient.getLayoutService().getLayouts(Direction.DESCENDING, new PageRequest(itr, 50));
 			for (int m = 0; m < layouts.size(); m++) {
 
 				DocumentPackage myLayout = layouts[m];
@@ -97,7 +99,7 @@ public class CreatePackageFromDocLayoutController {
 					signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
 							.withFirstName(signersArray[j].getAt("signerFirstName"))
 							.withLastName(signersArray[j].getAt("signerLastName"))
-							.signingOrder(j);
+							.signingOrder(signersequence++);
 				} else {
 					signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
 							.withFirstName(signersArray[j].getAt("signerFirstName"))
