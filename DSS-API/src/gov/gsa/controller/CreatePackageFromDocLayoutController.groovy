@@ -2,6 +2,7 @@ package gov.gsa.controller
 
 import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.DSSQueueManagement;
+import gov.gsa.dss.helper.FileOperations
 import gov.gsa.dss.helper.ResponseBuilder
 import com.silanis.esl.sdk.EslClient
 import com.silanis.esl.sdk.builder.PackageBuilder
@@ -37,7 +38,7 @@ public class CreatePackageFromDocLayoutController {
 		String docLayoutName = null;
 		int itr = 0
 		List <String> listLayoutIds = new ArrayList<String>();
-		CreatePackageController createPackageContoller = new CreatePackageController();
+	   FileOperations fileOps = new FileOperations();
 		String successMessage;
 
 		/*Validate the Map templateData that comes in.*/
@@ -77,14 +78,14 @@ public class CreatePackageFromDocLayoutController {
 			/*Convert base64 encoded file String into InputStream*/
 			InputStream bufferedInputStream = null;
 			try {
-				bufferedInputStream = createPackageContoller.decodeBase64String(documentsMap[i].getAt("document").getAt("documentContent"));
+				bufferedInputStream = fileOps.decodeBase64String(documentsMap[i].getAt("document").getAt("documentContent"));
 			}
 			catch (Exception e) {
 				/*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
 				messageMap = exceptionHandlerService.parseValidationErrors(567);
 				return messageMap
 			}
-			File tmpPDFFile = createPackageContoller.writePDFFileToLocalDisk(bufferedInputStream)
+			File tmpPDFFile = fileOps.writePDFFileToLocalDisk(bufferedInputStream)
 			filePath = tmpPDFFile.getCanonicalPath()
 			bufferedInputStream.close()
 
