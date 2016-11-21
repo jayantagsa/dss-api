@@ -1,6 +1,7 @@
 package gov.gsa.dss.views.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import gov.gsa.controller.CreatePackageFromDocLayoutController
 import gov.gsa.controller.CreatePackageFromTemplateController
 import gov.gsa.dss.helper.ExceptionHandlerService
 import javax.servlet.http.HttpServletRequest
@@ -15,25 +16,25 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.*
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject
 
-@Path("/dssCreatePackageFromTemplate")
-public class CreatePackageFromTemplate {
+@Path("/dssCreatePackageFromDocLayout")
+public class CreatePackageFromDocLayout {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 
-	Response dssCreatePackageFromTemplate(@Context HttpServletRequest request, String data /* this is the json string*/ ) {
+	Response dssCreatePackageFromDocLayout(@Context HttpServletRequest request, String data /* this is the json string*/ ) {
 
 		try {
-			HashMap<String,Object> mappedData =
-					new ObjectMapper().readValue(data, HashMap.class);
-			CreatePackageFromTemplateController createPackageFromTemplateController = new CreatePackageFromTemplateController();
-			Map<String, Object> result = createPackageFromTemplateController.dssUniversalConnectorFromTemplate(mappedData);
+		HashMap<String,Object> mappedData =
+				new ObjectMapper().readValue(data, HashMap.class);
+		CreatePackageFromDocLayoutController createPackageFromDocLayoutController = new CreatePackageFromDocLayoutController();
+		Map<String, Object> result = createPackageFromDocLayoutController.dssUniversalConnectorFromDocLayout(mappedData);
 
-			/*Convert Map to JSON string*/
-			JSONObject jsonResult = new JSONObject();
-			jsonResult.putAll( result );
-			println "Rest call to createPackageFromTemplate completed."
-			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		/*Convert Map to JSON string*/
+		JSONObject jsonResult = new JSONObject();
+		jsonResult.putAll( result );
+		println "Rest call to createPackageFromDocLayout completed."	
+		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -33,18 +33,26 @@ public class CreatePackage {
 	//
 	Response dssUniversalConnector(@Context HttpServletRequest request, String data /* this is the json string*/ ) {
 
-        HashMap<String,Object> mappedData =
-        new ObjectMapper().readValue(data, HashMap.class);
-		CreatePackageController createPackageController = new CreatePackageController();
-        Map<String, Object> result = createPackageController.dssUniversalConnector(mappedData);
-        /*Convert Map to JSON string*/
-        JSONObject jsonResult = new JSONObject();
-        jsonResult.putAll( result );
-        println "Rest call to dssUniversalConnector completed."
-		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
-		
-//        return jsonResult;
-    }
-			
+		try {
+			HashMap<String,Object> mappedData =
+					new ObjectMapper().readValue(data, HashMap.class);
+			CreatePackageController createPackageController = new CreatePackageController();
+			Map<String, Object> result = createPackageController.dssUniversalConnector(mappedData);
+			/*Convert Map to JSON string*/
+			JSONObject jsonResult = new JSONObject();
+			jsonResult.putAll( result );
+			println "Rest call to dssUniversalConnector completed."
+			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			ExceptionHandlerService ehs = new ExceptionHandlerService();
+			String msg = ehs.parseException(e)+"";
+			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
+			return Response.status(code).type("text/plain")
+					.entity(ehs.parseException(e)+"").build();
+		}
+	}
+
 }
 

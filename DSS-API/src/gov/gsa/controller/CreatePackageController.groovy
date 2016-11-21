@@ -10,6 +10,7 @@ import com.silanis.esl.sdk.builder.*
 import com.silanis.esl.sdk.internal.EslServerException
 import com.silanis.esl.sdk.service.*
 import gov.gsa.dss.helper.ExceptionHandlerService
+import gov.gsa.dss.helper.FileOperations
 import gov.gsa.dss.helper.ResponseBuilder
 import gov.gsa.dss.helper.Authenticator
 import gov.dss.sdk.service.*
@@ -52,6 +53,7 @@ public class CreatePackageController {
        Map<String, String> messageMap = new HashMap<String, String>();
        ExceptionHandlerService exceptionHandlerService = new ExceptionHandlerService();
        ResponseBuilder responseBuilder = new ResponseBuilder();
+	   FileOperations fileOps = new FileOperations();
        String successMessage;
 	   
 	   Authenticator auth = new Authenticator();
@@ -75,7 +77,7 @@ public class CreatePackageController {
            /*Convert base64 encoded file String into InputStream*/
            InputStream bufferedInputStream = null;
            try {
-               bufferedInputStream = decodeBase64String(documentsMap[i].getAt("document").getAt("documentContent"));
+               bufferedInputStream = fileOps.decodeBase64String(documentsMap[i].getAt("document").getAt("documentContent"));
            }
            catch (Exception e) {
                /*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
@@ -84,7 +86,7 @@ public class CreatePackageController {
                        "Validation Error");
                return messageMap
            }
-           File tmpPDFFile = writePDFFileToLocalDisk(bufferedInputStream)
+           File tmpPDFFile = fileOps.writePDFFileToLocalDisk(bufferedInputStream)
            filePath = tmpPDFFile.getCanonicalPath()
            bufferedInputStream.close()
 
@@ -304,18 +306,6 @@ public class CreatePackageController {
 
    /**
     *
-    *
-    * @param encodedString
-    */
-   InputStream decodeBase64String(String encodedString) {
-       BASE64Decoder decoder = new BASE64Decoder();
-       byte[] decodedBytes = decoder.decodeBuffer(encodedString);
-       InputStream bufferedInputStream = new ByteArrayInputStream(decodedBytes);
-       return bufferedInputStream;
-   }
-
-   /**
-    *
     * This method is used to convert signationPosition string to TextAnchorPosition enum.
     * @param signPosition
     */
@@ -338,45 +328,4 @@ public class CreatePackageController {
        return myanchor;
    }
    
-   private File writePDFFileToLocalDisk(InputStream inputStream) {
-	   String ext = "pdf"
-	   String name = String.format("%s.%s", RandomStringUtils.randomAlphanumeric(8), ext);
-	   String fullyQualifiedFiledName = System.getProperty("java.io.tmpdir") + File.separator + name
-
-	   OutputStream outputStream = null
-
-	   try {
-		   // write the inputStream to a FileOutputStream
-		   outputStream = new FileOutputStream(new File(fullyQualifiedFiledName))
-
-		   int read = 0
-		   byte[] bytes = new byte[1024]
-
-		   while ((read = inputStream.read(bytes)) != -1) {
-			   outputStream.write(bytes, 0, read)
-		   }
-	   } catch (IOException e) {
-		   e.printStackTrace()
-	   } finally {
-		   if (inputStream != null) {
-			   try {
-				   inputStream.close()
-			   } catch (IOException e) {
-				   e.printStackTrace()
-			   }
-		   }
-		   if (outputStream != null) {
-			   try {
-				   // outputStream.flush()
-				   outputStream.close()
-			   } catch (IOException e) {
-				   e.printStackTrace()
-			   }
-
-		   }
-	   }
-	   new File(fullyQualifiedFiledName)
-   }
-
-
 }
