@@ -26,7 +26,7 @@ public class ResponseBuilder {
     Map buildSuccessResponse (String message, String packageId, String packageName) {
         Map<String, String> packageDetails = new HashMap<String, String>();
 
-        response.put("code", 200);
+        response.put("code", "200");
         response.put("message", message);
         packageDetails.put("packageId", packageId);
         packageDetails.put("packageName", packageName);
@@ -37,7 +37,7 @@ public class ResponseBuilder {
     Map buildSuccessResponse (String message) {
         Map<String, String> packageDetails = new HashMap<String, String>();
 
-        response.put("code", 200);
+        response.put("code", "200");
         response.put("message", message);
         return response;
     }
