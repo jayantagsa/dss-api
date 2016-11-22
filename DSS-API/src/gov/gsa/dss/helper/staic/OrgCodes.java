@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,6 +63,36 @@ public class OrgCodes
 		  e.printStackTrace();
 		  return null;
 	  }
+    
+  }
+  
+  public static List getOrgList() 
+  {
+	 List orgList = null;
+	  try
+	    {
+	      OrgCodes util = new OrgCodes();
+	      BufferedReader reader = new BufferedReader(new InputStreamReader(util.getPropertiesFromClasspath("orgcode.json")));
+	      StringBuilder out = new StringBuilder();
+	      String line;
+	      while ((line = reader.readLine()) != null) {
+	    	  //System.out.println(line);
+	          out.append(line);
+	          orgList.add(out.toString());
+	          //break;
+	      }
+	      reader.close();
+	    }
+	    catch (FileNotFoundException e)
+	    {
+	      e.printStackTrace();
+	    }
+	    catch (IOException e)
+	    {
+	      e.printStackTrace();
+	    }
+	  
+	  return orgList;
     
   }
  

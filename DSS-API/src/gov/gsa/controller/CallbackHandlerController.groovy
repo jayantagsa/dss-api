@@ -26,7 +26,7 @@ class CallbackHandlerController {
 			EslClient dssEslClient = auth.getAuth();
 			EmailContent emailContent = new EmailContent();
 			RetaCallbackHandler retaCallbackHandler = new RetaCallbackHandler();
-			IACPPackageController iacpPackageController = new IACPPackageController();
+			EDMSController edmsController = new EDMSController();
 			PackageOrgName packageOrgName = new PackageOrgName();
 			
 			def eventOccurred = mappedData.getAt("name");
@@ -54,8 +54,8 @@ class CallbackHandlerController {
 					println "IACP event: $eventOccurred"
 					println "Package Name: $packageName"
 					println "Package Id: $packageIdString"
-					iacpPackageController.uploadPackagetoEDMS(packageIdString,orgName)
-				//iacpCallbackHandler.handleCallback(sEvent)
+					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+					//iacpCallbackHandler.handleCallback(sEvent)
 					break
 				default:
 					println "Default event occurred: $eventOccurred"
@@ -63,6 +63,10 @@ class CallbackHandlerController {
 					println "Package Id: $packageIdString"
 					emailContent.emailOnRoutingExp(eventOccurred, packageName, packageIdString);
 					break
+			}
+			
+			if (eventOccurred=="PACKAGE_COMPLETE" ) {
+				edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 			}
 		}
 		catch (Exception e) {

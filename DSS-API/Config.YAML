@@ -4,6 +4,11 @@ edmsURL: https://edms.acuitys.com/alfresco/api/-default-/public/cmis/versions/1.
 edmsuser: dssserviceaccnt
 edmspwd: ACPedms!23
 edmspath: /Sites/agency-concurrence-process/documentLibrary/Signed/
+edmspathRETA: /Sites/agency-concurrence-process/documentLibrary/Signed/
+edmspathAAAP: /Sites/agency-concurrence-process/documentLibrary/Signed/
+edmspathGSA: /Sites/agency-concurrence-process/documentLibrary/Signed/
+edmspathIACP: /Sites/agency-concurrence-process/documentLibrary/Signed/
+edmspathSalesforce: /Sites/agency-concurrence-process/documentLibrary/Signed/
 smtp: smtp.gsa.gov
 # Connection parameters
 connection:
