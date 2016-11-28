@@ -72,8 +72,6 @@ class CallbackHandlerController {
 		catch (Exception e) {
 			e.printStackTrace();
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
-
-			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
 			String msg = ehs.parseException(e)+"";
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
 			return Response.status(code).type("text/plain")
