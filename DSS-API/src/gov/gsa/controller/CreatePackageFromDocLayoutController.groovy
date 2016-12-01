@@ -40,6 +40,7 @@ public class CreatePackageFromDocLayoutController {
 		List <String> listLayoutIds = new ArrayList<String>();
 		FileOperations fileOps = new FileOperations();
 		String successMessage;
+		def numOfAttachments = 0;
 
 		/*Validate the Map templateData that comes in.*/
 		messageMap = validateData(docLayoutData);
@@ -57,33 +58,35 @@ public class CreatePackageFromDocLayoutController {
 
 		/*Iterate through the attachment map loop--Start*/
 		def attachmentsMap = docLayoutData.attachments;
-		def numOfAttachments = attachmentsMap.size();
+		/*if the sender does not have a key for attachments*/
+		if (attachmentsMap != null) {
+			numOfAttachments = attachmentsMap.size();
+			if (numOfAttachments !=0) {
+				for (int i = 0; i < attachmentsMap.size(); i++) {
+					docName = (attachmentsMap[i].getAt("attachment").getAt("attachmentName"));
 
-		if (numOfAttachments !=0) {
-			for (int i = 0; i < attachmentsMap.size(); i++) {
-				docName = (attachmentsMap[i].getAt("attachment").getAt("attachmentName"));
+					/*Convert base64 encoded file String into InputStream*/
+					InputStream bufferedInputStreamForAttachments = null;
+					try {
+						bufferedInputStreamForAttachments = fileOps.decodeBase64String(attachmentsMap[i].getAt("attachment").getAt("attachmentContent"));
+					}
+					catch (Exception e) {
+						/*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
+						messageMap = exceptionHandlerService.parseValidationErrors(567);
+						return messageMap
+					}
+					File tmpAttacheFile = fileOps.writePDFFileToLocalDisk(bufferedInputStreamForAttachments)
+					filePath = tmpAttacheFile.getCanonicalPath()
+					bufferedInputStreamForAttachments.close()
 
-				/*Convert base64 encoded file String into InputStream*/
-				InputStream bufferedInputStreamForAttachments = null;
-				try {
-					bufferedInputStreamForAttachments = fileOps.decodeBase64String(attachmentsMap[i].getAt("attachment").getAt("attachmentContent"));
+					Document myAttachment = DocumentBuilder.newDocumentWithName(docName)
+							.fromFile(filePath)
+							.build();
+
+
+					package1.withDocument(myAttachment);
+					tmpAttacheFile.delete();
 				}
-				catch (Exception e) {
-					/*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
-					messageMap = exceptionHandlerService.parseValidationErrors(567);
-					return messageMap
-				}
-				File tmpAttacheFile = fileOps.writePDFFileToLocalDisk(bufferedInputStreamForAttachments)
-				filePath = tmpAttacheFile.getCanonicalPath()
-				bufferedInputStreamForAttachments.close()
-
-				Document myAttachment = DocumentBuilder.newDocumentWithName(docName)
-						.fromFile(filePath)
-						.build();
-
-
-				package1.withDocument(myAttachment);
-				tmpAttacheFile.delete();
 			}
 		}
 		/*Iterate through the attachment map loop--End*/
