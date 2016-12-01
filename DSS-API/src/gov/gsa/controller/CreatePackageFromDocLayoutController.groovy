@@ -38,7 +38,7 @@ public class CreatePackageFromDocLayoutController {
 		String docLayoutName = null;
 		int itr = 0
 		List <String> listLayoutIds = new ArrayList<String>();
-	   FileOperations fileOps = new FileOperations();
+		FileOperations fileOps = new FileOperations();
 		String successMessage;
 
 		/*Validate the Map templateData that comes in.*/
@@ -55,26 +55,60 @@ public class CreatePackageFromDocLayoutController {
 		PackageBuilder package1 = newPackageNamed(docLayoutData.packageName);
 		package1.withSenderInfo(SenderInfoBuilder.newSenderInfo(docLayoutData.senderEmail));
 
+		/*Iterate through the attachment map loop--Start*/
+		def attachmentsMap = docLayoutData.attachments;
+		def numOfAttachments = attachmentsMap.size();
+
+		if (numOfAttachments !=0) {
+			for (int i = 0; i < attachmentsMap.size(); i++) {
+				docName = (attachmentsMap[i].getAt("attachment").getAt("attachmentName"));
+
+				/*Convert base64 encoded file String into InputStream*/
+				InputStream bufferedInputStreamForAttachments = null;
+				try {
+					bufferedInputStreamForAttachments = fileOps.decodeBase64String(attachmentsMap[i].getAt("attachment").getAt("attachmentContent"));
+				}
+				catch (Exception e) {
+					/*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
+					messageMap = exceptionHandlerService.parseValidationErrors(567);
+					return messageMap
+				}
+				File tmpAttacheFile = fileOps.writePDFFileToLocalDisk(bufferedInputStreamForAttachments)
+				filePath = tmpAttacheFile.getCanonicalPath()
+				bufferedInputStreamForAttachments.close()
+
+				Document myAttachment = DocumentBuilder.newDocumentWithName(docName)
+						.fromFile(filePath)
+						.build();
+
+
+				package1.withDocument(myAttachment);
+				tmpAttacheFile.delete();
+			}
+		}
+		/*Iterate through the attachment map loop--End*/
+
+		/*Iterate through the documents map loop--Start*/ 
 		def documentsMap = docLayoutData.documents;
 		def numOfDocs = documentsMap.size();
 		int signersequence = 0;//initialize inner loop, so that counter for signer sequence doesn't get reset
-		
+
 		for (int i = 0; i < documentsMap.size(); i++) {
 			docName = (documentsMap[i].getAt("document").getAt("documentName"));
 			docLayoutName = (documentsMap[i].getAt("document").getAt("layoutName"));
 
 			/*Iterate through all the layouts*/
-			List<DocumentPackage> layouts = dssEslClient.getLayoutService().getLayouts(Direction.DESCENDING, new PageRequest(itr, 50));
+			List<DocumentPackage> layouts = dssEslClient.getLayoutService().getLayouts(Direction.DESCENDING, new PageRequest(itr, 100));
 			for (int m = 0; m < layouts.size(); m++) {
 
 				DocumentPackage myLayout = layouts[m];
 				if (myLayout.getName() == docLayoutName) {
 					def docLayoutId = myLayout.getId();
 					listLayoutIds.add(docLayoutId.toString());
-//					placeholders = myLayout.getPlaceholders();
+					//					placeholders = myLayout.getPlaceholders();
 				}
 			}
-		
+
 			/*Convert base64 encoded file String into InputStream*/
 			InputStream bufferedInputStream = null;
 			try {
@@ -115,6 +149,8 @@ public class CreatePackageFromDocLayoutController {
 			package1.withDocument(mydoc);
 			tmpPDFFile.delete();
 		}
+		/*Iterate through the documents map loop--End*/
+
 		try {
 			/*The package attribute is set to the organization name using withAttributes() method*/
 			DocumentPackage completePackage = package1
@@ -122,7 +158,7 @@ public class CreatePackageFromDocLayoutController {
 					.withAttribute("orgName", docLayoutData.orgName)
 					.build())
 					.build();
-					
+
 			/*Make sure the number of layouts and number of documents is the same. Because if the user gives incorrect layout name this count will differ.*/		
 			def numOfLayouts = listLayoutIds.size();
 			if (numOfLayouts != numOfDocs) {
@@ -136,13 +172,15 @@ public class CreatePackageFromDocLayoutController {
 			}
 			PackageId packageId = dssEslClient.createPackage(completePackage);
 
-			List<com.silanis.esl.sdk.Document> packageDocuments= dssEslClient.getPackage(packageId).getDocuments();		
+			List<com.silanis.esl.sdk.Document> packageDocuments= dssEslClient.getPackage(packageId).getDocuments();
 
-			for (int k = 1; k < packageDocuments.size(); k++) {
+			for (int k = numOfAttachments+1; k < packageDocuments.size(); k++) {
+				//				for (int k = 1; k < numOfDocs; k++) {
+
 				docId = packageDocuments[k].getId().toString();
-				dssEslClient.getLayoutService().applyLayout(packageId, docId, listLayoutIds[k-1]);
+				dssEslClient.getLayoutService().applyLayout(packageId, docId, listLayoutIds[k-numOfAttachments-1]);
 			}
-			
+
 			if (docLayoutData.packageOption == "createSend") {
 				dssEslClient.sendPackage(packageId)
 				successMessage = "Package created and sent."
