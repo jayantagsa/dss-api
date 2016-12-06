@@ -26,6 +26,7 @@ import java.util.Map;
 
 public class CreatePackageFromDocLayoutController {
 	Map<String, Object> dssUniversalConnectorFromDocLayout(Map<String, Object> docLayoutData) {
+
 		Map<String, String> messageMap = new HashMap<String, String>();
 		SignerBuilder signer;
 		ExceptionHandlerService exceptionHandlerService = new ExceptionHandlerService();
@@ -38,9 +39,14 @@ public class CreatePackageFromDocLayoutController {
 		String docLayoutName = null;
 		int itr = 0
 		List <String> listLayoutIds = new ArrayList<String>();
+		List <Placeholder> listPlaceHolderObj = new ArrayList<Placeholder>();
+		Placeholder pholder;
+
 		FileOperations fileOps = new FileOperations();
 		String successMessage;
 		def numOfAttachments = 0;
+		def numSigners = 0;
+		
 
 		/*Validate the Map templateData that comes in.*/
 		messageMap = validateData(docLayoutData);
@@ -91,10 +97,11 @@ public class CreatePackageFromDocLayoutController {
 		}
 		/*Iterate through the attachment map loop--End*/
 
-		/*Iterate through the documents map loop--Start*/ 
+		/*Iterate through the documents map loop--Start*/
 		def documentsMap = docLayoutData.documents;
 		def numOfDocs = documentsMap.size();
-		int signersequence = 0;//initialize inner loop, so that counter for signer sequence doesn't get reset
+		/*initialize inner loop, so that counter for signer sequence doesn't get reset*/
+		int signersequence = 0;
 
 		for (int i = 0; i < documentsMap.size(); i++) {
 			docName = (documentsMap[i].getAt("document").getAt("documentName"));
@@ -108,7 +115,10 @@ public class CreatePackageFromDocLayoutController {
 				if (myLayout.getName() == docLayoutName) {
 					def docLayoutId = myLayout.getId();
 					listLayoutIds.add(docLayoutId.toString());
-					//					placeholders = myLayout.getPlaceholders();
+					placeholders = myLayout.getPlaceholders();
+					for (int p = 0; p < placeholders.size(); p++) {
+						listPlaceHolderObj.add(placeholders[p]);
+					}
 				}
 			}
 
@@ -119,7 +129,7 @@ public class CreatePackageFromDocLayoutController {
 			}
 			catch (Exception e) {
 				/*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
-				messageMap = exceptionHandlerService.parseValidationErrors(567);
+				messageMap = exceptionHandlerService.parseValidationErrors("567");
 				return messageMap
 			}
 			File tmpPDFFile = fileOps.writePDFFileToLocalDisk(bufferedInputStream)
@@ -132,22 +142,30 @@ public class CreatePackageFromDocLayoutController {
 
 			def signersArray = documentsMap[i].getAt("document").getAt("signers");
 			for (int j = 0; j < signersArray.size(); j++) {
+				for (int h = 0; h < listPlaceHolderObj.size(); h++) {
+					Signer pSigner = listPlaceHolderObj[h];
+					if(pSigner.getPlaceholderName()==signersArray[j].getAt("placeHolderName")){
+						pholder = new Placeholder(pSigner.getPlaceholderName());
+					}
+				}
 
 				if (docLayoutData.enableSigningOrder == true) {
 					signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
 							.withFirstName(signersArray[j].getAt("signerFirstName"))
 							.withLastName(signersArray[j].getAt("signerLastName"))
-							.signingOrder(signersequence++);
+							.signingOrder(signersequence++).replacing(pholder);
 				} else {
 					signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
 							.withFirstName(signersArray[j].getAt("signerFirstName"))
-							.withLastName(signersArray[j].getAt("signerLastName"));
+							.withLastName(signersArray[j].getAt("signerLastName"))
+							.replacing(pholder);
 				}
 
 				if ((docLayoutData.containsKey(signersArray[j].getAt("noteToSigner")))||(StringUtils.isNotEmpty(signersArray[j].getAt("noteToSigner")))) {
 					signer.withEmailMessage(signersArray[j].getAt("noteToSigner"));
 				}
-				package1.withSigner(signer);
+				package1.withSigner(signer);	
+				numSigners = numSigners + signersArray.size();
 			}
 			package1.withDocument(mydoc);
 			tmpPDFFile.delete();
@@ -162,7 +180,7 @@ public class CreatePackageFromDocLayoutController {
 					.build())
 					.build();
 
-			/*Make sure the number of layouts and number of documents is the same. Because if the user gives incorrect layout name this count will differ.*/		
+			/*Make sure the number of layouts and number of documents is the same. Because if the user gives incorrect layout name this count will differ.*/
 			def numOfLayouts = listLayoutIds.size();
 			if (numOfLayouts != numOfDocs) {
 				messageMap = exceptionHandlerService.parseValidationErrors("566");
@@ -178,12 +196,22 @@ public class CreatePackageFromDocLayoutController {
 			List<com.silanis.esl.sdk.Document> packageDocuments= dssEslClient.getPackage(packageId).getDocuments();
 
 			for (int k = numOfAttachments+1; k < packageDocuments.size(); k++) {
-				//				for (int k = 1; k < numOfDocs; k++) {
-
 				docId = packageDocuments[k].getId().toString();
 				dssEslClient.getLayoutService().applyLayout(packageId, docId, listLayoutIds[k-numOfAttachments-1]);
 			}
-
+			
+			/*Remove the placeholders which do not have any signer information associated with them. 
+			 * This is to get rid of optional signers which do not have to sign*/
+			for(Signer s: dssEslClient.getPackage(packageId).getPlaceholders())
+			{
+				dssEslClient.getPackageService().removeSigner(packageId, s.getId());
+			}
+			
+			if(numSigners < dssEslClient.getPackage(packageId).getPlaceholders().size()){
+				messageMap = exceptionHandlerService.parseValidationErrors("568");
+				return messageMap
+			}
+			
 			if (docLayoutData.packageOption == "createSend") {
 				dssEslClient.sendPackage(packageId)
 				successMessage = "Package created and sent."
@@ -196,6 +224,8 @@ public class CreatePackageFromDocLayoutController {
 			messageMap = exceptionHandlerService.parseException(e);
 		}
 		return messageMap
+
+
 	}
 
 	def validateData(Map<String, Object> data) {
