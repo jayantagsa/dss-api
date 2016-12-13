@@ -30,14 +30,15 @@ public class CallbackHandler {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	//
-	void executeCallbackHandler(
+	Response executeCallbackHandler(
 			@Context HttpServletRequest request, String sEvent) {
 
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(sEvent, HashMap.class);
 		
 		CallbackHandlerController callbackHandlerController = new CallbackHandlerController();
-		callbackHandlerController.routeCallback(mappedData, sEvent);		
+		callbackHandlerController.routeCallback(mappedData, sEvent);	
+		return Response.ok("{\"code\":\"success\"}", MediaType.APPLICATION_JSON).build();
 		}
 			
 }

@@ -96,5 +96,9 @@
       "567": {
         "type": "Validation Error.",
         "message": "File could not be decoded."
+      },
+      "568": {
+        "type": "Validation Error.",
+        "message": "Number of placeholders is more than number of signers."
       }
 }
