@@ -35,6 +35,7 @@ public class CreateAndSendPackageRest {
 			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			//throw e;
 		}
 
 		// print result
