@@ -72,6 +72,10 @@ class CreatePackageFromDocLayoutTest {
 			packageOption     : "create",
 			packageDescription: "This is a high priority package.",
 			documents         : documents]
+		
+		inputStream1.close();
+		inputStream2.close();
+		
 		return allData;
 	}
 

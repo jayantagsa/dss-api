@@ -8,100 +8,70 @@ import java.io.InputStreamReader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
- 
-public class EmailMessages
-{
- 
-  private static String props;
- 
-  static
-  {
-    //props = new Properties();
-    try
-    {
-    	EmailMessages util = new EmailMessages();
-      BufferedReader reader = new BufferedReader(new InputStreamReader(util.getPropertiesFromClasspath("emailmessages.json")));
-      StringBuilder out = new StringBuilder();
-      String line;
-      while ((line = reader.readLine()) != null) {
-    	  //System.out.println(line);
-          out.append(line);
-          //break;
-          
-      }
-      props = out.toString();
-      //System.out.println("ssGJASJDJASDJGH"+out.toString()+"");   //Prints the string content read from input stream
-      reader.close();
-      //props = util.getPropertiesFromClasspath("errorcodes.properties");
-    }
-    catch (FileNotFoundException e)
-    {
-      e.printStackTrace();
-    }
-    catch (IOException e)
-    {
-      e.printStackTrace();
-    }
-  }
- 
-  // private constructor
-  private  EmailMessages() 
-  {
-  }
-  public static String getSubject(String key) throws JSONException 
-  {
-	 
-	  JSONObject obj = new JSONObject(props);
-	 // System.out.println(obj.getString(key)+"\tnnnnnnnnnnnnnn");
-	  ;
-	  JSONObject subject = obj.getJSONObject("subject");
-	  return subject.getString(key);
-	 
 
-  }
-  public static String getMessage(String key) throws JSONException 
-  {
-	  
-	  JSONObject obj = new JSONObject(props);
-	  JSONObject subject = obj.getJSONObject("message");
-	 // System.out.println(obj.getString(key)+"\tnnnnnnnnnnnnnn");
-	  ;
-	  return subject.getString(key);
-	  
-	  
-  }
-   /**
-   * loads properties file from classpath
-   *
-   * @param propFileName
-   * @return
-   * @throws IOException
-   */
-  InputStream getPropertiesFromClasspath(String propFileName)
-                                                                    throws IOException
-  {
-    //Properties props = new Properties();
-    InputStream inputStream = null;
-    
-    try
-    {
-      inputStream =
-          this.getClass().getClassLoader().getResourceAsStream(propFileName);
- 
-      if (inputStream == null)
-      {
-        throw new FileNotFoundException("property file '" + propFileName
-            + "' not found in the classpath");
-      }
-      else {
-    	  return inputStream;
-      }
-      //props.load(inputStream);
-    }
-    finally
-    {
-      //inputStream.close();
-    }
-    
-  }
+public class EmailMessages {
+
+	private static String props;
+
+	static {
+		try {
+			EmailMessages util = new EmailMessages();
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(util.getPropertiesFromClasspath("emailmessages.json")));
+			StringBuilder out = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				out.append(line);
+
+			}
+			props = out.toString();
+			reader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// private constructor
+	private EmailMessages() {
+	}
+
+	public static String getSubject(String key) throws JSONException {
+		JSONObject obj = new JSONObject(props);
+		JSONObject subject = obj.getJSONObject("subject");
+		return subject.getString(key);
+	}
+
+	public static String getMessage(String key) throws JSONException {
+		JSONObject obj = new JSONObject(props);
+		JSONObject subject = obj.getJSONObject("message");
+		return subject.getString(key);
+	}
+
+	/**
+	 * loads properties file from classpath
+	 *
+	 * @param propFileName
+	 * @return
+	 * @throws IOException
+	 */
+	InputStream getPropertiesFromClasspath(String propFileName) throws IOException {
+		InputStream inputStream = null;
+
+		try {
+			inputStream = this.getClass().getClassLoader().getResourceAsStream(propFileName);
+
+			if (inputStream == null) {
+				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+			} else {
+				return inputStream;
+			}
+		}
+
+		finally {
+			inputStream.close();
+		}
+
+	}
 }

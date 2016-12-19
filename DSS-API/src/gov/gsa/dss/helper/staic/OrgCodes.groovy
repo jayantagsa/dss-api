@@ -20,8 +20,7 @@ public class OrgCodes {
 	private static String props;
 
 	static {
-		try
-		{
+		try {
 			OrgCodes util = new OrgCodes();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(util.getPropertiesFromClasspath("orgcode.json")));
 			StringBuilder out = new StringBuilder();
@@ -32,12 +31,10 @@ public class OrgCodes {
 			props = out.toString();
 			reader.close();
 		}
-		catch (FileNotFoundException e)
-		{
+		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-		catch (IOException e)
-		{
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -105,8 +102,7 @@ public class OrgCodes {
 	 * @return
 	 * @throws IOException
 	 */
-	private InputStream getPropertiesFromClasspath(String propFileName)
-			throws IOException
+	private InputStream getPropertiesFromClasspath(String propFileName) throws IOException
 	{
 		InputStream inputStream = null;
 		try
@@ -122,11 +118,11 @@ public class OrgCodes {
 			else {
 				return inputStream;
 			}
+			inputStream.close();
 		}
-		finally
+		catch (IOException e)
 		{
-			//inputStream.close();
+			e.printStackTrace();
 		}
-
 	}
 }
