@@ -70,7 +70,7 @@ public class IACPPackageController {
 			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":" + newContent1.getId() + "}").build();
 		}
-
+		/* This exception will be parsed using DSS ExceptionHandlerService, so we will need to capture the broad exception here.*/ 
 		catch (Exception e) {
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			@SuppressWarnings("unchecked")
