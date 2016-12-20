@@ -18,15 +18,19 @@ import com.silanis.esl.sdk.DocumentPackageAttributes
 import com.silanis.esl.sdk.EslClient;
 import com.silanis.esl.sdk.PackageId
 import gov.gsa.controller.CallbackHandlerController
-import gov.gsa.controller.CreatePackageController;
+import gov.gsa.controller.CreatePackageController
+import gov.gsa.controller.RetrieveController;
 import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject
 import org.apache.commons.lang3.StringUtils
+import org.apache.log4j.Logger;
 
 
 @Path("/dssUniversalConnector")
 public class CreatePackage {
+	final static Logger log =Logger.getLogger(CreatePackage.class);
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -41,11 +45,11 @@ public class CreatePackage {
 			/*Convert Map to JSON string*/
 			JSONObject jsonResult = new JSONObject();
 			jsonResult.putAll( result );
-			println "Rest call to dssUniversalConnector completed."
+			log.info( "Rest call to dssUniversalConnector completed.");
 			return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			String msg = ehs.parseException(e)+"";
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);

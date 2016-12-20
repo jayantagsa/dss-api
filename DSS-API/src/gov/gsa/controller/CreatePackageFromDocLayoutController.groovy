@@ -17,6 +17,7 @@ import static com.silanis.esl.sdk.builder.PackageBuilder.newPackageNamed
 import static com.silanis.esl.sdk.builder.SignatureBuilder.*
 import static com.silanis.esl.sdk.builder.SignerBuilder.newSignerWithEmail
 import org.apache.commons.lang3.StringUtils
+import org.apache.log4j.Logger;
 import org.apache.commons.lang3.RandomStringUtils
 import sun.misc.BASE64Decoder
 
@@ -25,6 +26,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 public class CreatePackageFromDocLayoutController {
+	final static Logger log =Logger.getLogger(CreatePackageFromDocLayoutController.class);
 	Map<String, Object> dssUniversalConnectorFromDocLayout(Map<String, Object> docLayoutData) {
 
 		Map<String, String> messageMap = new HashMap<String, String>();
@@ -128,6 +130,7 @@ public class CreatePackageFromDocLayoutController {
 				bufferedInputStream = fileOps.decodeBase64String(documentsMap[i].getAt("document").getAt("documentContent"));
 			}
 			catch (Exception e) {
+				log.error(e);
 				/*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
 				messageMap = exceptionHandlerService.parseValidationErrors("567");
 				return messageMap
@@ -221,6 +224,7 @@ public class CreatePackageFromDocLayoutController {
 			messageMap = responseBuilder.buildSuccessResponse(successMessage, packageId.toString(), completePackage.getName())
 		}
 		catch (Exception e) {
+			log.error(e);
 			messageMap = exceptionHandlerService.parseException(e);
 		}
 		return messageMap

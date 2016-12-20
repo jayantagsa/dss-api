@@ -8,15 +8,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.List
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OrgCodes {
-
+	final static Logger log =Logger.getLogger(OrgCodes.class);
 	private static String props;
 
 	static {
@@ -32,10 +33,10 @@ public class OrgCodes {
 			reader.close();
 		}
 		catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 		catch (IOException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 
@@ -52,7 +53,7 @@ public class OrgCodes {
 		}
 		catch(JSONException e)
 		{
-			e.printStackTrace();
+			log.error(e);
 			return null;
 		}
 
@@ -76,17 +77,17 @@ public class OrgCodes {
 
 			for (String value : mappedData.values())
 				orgList.add(value);
-			System.out.println("orglist:");
-			System.out.println(orgList);
+			//System.out.println("orglist:");
+			//System.out.println(orgList);
 			reader.close();
 		}
 		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
+			log.error(e);
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			log.error(e);
 		}
 		return orgList;
 	}
@@ -122,7 +123,7 @@ public class OrgCodes {
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 }

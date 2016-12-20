@@ -1,6 +1,7 @@
 package gov.gsa.dss.helper
 
-import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException;
+import org.apache.chemistry.opencmis.commons.exceptions.CmisContentAlreadyExistsException
+import org.apache.log4j.Logger;
 
 import com.silanis.esl.sdk.internal.EslServerException
 
@@ -17,6 +18,7 @@ import gov.gsa.dss.helper.staic.ErrorMessages;
  * 3.) Send it to ResponseBuilder to create a readable Map
  */
 public class ExceptionHandlerService {
+	final static Logger log =Logger.getLogger(ExceptionHandlerService.class);
 	String message;
 	int code;
 	String type;
@@ -30,8 +32,9 @@ public class ExceptionHandlerService {
 		}
 		else if(exc instanceof CmisContentAlreadyExistsException)
 		{
+			log.error(exc);
 			
-			println exc.getMessage();
+			log.info(exc.getMessage());
 			//+"...............";
 			//exc.printStackTrace();
 			message = exc.getMessage();;

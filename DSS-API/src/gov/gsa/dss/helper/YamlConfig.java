@@ -11,10 +11,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 public class YamlConfig {
-
+	final static Logger log =Logger.getLogger(YamlConfig.class);
 	private static String key;
 	private static String url;
 
@@ -45,7 +46,8 @@ public class YamlConfig {
 		try {
 			ios.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e);
+			//e.printStackTrace();
 		}
 
 	}

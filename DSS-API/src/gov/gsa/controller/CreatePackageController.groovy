@@ -19,7 +19,7 @@ import groovy.json.JsonSlurper
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.RandomStringUtils
 import org.apache.commons.lang3.StringUtils
-import sun.misc.BASE64Decoder
+import org.apache.log4j.Logger;
 
 import java.nio.file.Path
 
@@ -31,7 +31,7 @@ import static com.silanis.esl.sdk.builder.SignerBuilder.newSignerWithEmail
 import sun.misc.BASE64Decoder;
 
 public class CreatePackageController {
-	
+	final static Logger log =Logger.getLogger(CreatePackageController.class);
 	/**
     *
     *
@@ -80,6 +80,7 @@ public class CreatePackageController {
                bufferedInputStream = fileOps.decodeBase64String(documentsMap[i].getAt("document").getAt("documentContent"));
            }
            catch (Exception e) {
+			   log.error(e);
                /*This is when the base64 encoded file is corrupt and ends up with an exception while decoding it*/
                messageMap = exceptionHandlerService.parseValidationErrors("File could not be decoded.",
                        564,
@@ -122,7 +123,7 @@ public class CreatePackageController {
                            SimpleTextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
                            currentPageText = PdfTextExtractor.getTextFromPage(pdfReader, page, strategy);
                        } catch (Exception e) {
-                           e.printStackTrace()
+                           log.error(e);
                        }
                        while (currentPageText.contains(signersArray[j].getAt("searchText"))) {
                            occurrences1++;
@@ -200,6 +201,7 @@ public class CreatePackageController {
            messageMap = responseBuilder.buildSuccessResponse(successMessage, packageId.toString(), completePackage.getName())
        }
        catch (Exception e) {
+		   log.error(e);
            messageMap = exceptionHandlerService.parseException(e);
        }
        return messageMap

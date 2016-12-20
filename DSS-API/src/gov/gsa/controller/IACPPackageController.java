@@ -25,6 +25,7 @@ import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,8 +38,10 @@ import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.YamlConfig;
 import gov.gsa.dss.helper.Zipper;
 import gov.gsa.dss.helper.staic.ErrorMessages;
+import gov.gsa.dss.views.integration.IacpPackage;
 
 public class IACPPackageController {
+	final static Logger log =Logger.getLogger(IACPPackageController.class);
 	protected static String fileName="";
 	protected static String strbaseURL="";
 	protected static byte [] base64File;
@@ -68,21 +71,21 @@ public class IACPPackageController {
 			ZippedPackage();
 			Folder fol = (Folder) lSession.getObjectByPath(obj.getProp("edmspath"));
 			String name = fileName;
-			System.out.println(fileName);
+			log.info(fileName);
 			lProperties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
 			lProperties.put(PropertyIds.NAME, name);
 			byte[] content = base64File;
 			InputStream stream = new ByteArrayInputStream(content);
 			ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
 			Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
-			//System.out.println("Document created: " + newContent1.getId());
+			//log.info("Document created: " + newContent1.getId());
 			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
 		}
  
 		catch (Exception e)
 		{
-			//e.printStackTrace();
+			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			
 			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
@@ -90,7 +93,7 @@ public class IACPPackageController {
 			Map <String, String> msg = (Map<String, String>) ehs.parseException(e);
 
 			
-			//System.out.println(msg);
+			//log.info(msg);
 				
 					
 					@SuppressWarnings("unchecked")
@@ -112,19 +115,8 @@ public class IACPPackageController {
 		DocumentPackage DocPackage = Client.getPackage(packageId);
 		Zipper zipDocs = new Zipper();
 		
-		//String target =strbaseURL+"retrieve/downloadDocuments?packageId="+strPackageID+"&orgName="+strOrgName;
-		//System.out.println(target);
-		//Client client = ClientBuilder.newClient();
-		//WebTarget ret =client.target(target); //...;
-		//Response response = ret.request(MediaType.APPLICATION_JSON).get();
-		//status=response.getStatus();
-		
-		//String output = response.readEntity(String.class);
-		//System.out.println(output);
-		//JSONObject obj = new JSONObject(output);
-		//String base64ZIP = obj.getJSONObject("Package").getString("Content");
+
 		fileName =DocPackage.getName()+"_"+strPackageID+".zip";
-		//String base64ZIPevidence = obj.getJSONObject("Package").getString("Evidence");
 
 		base64File = zipDocs.getZip(DocPackage, Client);
 		

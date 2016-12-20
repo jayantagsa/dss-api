@@ -6,11 +6,14 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import javax.naming.NamingException;
 
+import org.apache.log4j.Logger;
+
 import gov.gsa.dss.helper.staic.EmailMessages;
 
 import javax.activation.*;
 
 public class Mail {
+	final static Logger log =Logger.getLogger(Mail.class);
 	protected YamlConfig configObj;
 	protected Properties props;
 	public Mail() throws FileNotFoundException, NamingException
@@ -24,15 +27,11 @@ public class Mail {
       // Recipient's email ID needs to be mentioned.
 	   try
 	    {
-		   
-		   
-			
-		    //String smtpHostServer = "smtp.gsa.gov";
-		    //String emailID = "pankaj@journaldev.com";
+
 		    int i=0;
-		    System.out.println(configObj.getProp("smtp"));
+		    log.info(configObj.getProp("smtp"));
 		  props.put("mail.smtp.host", configObj.getProp("smtp"));
-		  System.out.println(i++);
+		  //System.out.println(i++);
 		  Session session = Session.getInstance(props, null);
 	      MimeMessage msg = new MimeMessage(session);
 	      //set message headers
@@ -47,19 +46,19 @@ public class Mail {
 	      msg.setSubject(msgSubject, "UTF-8");
 
 	      msg.setText(msgBody, "UTF-8");
-	      System.out.println(i++);
+	      i++;
+	     // System.out.println(i++);
 
 	      msg.setSentDate(new Date());
 
 	      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiverEmailAddr, false));
-	      //System.out.println("Message is ready\t"+EmailMessages.getMessage(msgCode));
-   	  Transport.send(msg);  
+	      Transport.send(msg);  
 
-	      System.out.println("EMail Sent Successfully!!");
+	      log.info("EMail Sent Successfully!!");
 	      return true;
 	    }
 	    catch (Exception e) {
-	      e.printStackTrace();
+	      log.error(e);
 	      return false;
 	    }
    }

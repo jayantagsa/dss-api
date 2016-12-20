@@ -6,11 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EmailMessages {
-
+	final static Logger log =Logger.getLogger(EmailMessages.class);
 	private static String props;
 
 	static {
@@ -27,9 +28,9 @@ public class EmailMessages {
 			props = out.toString();
 			reader.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.error(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 

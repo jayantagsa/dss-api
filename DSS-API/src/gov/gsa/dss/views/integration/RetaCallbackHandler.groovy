@@ -1,14 +1,18 @@
 package gov.gsa.dss.views.integration
 
 import com.silanis.esl.sdk.DocumentPackage
+
+import gov.gsa.controller.RetrieveController;
 import gov.gsa.dss.helper.DSSQueueManagement
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject
+import org.apache.log4j.Logger;
 
 /**
  * Created by Sudhangi on 8/24/2016.
  */
 class RetaCallbackHandler {
-
+	final static Logger log =Logger.getLogger(RetaCallbackHandler.class);
+	
     public void retaPublishToQueue(String eventOccurred, String packageId , String packageName, String orgName, DocumentPackage documentPackage) {
 
         Map<String, String> myMessage = new HashMap<String, String>();
@@ -42,7 +46,7 @@ class RetaCallbackHandler {
         dssQueue.initConnection()
 
         def result = dssQueue.publishToQueue("DSS_RETA_QUEUE_DEV", messageString);
-        System.out.println ("published to queue: " + result);
+        log.info ("published to queue: " + result);
 
         dssQueue.closeConnection()
     }

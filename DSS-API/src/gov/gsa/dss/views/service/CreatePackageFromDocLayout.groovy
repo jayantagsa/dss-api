@@ -3,6 +3,7 @@ package gov.gsa.dss.views.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import gov.gsa.controller.CreatePackageFromDocLayoutController
 import gov.gsa.controller.CreatePackageFromTemplateController
+import gov.gsa.controller.RetrieveController;
 import gov.gsa.dss.helper.ExceptionHandlerService
 import javax.servlet.http.HttpServletRequest
 import javax.ws.rs.GET;
@@ -15,9 +16,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.*
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject
+import org.apache.log4j.Logger;
 
 @Path("/dssCreatePackageFromDocLayout")
 public class CreatePackageFromDocLayout {
+	final static Logger log =Logger.getLogger(CreatePackageFromDocLayout.class);
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -33,11 +37,11 @@ public class CreatePackageFromDocLayout {
 		/*Convert Map to JSON string*/
 		JSONObject jsonResult = new JSONObject();
 		jsonResult.putAll( result );
-		println "Rest call to createPackageFromDocLayout completed."	
+		log.info( "Rest call to createPackageFromDocLayout completed."	);
 		return Response.ok(jsonResult.toString(), MediaType.APPLICATION_JSON).build();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			String msg = ehs.parseException(e)+"";
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);

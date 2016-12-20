@@ -8,11 +8,15 @@ import java.util.zip.Inflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.log4j.Logger;
+
 import com.silanis.esl.sdk.Document;
 import com.silanis.esl.sdk.DocumentPackage;
 import com.silanis.esl.sdk.EslClient;
+
+import gov.gsa.dss.helper.staic.EmailMessages;
 public class Zipper {
-	
+	final static Logger log =Logger.getLogger(Zipper.class);
 	public  byte[] getZip(DocumentPackage docPackage,EslClient esl) throws IOException
 	{
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -21,7 +25,7 @@ public class Zipper {
 		List <Document> Documents = docPackage.getDocuments();
 		for (Document doc : Documents )
 		{
-			System.out.println(doc.getName());
+			log.info(doc.getName());
 			ZipEntry entry = new ZipEntry(doc.getName()+".pdf");
 			
 			entry.setSize(esl.downloadDocument(docPackage.getId(), doc.getId()+"").length);
@@ -61,15 +65,5 @@ public class Zipper {
         // Get the decompressed data 
         return bos.toByteArray(); 
 	}
-	/*public static byte[] zipBytes(String filename, byte[] input) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ZipOutputStream zos = new ZipOutputStream(baos);
-		ZipEntry entry = new ZipEntry(filename);
-		entry.setSize(input.length);
-		zos.putNextEntry(entry);
-		zos.write(input);
-		zos.closeEntry();
-		zos.close();
-		return baos.toByteArray();
-	}*/
+	
 }

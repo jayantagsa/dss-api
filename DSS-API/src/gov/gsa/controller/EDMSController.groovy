@@ -17,7 +17,8 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
-import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.silanis.esl.sdk.DocumentPackage;
@@ -30,7 +31,8 @@ import gov.gsa.dss.helper.YamlConfig;
 import gov.gsa.dss.helper.Zipper;
 
 class EDMSController {
-
+	final static Logger log =Logger.getLogger(EDMSController.class);
+	
 	protected static String fileName="";
 	protected static String strbaseURL="";
 	protected static byte [] base64File;
@@ -42,6 +44,7 @@ class EDMSController {
 	//@Context
 	//UriInfo uriInfo;
 	public Response uploadPackagetoEDMS(String PackageId, String OrgName)
+	
 	{
 
 		strOrgName=OrgName;
@@ -64,7 +67,8 @@ class EDMSController {
 			Folder fol = (Folder) lSession.getObjectByPath(obj.getProp(appendPathUrl));
 
 			String name = fileName;
-			System.out.println(fileName);
+			
+			log.info(fileName);
 			lProperties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
 			lProperties.put(PropertyIds.NAME, name);
 			
@@ -79,6 +83,7 @@ class EDMSController {
 
 		catch (Exception e)
 		{
+			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			
 			@SuppressWarnings("unchecked")
