@@ -66,7 +66,9 @@ public class ErrorMessages {
 				return inputStream;
 			}
 		} finally {
-			inputStream.close();
+		/*This nputStream needs to be closed but a better approach should be figured out to do it. 
+		 * Closing it here causes problems in accessing the stream further ahead which results in NullPointerException */	
+//			inputStream.close();
 		}
 
 	}
