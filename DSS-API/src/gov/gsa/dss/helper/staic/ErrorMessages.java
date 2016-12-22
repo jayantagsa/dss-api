@@ -14,21 +14,30 @@ public class ErrorMessages {
 	private static String props;
 
 	static {
+		InputStreamReader is = null;
+		BufferedReader reader = null;
 		try {
 			ErrorMessages util = new ErrorMessages();
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(util.getPropertiesFromClasspath("errorcodes.json")));
+			is = new InputStreamReader(util.getPropertiesFromClasspath("errorcodes.json"));
+			reader = new BufferedReader(is);
 			StringBuilder out = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
 				out.append(line);
 			}
 			props = out.toString();
-			reader.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				reader.close();
+				is.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
 	}
 
@@ -66,9 +75,13 @@ public class ErrorMessages {
 				return inputStream;
 			}
 		} finally {
-		/*This nputStream needs to be closed but a better approach should be figured out to do it. 
-		 * Closing it here causes problems in accessing the stream further ahead which results in NullPointerException */	
-//			inputStream.close();
+			/*
+			 * This nputStream needs to be closed but a better approach should
+			 * be figured out to do it. Closing it here causes problems in
+			 * accessing the stream further ahead which results in
+			 * NullPointerException
+			 */
+			// inputStream.close();
 		}
 
 	}
