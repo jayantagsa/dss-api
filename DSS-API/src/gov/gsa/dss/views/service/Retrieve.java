@@ -18,11 +18,13 @@ import gov.gsa.dss.views.integration.IacpPackage;
 @Path("/package")
 
 public class Retrieve {
+	
+	static Logger log =Logger.getLogger(Retrieve.class);
 	/**
 	 * Class retrieve
 	 */
+	 
 	
-	final static Logger log =Logger.getLogger(Retrieve.class);
 	@Path("retrieve")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

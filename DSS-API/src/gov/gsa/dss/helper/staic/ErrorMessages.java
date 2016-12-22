@@ -15,10 +15,13 @@ public class ErrorMessages {
 	private static String props;
 
 	static {
+		InputStream inputStream = null;
 		try {
+			
 			ErrorMessages util = new ErrorMessages();
+			inputStream=util.getPropertiesFromClasspath("errorcodes.json");
 			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(util.getPropertiesFromClasspath("errorcodes.json")));
+					new InputStreamReader(inputStream));
 			StringBuilder out = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -30,6 +33,14 @@ public class ErrorMessages {
 			log.error(e);
 		} catch (IOException e) {
 			log.error(e);
+		}
+		finally{
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				log.error(e);
+			}
 		}
 	}
 
@@ -67,7 +78,7 @@ public class ErrorMessages {
 				return inputStream;
 			}
 		} finally {
-			inputStream.close();
+			//inputStream.close();
 		}
 
 	}
