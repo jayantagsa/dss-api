@@ -1,6 +1,7 @@
 package gov.gsa.dss.views.integration;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -36,7 +37,7 @@ public class IacpPackage {
 	 * @param strOrgName
 	 * @return Application JSON (Base64 encoded zipped docs+ evidence summary) and Package name
 	 */
-	public Response uploadEDMS(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
+	public Response uploadEDMS(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName) throws IOException    {
 		System.out.println(uriInfo.getBaseUri());
 		
 		IACPPackageController obj =new IACPPackageController();
