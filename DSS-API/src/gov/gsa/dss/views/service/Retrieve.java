@@ -23,7 +23,6 @@ public class Retrieve {
 	/**
 	 * Class retrieve
 	 */
-	 
 	
 	@Path("retrieve")
 	@GET
