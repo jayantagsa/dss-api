@@ -80,18 +80,7 @@ public class IACPPackageController {
 			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			@SuppressWarnings("unchecked")
-			Map <String, String> msg = (Map<String, String>) ehs.parseException(e);
-
 			
-			//log.info(msg);
-				
-					
-					@SuppressWarnings("unchecked")
-					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
-					int code =  Integer.parseInt((String) msg.get("code"));
-					JSONObject json = new JSONObject(parseValidationErrors);
-					return Response.status(code).type(MediaType.APPLICATION_JSON)
-						.entity(json+"").build();
 			Map<String, String> msg = (Map<String, String>) ehs.parseException(e);
 			@SuppressWarnings("unchecked")
 			Map<String, String> parseValidationErrors = (Map<String, String>) ehs.parseException(e);
