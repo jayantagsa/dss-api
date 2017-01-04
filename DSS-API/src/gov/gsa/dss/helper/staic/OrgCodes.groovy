@@ -36,13 +36,9 @@ public class OrgCodes {
 			log.error(e);
 		}
 		catch (IOException e) {
-<<<<<<< HEAD
 			log.error(e);
-=======
-			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 		}
 	}
 

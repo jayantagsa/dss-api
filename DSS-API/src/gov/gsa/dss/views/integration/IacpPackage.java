@@ -40,8 +40,7 @@ public class IacpPackage {
 	 * @param strOrgName
 	 * @return Application JSON (Base64 encoded zipped docs+ evidence summary) and Package name
 	 */
-<<<<<<< HEAD
-	public Response uploadEDMS(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName)    {
+	public Response uploadEDMS(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName) throws IOException    {
 		log.info(uriInfo.getBaseUri());
 		Validator validator = ESAPI.validator();
 		 ValidationErrorList errorList = new ValidationErrorList();
@@ -55,10 +54,6 @@ public class IacpPackage {
 			 validatedPackageID=strPackageId;
 			 //OrgCodes.getOrg(paramOrgName);
 		 }
-=======
-	public Response uploadEDMS(@QueryParam ("packageId") String strPackageId, @QueryParam ("orgName") String strOrgName) throws IOException    {
-		System.out.println(uriInfo.getBaseUri());
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 		
 		IACPPackageController obj =new IACPPackageController();
 

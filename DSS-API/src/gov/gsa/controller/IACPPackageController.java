@@ -20,11 +20,7 @@ import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
-<<<<<<< HEAD
 import org.apache.log4j.Logger;
-import org.json.JSONException;
-=======
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 import org.json.JSONObject;
 
 import com.silanis.esl.sdk.DocumentPackage;
@@ -35,23 +31,13 @@ import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.YamlConfig;
 import gov.gsa.dss.helper.Zipper;
-<<<<<<< HEAD
-import gov.gsa.dss.helper.staic.ErrorMessages;
 import gov.gsa.dss.views.integration.IacpPackage;
-=======
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 
 public class IACPPackageController {
-<<<<<<< HEAD
 	final static Logger log =Logger.getLogger(IACPPackageController.class);
-	protected static String fileName="";
-	protected static String strbaseURL="";
-	protected static byte [] base64File;
-=======
 	protected static String fileName = "";
 	protected static String strbaseURL = "";
 	protected static byte[] base64File;
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 	protected static String strOrgName;
 	protected static String strPackageID;
 	protected static int status;
@@ -83,27 +69,17 @@ public class IACPPackageController {
 			byte[] content = base64File;
 			stream = new ByteArrayInputStream(content);
 			ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
-<<<<<<< HEAD
 			Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
 			//log.info("Document created: " + newContent1.getId());
-=======
-			Document newContent1 = fol.createDocument(lProperties, contentStream, null);
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":" + newContent1.getId() + "}").build();
 		}
-<<<<<<< HEAD
  
 		catch (Exception e)
 		{
 			log.error(e);
-=======
-		/* This exception will be parsed using DSS ExceptionHandlerService, so we will need to capture the broad exception here.*/ 
-		catch (Exception e) {
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			@SuppressWarnings("unchecked")
-<<<<<<< HEAD
 			Map <String, String> msg = (Map<String, String>) ehs.parseException(e);
 
 			
@@ -116,7 +92,6 @@ public class IACPPackageController {
 					JSONObject json = new JSONObject(parseValidationErrors);
 					return Response.status(code).type(MediaType.APPLICATION_JSON)
 						.entity(json+"").build();
-=======
 			Map<String, String> msg = (Map<String, String>) ehs.parseException(e);
 			@SuppressWarnings("unchecked")
 			Map<String, String> parseValidationErrors = (Map<String, String>) ehs.parseException(e);
@@ -126,7 +101,6 @@ public class IACPPackageController {
 		}
 		finally {
 			stream.close();
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 		}
 	}
 
@@ -136,14 +110,11 @@ public class IACPPackageController {
 		PackageId packageId = new PackageId(strPackageID);
 		DocumentPackage DocPackage = Client.getPackage(packageId);
 		Zipper zipDocs = new Zipper();
-<<<<<<< HEAD
 		
 
 		fileName =DocPackage.getName()+"_"+strPackageID+".zip";
 
-=======
 		fileName = DocPackage.getName() + "_" + strPackageID + ".zip";
->>>>>>> refs/heads/DSS-Sprint22_518_merge
 		base64File = zipDocs.getZip(DocPackage, Client);
 	}
 
