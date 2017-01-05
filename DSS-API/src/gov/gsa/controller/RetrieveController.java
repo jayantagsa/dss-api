@@ -89,7 +89,7 @@ public class RetrieveController {
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			@SuppressWarnings("unchecked")
 			Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);

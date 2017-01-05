@@ -47,7 +47,7 @@ public class YamlConfig {
 			ios.close();
 		} catch (IOException e) {
 			log.error(e);
-			//e.printStackTrace();
+
 		}
 
 	}

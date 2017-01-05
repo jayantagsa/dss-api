@@ -25,9 +25,9 @@ public class Mail {
 		// Recipient's email ID needs to be mentioned.
 		try {
 			int i = 0;
-			System.out.println(configObj.getProp("smtp"));
+			log.info(configObj.getProp("smtp"));
 			props.put("mail.smtp.host", configObj.getProp("smtp"));
-			System.out.println(i++);
+			log.info(i++);
 			Session session = Session.getInstance(props, null);
 			MimeMessage msg = new MimeMessage(session);
 			// set message headers
@@ -37,23 +37,23 @@ public class Mail {
 			msg.setFrom(new InternetAddress(senderEmailAddr, senderEmailAddr));
 			msg.setSubject(msgSubject, "UTF-8");
 			msg.setText(msgBody, "UTF-8");
-			System.out.println(i++);
+			log.info(i++);
 			msg.setSentDate(new Date());
 			msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiverEmailAddr, false));
 			Transport.send(msg);
-			System.out.println("EMail Sent Successfully!!");
+			log.info("EMail Sent Successfully!!");
 			return true;
 		} catch (AddressException e) {
-			e.printStackTrace();
+			log.error(e);
 			return false;
 		} catch (MessagingException e) {
-			e.printStackTrace();
-			return false;
+			log.error(e);
+				return false;
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e);
 			return false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 			return false;
 		}
 	}
