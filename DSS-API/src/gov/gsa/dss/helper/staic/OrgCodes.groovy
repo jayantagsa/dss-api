@@ -19,9 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class OrgCodes {
 	final static Logger log =Logger.getLogger(OrgCodes.class);
 	private static String props;
-
+	private static InputStream inputStream = null;
 	static {
-		InputStream inputStream = null;
+		
 		BufferedReader reader;
 		try {
 			OrgCodes util = new OrgCodes();
@@ -87,7 +87,7 @@ public class OrgCodes {
 		try
 		{
 			OrgCodes util = new OrgCodes();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(util.getPropertiesFromClasspath("orgcode.json")));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			StringBuilder out = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
