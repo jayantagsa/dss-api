@@ -11,7 +11,6 @@ import org.apache.commons.lang3.StringUtils
 class PackageOrgName {
 
 	def getOrgName(DocumentPackage documentPackage) {
-
 		DocumentPackageAttributes documentPackageAttributes = documentPackage.getAttributes();
 		def orgName = documentPackageAttributes.getContents().get("orgName").toString();
 		def orgList = OrgCodes.getOrgList();

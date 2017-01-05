@@ -18,11 +18,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OrgCodes {
 	final static Logger log =Logger.getLogger(OrgCodes.class);
-	private static String props;
+	 private static String props;
 	private static InputStream inputStream = null;
+	private static BufferedReader reader;
 	static {
-		
-		BufferedReader reader;
+
+
 		try {
 			OrgCodes util = new OrgCodes();
 			inputStream =
@@ -55,9 +56,9 @@ public class OrgCodes {
 				inputStream.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				e.printStackTrace();
 				log.error(e);
 			}
-
 		}
 	}
 
@@ -77,73 +78,22 @@ public class OrgCodes {
 			log.error(e);
 			return null;
 		}
-
 	}
 
 	public static List getOrgList()
 	{
 		List<String> orgList = new ArrayList<String>();
+		OrgCodes util = new OrgCodes();
+		log.info(props);
+		HashMap<String,Object> mappedData =
+				new ObjectMapper().readValue(props, HashMap.class);
 
-		try
+		for (String value : mappedData.values())
 		{
-			OrgCodes util = new OrgCodes();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-			StringBuilder out = new StringBuilder();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				out.append(line);
-			}
-			HashMap<String,Object> mappedData =
-					new ObjectMapper().readValue(out.toString(), HashMap.class);
-
-			for (String value : mappedData.values())
-				orgList.add(value);
-			//System.out.println("orglist:");
-			//System.out.println(orgList);
-			reader.close();
-		}
-		catch (FileNotFoundException e)
-		{
-			log.error(e);
-		}
-		catch (IOException e)
-		{
-			log.error(e);
+			
+			orgList.add(value);
 		}
 		return orgList;
 	}
 
-
-
-
-
-	/**
-	 * loads properties file from classpath
-	 *
-	 * @param propFileName
-	 * @return
-	 * @throws IOException
-	 */
-	/*	private InputStream getPropertiesFromClasspath(String propFileName) throws IOException
-	 {
-	 InputStream inputStream = null;
-	 try
-	 {
-	 inputStream =
-	 this.getClass().getClassLoader().getResourceAsStream(propFileName);
-	 if (inputStream == null)
-	 {
-	 throw new FileNotFoundException("property file '" + propFileName
-	 + "' not found in the classpath");
-	 }
-	 else {
-	 return inputStream;
-	 }
-	 inputStream.close();
-	 }
-	 catch (IOException e)
-	 {
-	 log.error(e);
-	 }
-	 }
-	 */}
+}

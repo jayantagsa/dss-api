@@ -18,7 +18,6 @@ public class ErrorMessages {
 		InputStream inputStream = null;
 		BufferedReader reader = null;
 		try {
-
 			ErrorMessages util = new ErrorMessages();
 			inputStream = util.getClass().getClassLoader().getResourceAsStream("errorcodes.json");
 			reader = new BufferedReader(new InputStreamReader(inputStream));
