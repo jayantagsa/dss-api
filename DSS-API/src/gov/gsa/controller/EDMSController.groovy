@@ -32,7 +32,7 @@ import gov.gsa.dss.helper.Zipper;
 
 class EDMSController {
 	final static Logger log =Logger.getLogger(EDMSController.class);
-	
+
 	protected static String fileName="";
 	protected static String strbaseURL="";
 	protected static byte [] base64File;
@@ -40,16 +40,14 @@ class EDMSController {
 	protected static String strPackageID;
 	protected static int status;
 	protected InputStream stream;
-	
+
 	//@Context
 	//UriInfo uriInfo;
 	public Response uploadPackagetoEDMS(String PackageId, String OrgName)
-	
-	{
 
+	{
 		strOrgName=OrgName;
 		strPackageID=PackageId;
-		
 		try{
 			YamlConfig obj = new YamlConfig();
 			Map<String, String> sessionParameters = new HashMap<String, String>();
@@ -67,16 +65,16 @@ class EDMSController {
 			Folder fol = (Folder) lSession.getObjectByPath(obj.getProp(appendPathUrl));
 
 			String name = fileName;
-			
+
 			log.info(fileName);
 			lProperties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
 			lProperties.put(PropertyIds.NAME, name);
-			
+
 			byte[] content = base64File;
 			stream = new ByteArrayInputStream(content);
 			ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
 			Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
-				
+
 			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
 		}
@@ -85,18 +83,16 @@ class EDMSController {
 		{
 			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
-			
+
 			@SuppressWarnings("unchecked")
 					Map <String, String> msg = (Map<String, String>) ehs.parseException(e);
-
-
 			@SuppressWarnings("unchecked")
 					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
 			int code =  Integer.parseInt((String) msg.get("code"));
 			JSONObject json = new JSONObject(parseValidationErrors);
 			return Response.status(code).type(MediaType.APPLICATION_JSON)
 					.entity(json+"").build();
-		}		
+		}
 		finally {
 			stream.close();
 		}

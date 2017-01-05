@@ -3,7 +3,7 @@ package gov.gsa.dss.helper;
 import java.util.HashMap;
 import java.util.Map
 
-import org.apache.log4j.Logger;;
+import org.apache.log4j.Logger;
 
 /**
  * Created by sudhangi on 7/21/2016.
