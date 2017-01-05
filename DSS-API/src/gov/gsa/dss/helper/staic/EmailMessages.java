@@ -15,10 +15,16 @@ public class EmailMessages {
 	private static String props;
 
 	static {
+		BufferedReader reader =null;
+		InputStream inputStream = null;
 		try {
 			EmailMessages util = new EmailMessages();
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(util.getPropertiesFromClasspath("emailmessages.json")));
+			inputStream = util.getClass().getClassLoader().getResourceAsStream("emailmessages.json");
+			if (inputStream == null) {
+				throw new FileNotFoundException("property file '" + "emailmessages.json" + "' not found in the classpath");
+			} 
+			reader = new BufferedReader(
+					new InputStreamReader(inputStream));
 			StringBuilder out = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -32,7 +38,16 @@ public class EmailMessages {
 		} catch (IOException e) {
 			log.error(e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
+		}
+		finally {
+			try {
+				reader.close();
+				inputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -59,22 +74,5 @@ public class EmailMessages {
 	 * @return
 	 * @throws IOException
 	 */
-	InputStream getPropertiesFromClasspath(String propFileName) throws IOException {
-		InputStream inputStream = null;
-
-		try {
-			inputStream = this.getClass().getClassLoader().getResourceAsStream(propFileName);
-
-			if (inputStream == null) {
-				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-			} else {
-				return inputStream;
-			}
-		}
-
-		finally {
-			inputStream.close();
-		}
-
-	}
+	
 }

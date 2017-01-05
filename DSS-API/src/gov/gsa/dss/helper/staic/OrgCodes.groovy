@@ -21,16 +21,25 @@ public class OrgCodes {
 	private static String props;
 
 	static {
+		InputStream inputStream = null;
+		BufferedReader reader;
 		try {
 			OrgCodes util = new OrgCodes();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(util.getPropertiesFromClasspath("orgcode.json")));
+			inputStream =
+					util.getClass().getClassLoader().getResourceAsStream("orgcode.json");
+
+			if (inputStream == null)
+			{
+				throw new FileNotFoundException("property file '" + "orgcode.json"
+				+ "' not found in the classpath");
+			}
+			reader = new BufferedReader(new InputStreamReader(inputStream));
 			StringBuilder out = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
 				out.append(line);
 			}
 			props = out.toString();
-			reader.close();
 		}
 		catch (FileNotFoundException e) {
 			log.error(e);
@@ -38,7 +47,17 @@ public class OrgCodes {
 		catch (IOException e) {
 			log.error(e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
+		}
+		finally{
+			try {
+				reader.close();
+				inputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				log.error(e);
+			}
+
 		}
 	}
 
@@ -105,27 +124,26 @@ public class OrgCodes {
 	 * @return
 	 * @throws IOException
 	 */
-	private InputStream getPropertiesFromClasspath(String propFileName) throws IOException
-	{
-		InputStream inputStream = null;
-		try
-		{
-			inputStream =
-					this.getClass().getClassLoader().getResourceAsStream(propFileName);
-
-			if (inputStream == null)
-			{
-				throw new FileNotFoundException("property file '" + propFileName
-				+ "' not found in the classpath");
-			}
-			else {
-				return inputStream;
-			}
-			inputStream.close();
-		}
-		catch (IOException e)
-		{
-			log.error(e);
-		}
-	}
-}
+	/*	private InputStream getPropertiesFromClasspath(String propFileName) throws IOException
+	 {
+	 InputStream inputStream = null;
+	 try
+	 {
+	 inputStream =
+	 this.getClass().getClassLoader().getResourceAsStream(propFileName);
+	 if (inputStream == null)
+	 {
+	 throw new FileNotFoundException("property file '" + propFileName
+	 + "' not found in the classpath");
+	 }
+	 else {
+	 return inputStream;
+	 }
+	 inputStream.close();
+	 }
+	 catch (IOException e)
+	 {
+	 log.error(e);
+	 }
+	 }
+	 */}

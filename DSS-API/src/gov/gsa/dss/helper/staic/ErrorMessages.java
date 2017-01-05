@@ -11,17 +11,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ErrorMessages {
-	final static Logger log =Logger.getLogger(ErrorMessages.class);
+	final static Logger log = Logger.getLogger(ErrorMessages.class);
 	private static String props;
 
 	static {
 		InputStream inputStream = null;
+		BufferedReader reader = null;
 		try {
-			
+
 			ErrorMessages util = new ErrorMessages();
-			inputStream=util.getPropertiesFromClasspath("errorcodes.json");
-			BufferedReader reader = new BufferedReader(
-					new InputStreamReader(inputStream));
+			inputStream = util.getClass().getClassLoader().getResourceAsStream("errorcodes.json");
+			reader = new BufferedReader(new InputStreamReader(inputStream));
 			StringBuilder out = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -33,9 +33,9 @@ public class ErrorMessages {
 			log.error(e);
 		} catch (IOException e) {
 			log.error(e);
-		}
-		finally{
+		} finally {
 			try {
+				reader.close();
 				inputStream.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -66,20 +66,18 @@ public class ErrorMessages {
 	 * @return
 	 * @throws IOException
 	 */
-	private InputStream getPropertiesFromClasspath(String propFileName) throws IOException {
-		InputStream inputStream = null;
-
-		try {
-			inputStream = this.getClass().getClassLoader().getResourceAsStream(propFileName);
-
-			if (inputStream == null) {
-				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
-			} else {
-				return inputStream;
-			}
-		} finally {
-			//inputStream.close();
-		}
-
-	}
+	/*
+	 * private InputStream getPropertiesFromClasspath(String propFileName)
+	 * throws IOException { InputStream inputStream = null;
+	 * 
+	 * try { inputStream =
+	 * this.getClass().getClassLoader().getResourceAsStream(propFileName);
+	 * 
+	 * if (inputStream == null) { throw new
+	 * FileNotFoundException("property file '" + propFileName +
+	 * "' not found in the classpath"); } else { return inputStream; } } finally
+	 * { //inputStream.close(); }
+	 * 
+	 * }
+	 */
 }
