@@ -57,6 +57,9 @@ class CallbackHandlerController {
 					log.info( "IACP event: $eventOccurred");
 					log.info( "Package Name: $packageName");
 					log.info( "Package Id: $packageIdString");
+					if (eventOccurred=="PACKAGE_COMPLETE" ) {
+						edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+					}
 					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					//iacpCallbackHandler.handleCallback(sEvent)
 					break
@@ -68,9 +71,7 @@ class CallbackHandlerController {
 					break
 			}
 			
-			if (eventOccurred=="PACKAGE_COMPLETE" ) {
-				edmsController.uploadPackagetoEDMS(packageIdString,orgName)
-			}
+			
 		}
 		catch (Exception e) {
 			log.error(e);
