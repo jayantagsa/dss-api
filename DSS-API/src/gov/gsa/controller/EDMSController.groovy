@@ -61,7 +61,16 @@ class EDMSController {
 
 			Map<String, Object> lProperties = new HashMap<String, Object>();
 			ZippedPackage();
-			def appendPathUrl = "edmspath"+OrgName;
+			def appendPathUrl;
+			// If Orgname is null, send files to base folder
+			if(OrgName!="null")
+			{
+				appendPathUrl = "edmspath"+OrgName;
+			}
+			else{
+				appendPathUrl = "edmspath"
+			}
+			log.info(appendPathUrl);
 			Folder fol = (Folder) lSession.getObjectByPath(obj.getProp(appendPathUrl));
 
 			String name = fileName;
