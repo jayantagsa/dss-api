@@ -62,7 +62,7 @@ class EDMSController {
 			Map<String, Object> lProperties = new HashMap<String, Object>();
 			ZippedPackage();
 			def appendPathUrl;
-			// If Orgname is null, send files to base folder
+			//If Orgname is null, send files to default folder
 			if(OrgName!="null")
 			{
 				appendPathUrl = "edmspath"+OrgName;
