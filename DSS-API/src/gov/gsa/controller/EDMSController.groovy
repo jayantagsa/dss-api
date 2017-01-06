@@ -91,7 +91,7 @@ class EDMSController {
 			int code =  Integer.parseInt((String) msg.get("code"));
 			JSONObject json = new JSONObject(parseValidationErrors);
 			return Response.status(code).type(MediaType.APPLICATION_JSON)
-					.entity(json+"").build();
+					.entity(json).build();
 		}
 		finally {
 			stream.close();
