@@ -18,12 +18,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OrgCodes {
 	final static Logger log =Logger.getLogger(OrgCodes.class);
-	 private static String props;
+	private static String props;
 	private static InputStream inputStream = null;
 	private static BufferedReader reader;
 	static {
-
-
 		try {
 			OrgCodes util = new OrgCodes();
 			inputStream =
@@ -78,7 +76,6 @@ public class OrgCodes {
 			return null;
 		}
 	}
-
 	public static List getOrgList()
 	{
 		List<String> orgList = new ArrayList<String>();
@@ -86,10 +83,9 @@ public class OrgCodes {
 		log.info(props);
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(props, HashMap.class);
-
 		for (String value : mappedData.values())
 		{
-			
+
 			orgList.add(value);
 		}
 		return orgList;
