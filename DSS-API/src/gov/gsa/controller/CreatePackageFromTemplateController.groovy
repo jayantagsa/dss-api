@@ -15,10 +15,12 @@ import static com.silanis.esl.sdk.builder.PackageBuilder.newPackageNamed
 import static com.silanis.esl.sdk.builder.SignatureBuilder.*
 import static com.silanis.esl.sdk.builder.SignerBuilder.newSignerWithEmail
 import org.apache.commons.lang3.StringUtils
+import org.apache.log4j.Logger;
 
 import java.util.Map;
 
 public class CreatePackageFromTemplateController {
+	final static Logger log =Logger.getLogger(CreatePackageFromTemplateController.class);
 	Map<String, Object> dssUniversalConnectorFromTemplate(Map<String, Object> templateData) {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		SignerBuilder signer;
@@ -48,6 +50,7 @@ public class CreatePackageFromTemplateController {
 			placeholders = tempPack.getPlaceholders();
 		}
 		catch (Exception exp){
+			log.error(exp);
 			messageMap = exceptionHandlerService.parseException(exp);
 			return messageMap;
 		}

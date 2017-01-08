@@ -11,6 +11,12 @@ edmspathIACP: /Sites/agency-concurrence-process/documentLibrary/Signed/
 edmspathSalesforce: /Sites/agency-concurrence-process/documentLibrary/Signed/
 smtp: smtp.gsa.gov
 # Connection parameters
+orgNames:
+  - AAAP
+  - IACP
+  - RETA
+  - Salesforce
+  - GSA
 connection:
     apiaaakey: ZXZqQmxNRFFzaFVROjM3RHlTTlI2SmdJRw==
     apiaaaurl: https://sandbox.e-signlive.com/api

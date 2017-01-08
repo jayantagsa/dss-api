@@ -1,7 +1,9 @@
 package gov.gsa.dss.helper;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Map
+
+import org.apache.log4j.Logger;
 
 /**
  * Created by sudhangi on 7/21/2016.
@@ -13,6 +15,7 @@ import java.util.Map;
  * 3.) Type or error
  */
 public class ResponseBuilder {
+	final static Logger log =Logger.getLogger(ResponseBuilder.class);
     Map<String, String> response = new HashMap<String, String>();
 
     Map buildExceptionResponse (String message, int code, String type) {

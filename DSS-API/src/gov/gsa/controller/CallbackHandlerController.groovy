@@ -8,6 +8,8 @@ import com.silanis.esl.sdk.PackageId
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils
+import org.apache.log4j.Logger;
+
 import com.silanis.esl.sdk.EslClient;
 import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.EmailContent;
@@ -17,7 +19,7 @@ import gov.gsa.dss.views.integration.RetaCallbackHandler;
 
 class CallbackHandlerController {
 
-
+	final static Logger log =Logger.getLogger(CallbackHandlerController.class);
 	public Response routeCallback (HashMap<String,Object> mappedData, String sEvent){
 
 		try {
@@ -34,6 +36,7 @@ class CallbackHandlerController {
 			PackageId packageId = new PackageId(packageIdString)
 			DocumentPackage documentPackage = dssEslClient.getPackage(packageId);
 			def orgName = packageOrgName.getOrgName(documentPackage);
+			log.info(orgName);
 			String packageName = documentPackage.getName();
 
 			switch (orgName) {
@@ -43,34 +46,35 @@ class CallbackHandlerController {
 				 tspCallbackHandler.handleCallback(sEvent)
 				 break*/
 				case "RETA":
-					println "RETA event: $eventOccurred"
-					println "Package Name: $packageName"
-					println "Package Id: $packageIdString"
+					log.info( "RETA event: $eventOccurred");
+					log.info( "Package Name: $packageName");
+					log.info( "Package Id: $packageIdString");
 					retaCallbackHandler.retaPublishToQueue(eventOccurred, packageIdString, packageName, orgName, documentPackage);
 				/*This genericCallbackHandler will not be used for RETA case.*/
 				/*genericCallbackHandler.handleCallback(sEvent)*/
 					break
 				case "IACP":
-					println "IACP event: $eventOccurred"
-					println "Package Name: $packageName"
-					println "Package Id: $packageIdString"
+					log.info( "IACP event: $eventOccurred");
+					log.info( "Package Name: $packageName");
+					log.info( "Package Id: $packageIdString");
+					if (eventOccurred=="PACKAGE_COMPLETE" ) {
+						edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+					}
 					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					//iacpCallbackHandler.handleCallback(sEvent)
 					break
 				default:
-					println "Default event occurred: $eventOccurred"
-					println "Package Name: $packageName"
-					println "Package Id: $packageIdString"
+					log.info( "Default event occurred: $eventOccurred");
+					log.info( "Package Name: $packageName");
+					log.info( "Package Id: $packageIdString");
 					emailContent.emailOnRoutingExp(eventOccurred, packageName, packageIdString);
 					break
 			}
 			
-			if (eventOccurred=="PACKAGE_COMPLETE" ) {
-				edmsController.uploadPackagetoEDMS(packageIdString,orgName)
-			}
+			
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			String msg = ehs.parseException(e)+"";
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);

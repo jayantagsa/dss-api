@@ -8,37 +8,56 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.List
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class OrgCodes {
-
-	private static String props;
-
+	final static Logger log =Logger.getLogger(OrgCodes.class);
+	 private static String props;
+	private static InputStream inputStream = null;
+	private static BufferedReader reader;
 	static {
-		try
-		{
+
+
+		try {
 			OrgCodes util = new OrgCodes();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(util.getPropertiesFromClasspath("orgcode.json")));
+			inputStream =
+					util.getClass().getClassLoader().getResourceAsStream("orgcode.json");
+
+			if (inputStream == null)
+			{
+				throw new FileNotFoundException("property file '" + "orgcode.json"
+				+ "' not found in the classpath");
+			}
+			reader = new BufferedReader(new InputStreamReader(inputStream));
 			StringBuilder out = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
 				out.append(line);
 			}
 			props = out.toString();
-			reader.close();
 		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
+		catch (FileNotFoundException e) {
+			log.error(e);
 		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
+		catch (IOException e) {
+			log.error(e);
+		} catch (Exception e) {
+			log.error(e);
+		}
+		finally{
+			try {
+				reader.close();
+				inputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				log.error(e);
+			}
 		}
 	}
 
@@ -55,78 +74,25 @@ public class OrgCodes {
 		}
 		catch(JSONException e)
 		{
-			e.printStackTrace();
+			log.error(e);
 			return null;
 		}
-
 	}
 
 	public static List getOrgList()
 	{
 		List<String> orgList = new ArrayList<String>();
+		OrgCodes util = new OrgCodes();
+		log.info(props);
+		HashMap<String,Object> mappedData =
+				new ObjectMapper().readValue(props, HashMap.class);
 
-		try
+		for (String value : mappedData.values())
 		{
-			OrgCodes util = new OrgCodes();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(util.getPropertiesFromClasspath("orgcode.json")));
-			StringBuilder out = new StringBuilder();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				out.append(line);
-			}
-			HashMap<String,Object> mappedData =
-					new ObjectMapper().readValue(out.toString(), HashMap.class);
-
-			for (String value : mappedData.values())
-				orgList.add(value);
-			System.out.println("orglist:");
-			System.out.println(orgList);
-			reader.close();
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
+			
+			orgList.add(value);
 		}
 		return orgList;
 	}
 
-
-
-
-
-	/**
-	 * loads properties file from classpath
-	 *
-	 * @param propFileName
-	 * @return
-	 * @throws IOException
-	 */
-	private InputStream getPropertiesFromClasspath(String propFileName)
-			throws IOException
-	{
-		InputStream inputStream = null;
-		try
-		{
-			inputStream =
-					this.getClass().getClassLoader().getResourceAsStream(propFileName);
-
-			if (inputStream == null)
-			{
-				throw new FileNotFoundException("property file '" + propFileName
-				+ "' not found in the classpath");
-			}
-			else {
-				return inputStream;
-			}
-		}
-		finally
-		{
-			//inputStream.close();
-		}
-
-	}
 }

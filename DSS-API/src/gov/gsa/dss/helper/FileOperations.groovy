@@ -9,11 +9,13 @@ import java.io.File;
 import java.io.InputStream;
 
 import org.apache.commons.lang3.StringUtils
+import org.apache.log4j.Logger;
+
 import sun.misc.BASE64Decoder
 import org.apache.commons.lang3.RandomStringUtils
 
 class FileOperations {
-
+	final static Logger log =Logger.getLogger(FileOperations.class);
 	/**
     *
     *
@@ -44,13 +46,14 @@ class FileOperations {
 			   outputStream.write(bytes, 0, read)
 		   }
 	   } catch (IOException e) {
-		   e.printStackTrace()
+		   log.error(e);
 	   } finally {
 		   if (inputStream != null) {
 			   try {
 				   inputStream.close()
 			   } catch (IOException e) {
-				   e.printStackTrace()
+			   log.error(e);
+				   //e.printStackTrace()
 			   }
 		   }
 		   if (outputStream != null) {
@@ -58,7 +61,7 @@ class FileOperations {
 				   // outputStream.flush()
 				   outputStream.close()
 			   } catch (IOException e) {
-				   e.printStackTrace()
+				   log.error(e);
 			   }
 
 		   }

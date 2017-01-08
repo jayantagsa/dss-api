@@ -17,7 +17,8 @@ import org.apache.chemistry.opencmis.commons.PropertyIds;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
 import org.apache.chemistry.opencmis.commons.data.ContentStream;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
-import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl;
+import org.apache.chemistry.opencmis.commons.impl.dataobjects.ContentStreamImpl
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.silanis.esl.sdk.DocumentPackage;
@@ -30,6 +31,7 @@ import gov.gsa.dss.helper.YamlConfig;
 import gov.gsa.dss.helper.Zipper;
 
 class EDMSController {
+	final static Logger log =Logger.getLogger(EDMSController.class);
 
 	protected static String fileName="";
 	protected static String strbaseURL="";
@@ -37,12 +39,13 @@ class EDMSController {
 	protected static String strOrgName;
 	protected static String strPackageID;
 	protected static int status;
+	protected InputStream stream;
+
 	//@Context
 	//UriInfo uriInfo;
 	public Response uploadPackagetoEDMS(String PackageId, String OrgName)
-	{
 
-		//strbaseURL =baseURL;
+	{
 		strOrgName=OrgName;
 		strPackageID=PackageId;
 		try{
@@ -58,38 +61,43 @@ class EDMSController {
 
 			Map<String, Object> lProperties = new HashMap<String, Object>();
 			ZippedPackage();
-			def appendPathUrl = "edmspath"+OrgName;
+			def appendPathUrl;
+				appendPathUrl = "edmspath"+OrgName;
+			
+			log.info(appendPathUrl);
 			Folder fol = (Folder) lSession.getObjectByPath(obj.getProp(appendPathUrl));
-		
+
 			String name = fileName;
-			System.out.println(fileName);
+
+			log.info(fileName);
 			lProperties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
 			lProperties.put(PropertyIds.NAME, name);
+
 			byte[] content = base64File;
-			InputStream stream = new ByteArrayInputStream(content);
+			stream = new ByteArrayInputStream(content);
 			ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
 			Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
-			//System.out.println("Document created: " + newContent1.getId());
+
 			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
 		}
 
 		catch (Exception e)
 		{
-			//e.printStackTrace();
+			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 
-			//return Response.ok(ehs.parseException(e)+"", MediaType.TEXT_PLAIN).build();
 			@SuppressWarnings("unchecked")
 					Map <String, String> msg = (Map<String, String>) ehs.parseException(e);
-
-
 			@SuppressWarnings("unchecked")
 					Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);
 			int code =  Integer.parseInt((String) msg.get("code"));
 			JSONObject json = new JSONObject(parseValidationErrors);
 			return Response.status(code).type(MediaType.APPLICATION_JSON)
-					.entity(json+"").build();
+					.entity(json).build();
+		}
+		finally {
+			stream.close();
 		}
 	}
 
@@ -102,13 +110,6 @@ class EDMSController {
 		DocumentPackage DocPackage = Client.getPackage(packageId);
 		Zipper zipDocs = new Zipper();
 		fileName =DocPackage.getName()+"_"+strPackageID+".zip";
-
 		base64File = zipDocs.getZip(DocPackage, Client);
-
-
-		//return decoded;
 	}
-
-
-
 }

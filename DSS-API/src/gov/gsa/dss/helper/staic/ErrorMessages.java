@@ -6,104 +6,77 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
- 
-public class ErrorMessages
-{
- 
-  private static String props;
- 
-  static
-  {
-    //props = new Properties();
-    try
-    {
-      ErrorMessages util = new ErrorMessages();
-      BufferedReader reader = new BufferedReader(new InputStreamReader(util.getPropertiesFromClasspath("errorcodes.json")));
-      StringBuilder out = new StringBuilder();
-      String line;
-      while ((line = reader.readLine()) != null) {
-    	  //System.out.println(line);
-          out.append(line);
-          //break;
-          
-      }
-      props = out.toString();
-      //System.out.println("ssGJASJDJASDJGH"+out.toString()+"");   //Prints the string content read from input stream
-      reader.close();
-      //props = util.getPropertiesFromClasspath("errorcodes.properties");
-    }
-    catch (FileNotFoundException e)
-    {
-      e.printStackTrace();
-    }
-    catch (IOException e)
-    {
-      e.printStackTrace();
-    }
-  }
- 
-  // private constructor
-  private ErrorMessages()
-  {
-  }
- 
-  public static String getMessage(String key) throws JSONException
-  {
-	  
-	  JSONObject obj = new JSONObject(props);
-	  //System.out.println(obj.getJSONObject("errors"));
-	  ;
-	  
-    return obj.getJSONObject(key).getString("message");
-  }
- 
 
- 
-  public static String getType(String key) throws JSONException
-  {
-	  
-	  JSONObject obj = new JSONObject(props);
-	  //System.out.println(obj.getJSONObject("errors"));
-	  ;
-	  
-    return obj.getJSONObject(key).getString("type");
-    //return "";
-  }
- 
-  /**
-   * loads properties file from classpath
-   *
-   * @param propFileName
-   * @return
-   * @throws IOException
-   */
-  private InputStream getPropertiesFromClasspath(String propFileName)
-                                                                    throws IOException
-  {
-    //Properties props = new Properties();
-    InputStream inputStream = null;
-    
-    try
-    {
-      inputStream =
-          this.getClass().getClassLoader().getResourceAsStream(propFileName);
- 
-      if (inputStream == null)
-      {
-        throw new FileNotFoundException("property file '" + propFileName
-            + "' not found in the classpath");
-      }
-      else {
-    	  return inputStream;
-      }
-      //props.load(inputStream);
-    }
-    finally
-    {
-      //inputStream.close();
-    }
-    
-  }
+public class ErrorMessages {
+	final static Logger log = Logger.getLogger(ErrorMessages.class);
+	private static String props;
+
+	static {
+		InputStream inputStream = null;
+		BufferedReader reader = null;
+		try {
+			ErrorMessages util = new ErrorMessages();
+			inputStream = util.getClass().getClassLoader().getResourceAsStream("errorcodes.json");
+			reader = new BufferedReader(new InputStreamReader(inputStream));
+			StringBuilder out = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				out.append(line);
+			}
+			props = out.toString();
+			reader.close();
+		} catch (FileNotFoundException e) {
+			log.error(e);
+		} catch (IOException e) {
+			log.error(e);
+		} finally {
+			try {
+				reader.close();
+				inputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				log.error(e);
+			}
+		}
+	}
+
+	// private constructor
+	private ErrorMessages() {
+	}
+
+	public static String getMessage(String key) throws JSONException {
+		JSONObject obj = new JSONObject(props);
+		return obj.getJSONObject(key).getString("message");
+	}
+
+	public static String getType(String key) throws JSONException {
+
+		JSONObject obj = new JSONObject(props);
+		return obj.getJSONObject(key).getString("type");
+	}
+
+	/**
+	 * loads properties file from classpath
+	 *
+	 * @param propFileName
+	 * @return
+	 * @throws IOException
+	 */
+	/*
+	 * private InputStream getPropertiesFromClasspath(String propFileName)
+	 * throws IOException { InputStream inputStream = null;
+	 * 
+	 * try { inputStream =
+	 * this.getClass().getClassLoader().getResourceAsStream(propFileName);
+	 * 
+	 * if (inputStream == null) { throw new
+	 * FileNotFoundException("property file '" + propFileName +
+	 * "' not found in the classpath"); } else { return inputStream; } } finally
+	 * { //inputStream.close(); }
+	 * 
+	 * }
+	 */
 }
