@@ -42,6 +42,11 @@ public class CreatePackageFromDocLayoutController {
 		int itr = 0
 		List <String> listLayoutIds = new ArrayList<String>();
 		List <Placeholder> listPlaceHolderObj = new ArrayList<Placeholder>();
+		List <Placeholder> listRequiredSignerPlaceHolder = new ArrayList<Placeholder>();
+		List <Placeholder> arrayToBeAddedSigner = new ArrayList<Placeholder>();
+		List <SignerBuilder> listSignerBuilders = new ArrayList<SignerBuilder>();
+		boolean signerExists;
+		
 		Placeholder pholder;
 
 		FileOperations fileOps = new FileOperations();
@@ -151,19 +156,34 @@ public class CreatePackageFromDocLayoutController {
 						pholder = new Placeholder(pSigner.getPlaceholderName());
 					}
 				}
-
-				if (docLayoutData.enableSigningOrder == true) {
-					signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
-							.withFirstName(signersArray[j].getAt("signerFirstName"))
-							.withLastName(signersArray[j].getAt("signerLastName"))
-							.signingOrder(signersequence++).replacing(pholder);
-				} else {
-					signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
-							.withFirstName(signersArray[j].getAt("signerFirstName"))
-							.withLastName(signersArray[j].getAt("signerLastName"))
-							.replacing(pholder);
+				listRequiredSignerPlaceHolder.add(pholder);
+				
+				signerExists = false;
+				for (int r = 0; r < listSignerBuilders.size(); r++) {
+					SignerBuilder objSignerBuilder = listSignerBuilders[r];
+					String emailValue = objSignerBuilder.getAt("email");
+					if (signersArray[j].getAt("signerEmail") == emailValue) {
+						signer = objSignerBuilder.replacing(pholder);
+						signerExists = true;
+					}
 				}
-
+				
+				if (signerExists == false) {
+					if (docLayoutData.enableSigningOrder == true) {
+						signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
+								.withFirstName(signersArray[j].getAt("signerFirstName"))
+								.withLastName(signersArray[j].getAt("signerLastName"))
+								.signingOrder(signersequence++).replacing(pholder);
+								listSignerBuilders.add(signer);
+					} else {
+						signer = SignerBuilder.newSignerWithEmail(signersArray[j].getAt("signerEmail"))
+								.withFirstName(signersArray[j].getAt("signerFirstName"))
+								.withLastName(signersArray[j].getAt("signerLastName"))
+								.replacing(pholder);
+								listSignerBuilders.add(signer);				
+					}
+				}
+				
 				if ((docLayoutData.containsKey(signersArray[j].getAt("noteToSigner")))||(StringUtils.isNotEmpty(signersArray[j].getAt("noteToSigner")))) {
 					signer.withEmailMessage(signersArray[j].getAt("noteToSigner"));
 				}
@@ -207,7 +227,44 @@ public class CreatePackageFromDocLayoutController {
 			 * This is to get rid of optional signers which do not have to sign*/
 			for(Signer s: dssEslClient.getPackage(packageId).getPlaceholders())
 			{
-				dssEslClient.getPackageService().removeSigner(packageId, s.getId());
+				for (int x=0; x<listRequiredSignerPlaceHolder.size(); x++) {
+					if (listRequiredSignerPlaceHolder[x].getId() == s.getPlaceholderName()) {
+						arrayToBeAddedSigner.add(listRequiredSignerPlaceHolder[x]);
+					}
+					else {
+						dssEslClient.getPackageService().removeSigner(packageId, s.getId());		
+					}
+				}
+//				dssEslClient.getPackageService().removeSigner(packageId, s.getId());
+			}
+			/*for (int z = 0; z < documentsMap.size(); z++) {
+				def signersArray2 = documentsMap[i].getAt("document").getAt("signers");
+				for (int y = 0; y < signersArray2.size(); y++) {
+					for (int v = 0; v < signersArray2.size(); v++) {
+					if (signersArray[j].getAt("placeHolderName") == arrayToBeAddedSigner[v].getId()) {
+						signer = 
+					}
+				}
+			}*/
+			boolean toUpdatePackage=false;
+			for (int y = 0; y < listSignerBuilders.size(); y++) {
+				for (int v = 0; v < arrayToBeAddedSigner.size(); v++) {
+					if (listSignerBuilders[y].getAt("id") == arrayToBeAddedSigner[v].getId()) {
+						SignerBuilder objSigner = listSignerBuilders[y];
+						signer = objSigner.replacing(arrayToBeAddedSigner[v]);
+						package1.withSigner(signer);
+						toUpdatePackage = true;
+//						DocumentPackage updatePackage = package1.build(); 
+//						dssEslClient.updatePackage(packageId, updatePackage);						
+					}
+				}
+			}
+			
+			if (toUpdatePackage == true) {
+				DocumentPackage packageNew = dssEslClient.getPackage(packageId);
+				
+				DocumentPackage theUpdatedPackage = package1.build();
+				dssEslClient.updatePackage(packageId, theUpdatedPackage);
 			}
 			
 			if(numSigners < dssEslClient.getPackage(packageId).getPlaceholders().size()){
