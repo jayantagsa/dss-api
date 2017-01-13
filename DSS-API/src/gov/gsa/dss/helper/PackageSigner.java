@@ -14,11 +14,11 @@ import com.silanis.esl.sdk.Audit;
 import com.silanis.esl.sdk.EslClient;
 import com.silanis.esl.sdk.PackageId;
 
-class Signer {
+public class PackageSigner {
 	
 	//protected List  Signers;
 	//protected List Decliners;
-	final static Logger log =Logger.getLogger(Signer.class);
+	final static Logger log =Logger.getLogger(PackageSigner.class);
 	
 	public List<Map<String, String>> getSigners(String strPackageId) throws FileNotFoundException, NamingException
 	{
