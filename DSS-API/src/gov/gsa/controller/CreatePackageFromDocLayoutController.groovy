@@ -19,7 +19,8 @@ import static com.silanis.esl.sdk.builder.SignerBuilder.newSignerWithEmail
 import org.apache.commons.lang3.StringUtils
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.RandomStringUtils
-import sun.misc.BASE64Decoder
+import sun.misc.BASE64Decoder;
+import com.silanis.esl.sdk.Document;
 
 import java.io.File;
 import java.io.InputStream;
@@ -44,6 +45,8 @@ public class CreatePackageFromDocLayoutController {
 		List <Placeholder> listPlaceHolderObj = new ArrayList<Placeholder>();
 		List <Placeholder> listRequiredSignerPlaceHolder = new ArrayList<Placeholder>();
 		List <Placeholder> arrayToBeAddedSigner = new ArrayList<Placeholder>();
+		List <Signer> arrayToBeAddedSignerObject = new ArrayList<Signer>();
+		
 		List <SignerBuilder> listSignerBuilders = new ArrayList<SignerBuilder>();
 		boolean signerExists;
 		
@@ -187,7 +190,7 @@ public class CreatePackageFromDocLayoutController {
 				if ((docLayoutData.containsKey(signersArray[j].getAt("noteToSigner")))||(StringUtils.isNotEmpty(signersArray[j].getAt("noteToSigner")))) {
 					signer.withEmailMessage(signersArray[j].getAt("noteToSigner"));
 				}
-				package1.withSigner(signer);	
+				package1.withSigner(signer);
 				numSigners = numSigners + signersArray.size();
 			}
 			package1.withDocument(mydoc);
@@ -229,44 +232,41 @@ public class CreatePackageFromDocLayoutController {
 			{
 				for (int x=0; x<listRequiredSignerPlaceHolder.size(); x++) {
 					if (listRequiredSignerPlaceHolder[x].getId() == s.getPlaceholderName()) {
-						arrayToBeAddedSigner.add(listRequiredSignerPlaceHolder[x]);
+						arrayToBeAddedSigner.add(listRequiredSignerPlaceHolder[x]);	
+						arrayToBeAddedSignerObject.add(s);
 					}
 					else {
-						dssEslClient.getPackageService().removeSigner(packageId, s.getId());		
-					}
-				}
-//				dssEslClient.getPackageService().removeSigner(packageId, s.getId());
-			}
-			/*for (int z = 0; z < documentsMap.size(); z++) {
-				def signersArray2 = documentsMap[i].getAt("document").getAt("signers");
-				for (int y = 0; y < signersArray2.size(); y++) {
-					for (int v = 0; v < signersArray2.size(); v++) {
-					if (signersArray[j].getAt("placeHolderName") == arrayToBeAddedSigner[v].getId()) {
-						signer = 
-					}
-				}
-			}*/
-			boolean toUpdatePackage=false;
-			for (int y = 0; y < listSignerBuilders.size(); y++) {
-				for (int v = 0; v < arrayToBeAddedSigner.size(); v++) {
-					if (listSignerBuilders[y].getAt("id") == arrayToBeAddedSigner[v].getId()) {
-						SignerBuilder objSigner = listSignerBuilders[y];
-						signer = objSigner.replacing(arrayToBeAddedSigner[v]);
-						package1.withSigner(signer);
-						toUpdatePackage = true;
-//						DocumentPackage updatePackage = package1.build(); 
-//						dssEslClient.updatePackage(packageId, updatePackage);						
+						dssEslClient.getPackageService().removeSigner(packageId, s.getId());
+//						dssEslClient.getPackage(packageId).removePlaceholder(s);
 					}
 				}
 			}
 			
-			if (toUpdatePackage == true) {
-				DocumentPackage packageNew = dssEslClient.getPackage(packageId);
-				
-				DocumentPackage theUpdatedPackage = package1.build();
-				dssEslClient.updatePackage(packageId, theUpdatedPackage);
+			/*Get the documents and add the extra signature */
+			def documentsMap2 = docLayoutData.documents;
+	
+			for (int i = 0; i < documentsMap2.size(); i++) {
+				def signersArray2 = documentsMap2[i].getAt("document").getAt("signers");
+				for (int y = numOfAttachments+1; y < packageDocuments.size(); y++) {
+					docId = packageDocuments[y].getId().toString();
+					for (int t = 0; t < signersArray2.size(); t++) {
+						def email2 = signersArray2[t].getAt("signerEmail");
+						def placeholder2 = signersArray2[t].getAt("placeHolderName");
+						for (int v = 0; v < arrayToBeAddedSigner.size(); v++) {
+							if (arrayToBeAddedSigner[v].getId().toString() == placeholder2) {
+								//packageDocuments[y].getId().withSignature(signatureFor(arrayToBeAddedSigner[v]));								
+//								Signature updatedSignature = SignatureBuilder.signatureFor(email2).build();					  
+//								List<Signature> signatures = new ArrayList();
+//								signatures.add(updatedSignature);
+								DocumentPackage updatedPackage = dssEslClient.getPackageService().getPackage(packageId);
+//								dssEslClient.getApprovalService().updateSignatures(updatedPackage, packageDocuments[y].getId().toString(), signatures);								
+							}
+						}
+					}
+				}
 			}
-			
+			System.out.println(packageId.toString());
+						
 			if(numSigners < dssEslClient.getPackage(packageId).getPlaceholders().size()){
 				messageMap = exceptionHandlerService.parseValidationErrors("568");
 				return messageMap
