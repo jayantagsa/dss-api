@@ -19,7 +19,13 @@ public class PackageSigner {
 	//protected List  Signers;
 	//protected List Decliners;
 	final static Logger log =Logger.getLogger(PackageSigner.class);
-	
+	/**
+	 * 
+	 * @param strPackageId
+	 * @return ArrayList of signers {Name email an Timestamp of signature}
+	 * @throws FileNotFoundException
+	 * @throws NamingException
+	 */
 	public List<Map<String, String>> getSigners(String strPackageId) throws FileNotFoundException, NamingException
 	{
 		PackageId packageId = new PackageId(strPackageId);
@@ -42,29 +48,28 @@ public class PackageSigner {
 	
 	/**
 	 * 
-	 * @return
+	 * @return Hashmap of decliner detail { email, name, decline date, decline comments}
 	 * @throws NamingException 
 	 * @throws FileNotFoundException 
 	 */
-	public List<Map<String, String>> getDecliners(String strPackageId) throws FileNotFoundException, NamingException
+	public Map<String, String> getDecliners(String strPackageId) throws FileNotFoundException, NamingException
 	{
 		PackageId packageId = new PackageId(strPackageId);
 		Authenticator auth = new Authenticator();
 		EslClient client = auth.getAuth();
-		List <Map<String, String>> Decliners = new ArrayList <Map<String, String>>();
+		
+		Map <String, String> DeclinerDetails = new HashMap<String, String>();
 		for (Audit aud: client.getAuditService().getAudit(packageId))
 		{
-			Map <String, String> DeclinerDetails = new HashMap<String, String>();
 			if (aud.getType().equals("Decline"))
 				{
 				DeclinerDetails.put("email",aud.getEmail());
 				DeclinerDetails.put("name",aud.getUser());
 				DeclinerDetails.put("date",aud.getDateTime());
-				DeclinerDetails.put("declinedata",aud.getData());
-				Decliners.add(DeclinerDetails);	
+				DeclinerDetails.put("declinedata",aud.getData());	
 				}
 		}
-		return Decliners;
+		return DeclinerDetails;
 	}
 
 }
