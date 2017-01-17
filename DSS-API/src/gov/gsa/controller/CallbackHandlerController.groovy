@@ -63,6 +63,16 @@ class CallbackHandlerController {
 					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					//iacpCallbackHandler.handleCallback(sEvent)
 					break
+					case "SORN":
+					log.info( "SORN event: $eventOccurred");
+					log.info( "Package Name: $packageName");
+					log.info( "Package Id: $packageIdString");
+					if (eventOccurred=="PACKAGE_COMPLETE" ) {
+						edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+					}
+					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+					//iacpCallbackHandler.handleCallback(sEvent)
+					break
 				default:
 					log.info( "Default event occurred: $eventOccurred");
 					log.info( "Package Name: $packageName");
