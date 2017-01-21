@@ -21,10 +21,12 @@ import org.apache.log4j.Logger;
 import org.apache.commons.lang3.RandomStringUtils
 import sun.misc.BASE64Decoder;
 import com.silanis.esl.sdk.Document;
+import com.silanis.esl.sdk.DocumentId
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Spliterators.AbstractDoubleSpliterator
 
 public class CreatePackageFromDocLayoutController {
 	final static Logger log =Logger.getLogger(CreatePackageFromDocLayoutController.class);
@@ -166,7 +168,11 @@ public class CreatePackageFromDocLayoutController {
 					SignerBuilder objSignerBuilder = listSignerBuilders[r];
 					String emailValue = objSignerBuilder.getAt("email");
 					if (signersArray[j].getAt("signerEmail") == emailValue) {
-						signer = objSignerBuilder.replacing(pholder);
+						String dummySignerEmail = "dummy"+ emailValue;
+						signer=SignerBuilder.newSignerWithEmail(dummySignerEmail)
+						.withFirstName(signersArray[j].getAt("signerFirstName"))
+						.withLastName(signersArray[j].getAt("signerLastName")).replacing(pholder);
+						//signer = objSignerBuilder.replacing(pholder);
 						signerExists = true;
 					}
 				}
@@ -226,45 +232,51 @@ public class CreatePackageFromDocLayoutController {
 				dssEslClient.getLayoutService().applyLayout(packageId, docId, listLayoutIds[k-numOfAttachments-1]);
 			}
 			
+			/*Michael Solution -Start*/
+			DocumentPackage createdPackageAfterLayout = dssEslClient.getPackage(packageId);
+			List<com.silanis.esl.sdk.Document> packageDocumentsAfterLayout= dssEslClient.getPackage(packageId).getDocuments();
+			
+			for (int x = numOfAttachments+1; x < packageDocumentsAfterLayout.size(); x++) {
+				
+			DocumentId currentDocId = createdPackageAfterLayout.getDocuments().get(x).getId(); //grab document
+			Collection mysigs = createdPackageAfterLayout.getDocuments().get(x).getSignatures(); //get all signatures
+			List sigsToMove = new ArrayList(); //create a new List to store all signatures in for "update".
+			Signature mynewsig = null; //create signature object to use to create new signatures to transfer from signer3 to signer1.
+			for(Signature sig : mysigs){ //walk through signatures
+				String email = sig.getSignerEmail();
+				if ((email != null) && (email.startsWith("dummy"))){ //check signature email against known dummy email
+					Collection myfields = sig.getFields(); //grab fields from signature
+					def repeatedEmail = email.substring(5);//grab email id which comes after the word 'dummy'
+					def toBeDeletedEmail = email;
+					mynewsig = SignatureBuilder.signatureFor(repeatedEmail) //create new signature for signer1 and transfer all value from
+							.atPosition(sig.getX(), sig.getY())
+							.withSize(sig.getWidth(), sig.getHeight())
+							.withId(sig.getId())
+							.onPage(sig.getPage())
+							.build();
+					mynewsig.addFields(myfields); //add all fields from old signature to new signature
+					sigsToMove.add(mynewsig); //add new signature to signature list
+					dssEslClient.getPackageService().removeSigner(packageId, completePackage.getSigner(toBeDeletedEmail).getId()); //remove the temp signer
+					
+				}
+				else{
+					sigsToMove.add(sig);//add unchanged signature to signature list
+				}
+			}
+			completePackage = dssEslClient.getPackage(packageId); //get updated package
+			dssEslClient.getApprovalService().updateSignatures(completePackage, currentDocId.getId(), sigsToMove); //update all signatures for document
+			}
+			
+			/*Michael Solution -End*/
+			
 			/*Remove the placeholders which do not have any signer information associated with them. 
 			 * This is to get rid of optional signers which do not have to sign*/
 			for(Signer s: dssEslClient.getPackage(packageId).getPlaceholders())
 			{
-				for (int x=0; x<listRequiredSignerPlaceHolder.size(); x++) {
-					if (listRequiredSignerPlaceHolder[x].getId() == s.getPlaceholderName()) {
-						arrayToBeAddedSigner.add(listRequiredSignerPlaceHolder[x]);	
-						arrayToBeAddedSignerObject.add(s);
-					}
-					else {
-						dssEslClient.getPackageService().removeSigner(packageId, s.getId());
-//						dssEslClient.getPackage(packageId).removePlaceholder(s);
-					}
-				}
+				dssEslClient.getPackageService().removeSigner(packageId, s.getId());
 			}
+
 			
-			/*Get the documents and add the extra signature */
-			def documentsMap2 = docLayoutData.documents;
-	
-			for (int i = 0; i < documentsMap2.size(); i++) {
-				def signersArray2 = documentsMap2[i].getAt("document").getAt("signers");
-				for (int y = numOfAttachments+1; y < packageDocuments.size(); y++) {
-					docId = packageDocuments[y].getId().toString();
-					for (int t = 0; t < signersArray2.size(); t++) {
-						def email2 = signersArray2[t].getAt("signerEmail");
-						def placeholder2 = signersArray2[t].getAt("placeHolderName");
-						for (int v = 0; v < arrayToBeAddedSigner.size(); v++) {
-							if (arrayToBeAddedSigner[v].getId().toString() == placeholder2) {
-								//packageDocuments[y].getId().withSignature(signatureFor(arrayToBeAddedSigner[v]));								
-//								Signature updatedSignature = SignatureBuilder.signatureFor(email2).build();					  
-//								List<Signature> signatures = new ArrayList();
-//								signatures.add(updatedSignature);
-								DocumentPackage updatedPackage = dssEslClient.getPackageService().getPackage(packageId);
-//								dssEslClient.getApprovalService().updateSignatures(updatedPackage, packageDocuments[y].getId().toString(), signatures);								
-							}
-						}
-					}
-				}
-			}
 			System.out.println(packageId.toString());
 						
 			if(numSigners < dssEslClient.getPackage(packageId).getPlaceholders().size()){
