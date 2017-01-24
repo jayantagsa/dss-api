@@ -40,6 +40,17 @@ class RetaCallbackHandler {
 				packageDetails.put("decliner",packageDecliners.getDecliners(packageId))
 				myMessage.put("packageInfo", packageDetails);
 				break;
+				case "PACKAGE_OPTOUT":
+				//String declineReason = documentPackage.getMessages().get(0).getContent();
+					PackageSigner packageDecliners= new PackageSigner();
+					myMessage.put("orgName", orgName);
+					myMessage.put("notificationType", eventOccurred);
+					packageDetails.put("packageId", packageId);
+					packageDetails.put("packageName", packageName);
+				//packageDetails.put("declineReason",declineReason);
+					packageDetails.put("decliner",packageDecliners.getDecliners(packageId))
+					myMessage.put("packageInfo", packageDetails);
+					break;
 		}
 
 		JSONObject jsonResult = new JSONObject();
