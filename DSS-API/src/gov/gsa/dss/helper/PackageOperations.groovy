@@ -9,7 +9,9 @@ import com.silanis.esl.sdk.builder.SignatureBuilder;
 
 
 class PackageOperations {
-	def signerSubstitute (PackageId packageId, int numOfAttachments, DocumentPackage completePackage) {
+	def signerSubstitute (PackageId packageId, 
+							int numOfAttachments/*Number of attachments that the package has*/, 
+							DocumentPackage originalPackage/*DocumentPackage before applying the layout*/) {
 		Authenticator auth = new Authenticator();
 		EslClient dssEslClient = auth.getAuth();
 		DocumentPackage createdPackageAfterLayout = dssEslClient.getPackage(packageId);
@@ -35,15 +37,15 @@ class PackageOperations {
 							.build();
 					mynewsig.addFields(myfields); //add all fields from old signature to new signature
 					sigsToMove.add(mynewsig); //add new signature to signature list
-					dssEslClient.getPackageService().removeSigner(packageId, completePackage.getSigner(toBeDeletedEmail).getId()); //remove the temporary signer
+					dssEslClient.getPackageService().removeSigner(packageId, originalPackage.getSigner(toBeDeletedEmail).getId()); //remove the temporary signer
 
 				}
 				else{
 					sigsToMove.add(sig);//add unchanged signature to signature list
 				}
 			}
-			completePackage = dssEslClient.getPackage(packageId); //get updated package
-			dssEslClient.getApprovalService().updateSignatures(completePackage, currentDocId.getId(), sigsToMove); //update all signatures for document
+			originalPackage = dssEslClient.getPackage(packageId); //get updated package
+			dssEslClient.getApprovalService().updateSignatures(originalPackage, currentDocId.getId(), sigsToMove); //update all signatures for document
 		}
 	}
 
