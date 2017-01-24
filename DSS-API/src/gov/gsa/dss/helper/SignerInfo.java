@@ -14,11 +14,11 @@ import com.silanis.esl.sdk.Audit;
 import com.silanis.esl.sdk.EslClient;
 import com.silanis.esl.sdk.PackageId;
 
-public class PackageSigner {
+public class SignerInfo {
 
 	//protected List  Signers;
 	//protected List Decliners;
-	final static Logger log =Logger.getLogger(PackageSigner.class);
+	final static Logger log =Logger.getLogger(SignerInfo.class);
 	/**
 	 * 
 	 * @param strPackageId
@@ -82,7 +82,7 @@ public class PackageSigner {
 	 * @throws FileNotFoundException
 	 * @throws NamingException
 	 */
-	public Map<String, String> getOptOut(String strPackageId) throws FileNotFoundException, NamingException
+	public Map<String, String> getOptOutDetails(String strPackageId) throws FileNotFoundException, NamingException
 	{
 		log.info("op_out/decline");
 		PackageId packageId = new PackageId(strPackageId);

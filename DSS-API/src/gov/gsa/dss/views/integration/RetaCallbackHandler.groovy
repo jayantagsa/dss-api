@@ -4,7 +4,7 @@ import com.silanis.esl.sdk.DocumentPackage
 
 import gov.gsa.controller.RetrieveController;
 import gov.gsa.dss.helper.DSSQueueManagement
-import gov.gsa.dss.helper.PackageSigner
+import gov.gsa.dss.helper.SignerInfo
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject
 import org.apache.log4j.Logger;
 
@@ -21,7 +21,7 @@ class RetaCallbackHandler {
 
 		switch (eventOccurred) {
 			case "PACKAGE_COMPLETE":
-				PackageSigner packageSigners = new PackageSigner();
+				SignerInfo packageSigners = new SignerInfo();
 				myMessage.put("orgName", orgName);
 				myMessage.put("notificationType", eventOccurred);
 				packageDetails.put("packageId", packageId);
@@ -43,13 +43,13 @@ class RetaCallbackHandler {
 			 break;*/
 			case "PACKAGE_OPT_OUT":
 			//String declineReason = documentPackage.getMessages().get(0).getContent();
-				PackageSigner packageOptOut= new PackageSigner();
+				SignerInfo packageOptOut= new SignerInfo();
 				myMessage.put("orgName", orgName);
 				myMessage.put("notificationType", eventOccurred);
 				packageDetails.put("packageId", packageId);
 				packageDetails.put("packageName", packageName);
 			//packageDetails.put("declineReason",declineReason);
-				packageDetails.put("opted_out_by",packageOptOut.getOptOut(packageId));
+				packageDetails.put("opted_out_by",packageOptOut.getOptOutDetails(packageId));
 				myMessage.put("packageInfo", packageDetails);
 				break;
 		}
