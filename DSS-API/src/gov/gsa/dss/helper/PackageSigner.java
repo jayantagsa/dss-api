@@ -37,6 +37,7 @@ public class PackageSigner {
 			Map <String, String> SignerDetails = new HashMap<String, String>();
 			if (aud.getType().equals("Click To Sign"))
 				{
+				log.info(aud.getType());
 				SignerDetails.put("email",aud.getEmail());
 				SignerDetails.put("name",aud.getUser());
 				SignerDetails.put("date",aud.getDateTime());
@@ -54,6 +55,7 @@ public class PackageSigner {
 	 */
 	public Map<String, String> getDecliners(String strPackageId) throws FileNotFoundException, NamingException
 	{
+		log.info("op_out/decline");
 		PackageId packageId = new PackageId(strPackageId);
 		Authenticator auth = new Authenticator();
 		EslClient client = auth.getAuth();
@@ -63,6 +65,7 @@ public class PackageSigner {
 		{
 			if (aud.getType().equals("Decline"))
 				{
+				log.info(aud.getType());
 				DeclinerDetails.put("email",aud.getEmail());
 				DeclinerDetails.put("name",aud.getUser());
 				DeclinerDetails.put("date",aud.getDateTime());
@@ -72,4 +75,25 @@ public class PackageSigner {
 		return DeclinerDetails;
 	}
 
+	public Map<String, String> getOptOut(String strPackageId) throws FileNotFoundException, NamingException
+	{
+		log.info("op_out/decline");
+		PackageId packageId = new PackageId(strPackageId);
+		Authenticator auth = new Authenticator();
+		EslClient client = auth.getAuth();
+		
+		Map <String, String> OptOutDetails = new HashMap<String, String>();
+		for (Audit aud: client.getAuditService().getAudit(packageId))
+		{
+			if (aud.getType().equals("Opt Out"))
+				{
+				log.info(aud.getType());
+				OptOutDetails.put("email",aud.getEmail());
+				OptOutDetails.put("name",aud.getUser());
+				OptOutDetails.put("date",aud.getDateTime());
+				OptOutDetails.put("declinedata",aud.getData());	
+				}
+		}
+		return OptOutDetails;
+	}
 }
