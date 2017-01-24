@@ -29,28 +29,29 @@ class RetaCallbackHandler {
 				packageDetails.put("signers",packageSigners.getSigners(packageId) )
 				myMessage.put("packageInfo", packageDetails);
 				break;
-			case "PACKAGE_DECLINE":
+			//Package Decline option shall be removed. to be deleted
+			/*			case "PACKAGE_DECLINE":
+			 //String declineReason = documentPackage.getMessages().get(0).getContent();
+			 PackageSigner packageDecliners= new PackageSigner();
+			 myMessage.put("orgName", orgName);
+			 myMessage.put("notificationType", eventOccurred);
+			 packageDetails.put("packageId", packageId);
+			 packageDetails.put("packageName", packageName);
+			 //packageDetails.put("declineReason",declineReason);
+			 packageDetails.put("decliner",packageDecliners.getDecliners(packageId))
+			 myMessage.put("packageInfo", packageDetails);
+			 break;*/
+			case "PACKAGE_OPT_OUT":
 			//String declineReason = documentPackage.getMessages().get(0).getContent();
-				PackageSigner packageDecliners= new PackageSigner();
+				PackageSigner packageOptOut= new PackageSigner();
 				myMessage.put("orgName", orgName);
 				myMessage.put("notificationType", eventOccurred);
 				packageDetails.put("packageId", packageId);
 				packageDetails.put("packageName", packageName);
 			//packageDetails.put("declineReason",declineReason);
-				packageDetails.put("decliner",packageDecliners.getDecliners(packageId))
+				packageDetails.put("opted_out_by",packageOptOut.getOptOut(packageId));
 				myMessage.put("packageInfo", packageDetails);
 				break;
-				case "PACKAGE_OPT_OUT":
-				//String declineReason = documentPackage.getMessages().get(0).getContent();
-					PackageSigner packageOptOut= new PackageSigner();
-					myMessage.put("orgName", orgName);
-					myMessage.put("notificationType", eventOccurred);
-					packageDetails.put("packageId", packageId);
-					packageDetails.put("packageName", packageName);
-				//packageDetails.put("declineReason",declineReason);
-					packageDetails.put("opted_out_by",packageOptOut.getOptOut(packageId));
-					myMessage.put("packageInfo", packageDetails);
-					break;
 		}
 
 		JSONObject jsonResult = new JSONObject();
