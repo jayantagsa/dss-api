@@ -3,8 +3,9 @@ package gov.gsa.controller
 import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.DSSQueueManagement;
 import gov.gsa.dss.helper.FileOperations
+import gov.gsa.dss.helper.PackageOperations
 import gov.gsa.dss.helper.ResponseBuilder
-import com.silanis.esl.sdk.EslClient
+
 import com.silanis.esl.sdk.builder.PackageBuilder
 import com.silanis.esl.sdk.service.*
 import com.silanis.esl.api.util.EmailValidator
@@ -20,8 +21,6 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.log4j.Logger;
 import org.apache.commons.lang3.RandomStringUtils
 import sun.misc.BASE64Decoder;
-import com.silanis.esl.sdk.Document;
-import com.silanis.esl.sdk.DocumentId
 
 import java.io.File;
 import java.io.InputStream;
@@ -74,6 +73,7 @@ public class CreatePackageFromDocLayoutController {
 		Placeholder pholder;
 
 		FileOperations fileOps = new FileOperations();
+		PackageOperations packOps = new PackageOperations();
 		String successMessage;
 		def numOfAttachments = 0;
 		def numSigners = 0;
@@ -260,40 +260,7 @@ public class CreatePackageFromDocLayoutController {
 			}
 
 			/*Steps 10, 11, 12 - Remove the temporary placeholder emails and replace it with the actual email -Start*/
-			DocumentPackage createdPackageAfterLayout = dssEslClient.getPackage(packageId);
-			List<com.silanis.esl.sdk.Document> packageDocumentsAfterLayout= dssEslClient.getPackage(packageId).getDocuments();
-
-			for (int x = numOfAttachments+1; x < packageDocumentsAfterLayout.size(); x++) {
-
-				DocumentId currentDocId = createdPackageAfterLayout.getDocuments().get(x).getId(); //grab document
-				Collection mysigs = createdPackageAfterLayout.getDocuments().get(x).getSignatures(); //get all signatures
-				List sigsToMove = new ArrayList(); //create a new List to store all signatures in for "update".
-				Signature mynewsig = null; //create signature object to use to create new signatures to transfer from signer3 to signer1.
-				for(Signature sig : mysigs){ //walk through signatures
-					String email = sig.getSignerEmail();
-					if ((email != null) && (email.startsWith("dsssignerph"))){ //check signature email against known temporary email
-						Collection myfields = sig.getFields(); //grab fields from signature
-						def repeatedEmail = email.substring(11);//grab email id which comes after the word 'dsssignerph'
-						def toBeDeletedEmail = email;//grab the signer which has a temporary email signer
-						mynewsig = SignatureBuilder.signatureFor(repeatedEmail) //create new signature for signer1 and transfer all values
-								.atPosition(sig.getX(), sig.getY())
-								.withSize(sig.getWidth(), sig.getHeight())
-								.withId(sig.getId())
-								.onPage(sig.getPage())
-								.build();
-						mynewsig.addFields(myfields); //add all fields from old signature to new signature
-						sigsToMove.add(mynewsig); //add new signature to signature list
-						dssEslClient.getPackageService().removeSigner(packageId, completePackage.getSigner(toBeDeletedEmail).getId()); //remove the temporary signer
-
-					}
-					else{
-						sigsToMove.add(sig);//add unchanged signature to signature list
-					}
-				}
-				completePackage = dssEslClient.getPackage(packageId); //get updated package
-				dssEslClient.getApprovalService().updateSignatures(completePackage, currentDocId.getId(), sigsToMove); //update all signatures for document
-			}
-
+			packOps.signerSubstitute(packageId, numOfAttachments, completePackage);
 			/*Steps 10, 11, 12 - Remove the temporary placeholder emails and replace it with the actual email -End*/
 
 			/*Step 13 - Remove the placeholders which do not have any signer information associated with them. 
