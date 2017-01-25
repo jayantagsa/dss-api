@@ -30,7 +30,6 @@ class CallbackHandlerController {
 			RetaCallbackHandler retaCallbackHandler = new RetaCallbackHandler();
 			EDMSController edmsController = new EDMSController();
 			PackageOrgName packageOrgName = new PackageOrgName();
-			
 			def eventOccurred = mappedData.getAt("name");
 			String packageIdString = mappedData.getAt("packageId");
 			PackageId packageId = new PackageId(packageIdString)
