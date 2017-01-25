@@ -30,7 +30,6 @@ class CallbackHandlerController {
 			RetaCallbackHandler retaCallbackHandler = new RetaCallbackHandler();
 			EDMSController edmsController = new EDMSController();
 			PackageOrgName packageOrgName = new PackageOrgName();
-			
 			def eventOccurred = mappedData.getAt("name");
 			String packageIdString = mappedData.getAt("packageId");
 			PackageId packageId = new PackageId(packageIdString)
@@ -55,6 +54,16 @@ class CallbackHandlerController {
 					break
 				case "IACP":
 					log.info( "IACP event: $eventOccurred");
+					log.info( "Package Name: $packageName");
+					log.info( "Package Id: $packageIdString");
+					if (eventOccurred=="PACKAGE_COMPLETE" ) {
+						edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+					}
+					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+					//iacpCallbackHandler.handleCallback(sEvent)
+					break
+					case "SORN":
+					log.info( "SORN event: $eventOccurred");
 					log.info( "Package Name: $packageName");
 					log.info( "Package Id: $packageIdString");
 					if (eventOccurred=="PACKAGE_COMPLETE" ) {

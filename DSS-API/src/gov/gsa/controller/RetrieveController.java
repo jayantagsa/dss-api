@@ -47,9 +47,12 @@ public class RetrieveController {
 				{
 					Zipper zipDocs = new Zipper();
 					String base64ZIP = Base64.encodeBase64String(zipDocs.getZip(DocPackage, Client));	
+					base64ZIP= validator.getValidInput("", base64ZIP, "HTTPHeaderValue",base64ZIP.length()*2 ,false, errorList);
 					RetrieveModel obj = new RetrieveModel();	
 					String strJSON=obj.getJSONString(paramPackageId, base64ZIP, DocPackage.getName());
-					strJSON= validator.getValidInput("", strJSON, "HTTPHeaderValue",strJSON.length() ,false, errorList);
+					//log.info("\n\n.....");
+					//strJSON= validator.getValidInput("", strJSON, "HTTPHeaderValue",strJSON.length()*2 ,false, errorList);
+					
 					return Response.ok(strJSON, MediaType.APPLICATION_JSON).build();
 				}
 				else{
@@ -71,7 +74,9 @@ public class RetrieveController {
 		}
 		catch (Exception e)
 		{
+			log.error("ttttttttt");
 			log.error(e);
+			
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
 			@SuppressWarnings("unchecked")
 			Map<String, String> parseValidationErrors =(Map<String, String>) ehs.parseException(e);

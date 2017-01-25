@@ -4,6 +4,7 @@ import com.silanis.esl.sdk.DocumentPackage
 
 import gov.gsa.controller.RetrieveController;
 import gov.gsa.dss.helper.DSSQueueManagement
+import gov.gsa.dss.helper.SignerInfo
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject
 import org.apache.log4j.Logger;
 
@@ -12,43 +13,59 @@ import org.apache.log4j.Logger;
  */
 class RetaCallbackHandler {
 	final static Logger log =Logger.getLogger(RetaCallbackHandler.class);
-	
-    public void retaPublishToQueue(String eventOccurred, String packageId , String packageName, String orgName, DocumentPackage documentPackage) {
 
-        Map<String, String> myMessage = new HashMap<String, String>();
-        Map<String, String> packageDetails = new HashMap<String, String>();
+	public void retaPublishToQueue(String eventOccurred, String packageId , String packageName, String orgName, DocumentPackage documentPackage) {
 
-        switch (eventOccurred) {
-            case "PACKAGE_COMPLETE":
-                myMessage.put("orgName", orgName);
-                myMessage.put("notificationType", eventOccurred);
-                packageDetails.put("packageId", packageId);
-                packageDetails.put("packageName", packageName);
-                myMessage.put("packageInfo", packageDetails);
-                break;
-            case "PACKAGE_DECLINE":
-                String declineReason = documentPackage.getMessages().get(0).getContent();
-                myMessage.put("orgName", orgName);
-                myMessage.put("notificationType", eventOccurred);
-                packageDetails.put("packageId", packageId);
-                packageDetails.put("packageName", packageName);
-                packageDetails.put("declineReason",declineReason);
-                myMessage.put("packageInfo", packageDetails);
-                break;
-        }
+		Map<String, String> myMessage = new HashMap<String, String>();
+		Map<String, String> packageDetails = new HashMap<String, String>();
 
-        JSONObject jsonResult = new JSONObject();
-        jsonResult.putAll( myMessage );
-        def messageString = jsonResult.toString();
+		switch (eventOccurred) {
+			case "PACKAGE_COMPLETE":
+				SignerInfo packageSigners = new SignerInfo();
+				myMessage.put("orgName", orgName);
+				myMessage.put("notificationType", eventOccurred);
+				packageDetails.put("packageId", packageId);
+				packageDetails.put("packageName", packageName);
+				packageDetails.put("signers",packageSigners.getSigners(packageId) )
+				myMessage.put("packageInfo", packageDetails);
+				break;
+			//Package Decline option shall be removed. to be deleted
+			/*			case "PACKAGE_DECLINE":
+			 //String declineReason = documentPackage.getMessages().get(0).getContent();
+			 PackageSigner packageDecliners= new PackageSigner();
+			 myMessage.put("orgName", orgName);
+			 myMessage.put("notificationType", eventOccurred);
+			 packageDetails.put("packageId", packageId);
+			 packageDetails.put("packageName", packageName);
+			 //packageDetails.put("declineReason",declineReason);
+			 packageDetails.put("decliner",packageDecliners.getDecliners(packageId))
+			 myMessage.put("packageInfo", packageDetails);
+			 break;*/
+			case "PACKAGE_OPT_OUT":
+			//String declineReason = documentPackage.getMessages().get(0).getContent();
+				SignerInfo packageOptOut= new SignerInfo();
+				myMessage.put("orgName", orgName);
+				myMessage.put("notificationType", eventOccurred);
+				packageDetails.put("packageId", packageId);
+				packageDetails.put("packageName", packageName);
+			//packageDetails.put("declineReason",declineReason);
+				packageDetails.put("opted_out_by",packageOptOut.getOptOutDetails(packageId));
+				myMessage.put("packageInfo", packageDetails);
+				break;
+		}
 
-        DSSQueueManagement dssQueue = new DSSQueueManagement()
+		JSONObject jsonResult = new JSONObject();
+		jsonResult.putAll( myMessage );
+		def messageString = jsonResult.toString();
 
-        dssQueue.initConnection()
+		DSSQueueManagement dssQueue = new DSSQueueManagement()
 
-        def result = dssQueue.publishToQueue("DSS_RETA_QUEUE_DEV", messageString);
-        log.info ("published to queue: " + result);
+		dssQueue.initConnection()
 
-        dssQueue.closeConnection()
-    }
+		def result = dssQueue.publishToQueue("DSS_RETA_QUEUE_DEV", messageString);
+		log.info ("published to queue: " + result);
+
+		dssQueue.closeConnection()
+	}
 
 }
