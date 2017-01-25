@@ -100,5 +100,9 @@
       "568": {
         "type": "Validation Error.",
         "message": "Number of placeholders is more than number of signers."
+      },
+      "569": {
+        "type": "Validation Error.",
+        "message": "Placeholder name provided does not exists or is invalid."
       }
 }
