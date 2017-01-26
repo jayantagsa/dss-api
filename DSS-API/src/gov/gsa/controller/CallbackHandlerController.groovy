@@ -57,7 +57,8 @@ class CallbackHandlerController {
 					log.info( "Package Name: $packageName");
 					log.info( "Package Id: $packageIdString");
 					if (eventOccurred=="PACKAGE_COMPLETE" ) {
-						edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+						retaCallbackHandler.edmsMessageBuilder(eventOccurred, packageIdString, packageName, orgName, documentPackage);
+						//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					}
 					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					//iacpCallbackHandler.handleCallback(sEvent)
@@ -67,7 +68,8 @@ class CallbackHandlerController {
 					log.info( "Package Name: $packageName");
 					log.info( "Package Id: $packageIdString");
 					if (eventOccurred=="PACKAGE_COMPLETE" ) {
-						edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+						retaCallbackHandler.edmsMessageBuilder(eventOccurred, packageIdString, packageName, orgName, documentPackage);
+						//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					}
 					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					//iacpCallbackHandler.handleCallback(sEvent)

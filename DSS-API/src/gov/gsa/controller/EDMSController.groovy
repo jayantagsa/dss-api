@@ -36,47 +36,21 @@ class EDMSController {
 	protected static String fileName="";
 	protected static String strbaseURL="";
 	protected static byte [] base64File;
-	protected static String strOrgName;
-	protected static String strPackageID;
+	//protected static String strOrgName;
+	//protected static String strPackageID;
 	protected static int status;
-	protected InputStream stream;
+	protected static InputStream stream;
 
 	//@Context
 	//UriInfo uriInfo;
 	public Response uploadPackagetoEDMS(String PackageId, String OrgName)
 
 	{
-		strOrgName=OrgName;
-		strPackageID=PackageId;
+		//strOrgName=OrgName;
+		//strPackageID=PackageId;
 		try{
-			YamlConfig obj = new YamlConfig();
-			Map<String, String> sessionParameters = new HashMap<String, String>();
-
-			sessionParameters.put(SessionParameter.USER, obj.getProp("edmsuser"));
-			sessionParameters.put(SessionParameter.PASSWORD, obj.getProp("edmspwd"));
-			sessionParameters.put(SessionParameter.ATOMPUB_URL,obj.getProp("edmsURL") );
-			sessionParameters.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-			SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
-			Session lSession = sessionFactory.getRepositories(sessionParameters).get(0).createSession();
-
-			Map<String, Object> lProperties = new HashMap<String, Object>();
-			ZippedPackage();
-			def appendPathUrl;
-				appendPathUrl = "edmspath"+OrgName;
+			packageUpload(PackageId, OrgName);
 			
-			log.info(appendPathUrl);
-			Folder fol = (Folder) lSession.getObjectByPath(obj.getProp(appendPathUrl));
-
-			String name = fileName;
-
-			log.info(fileName);
-			lProperties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
-			lProperties.put(PropertyIds.NAME, name);
-
-			byte[] content = base64File;
-			stream = new ByteArrayInputStream(content);
-			ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
-			Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
 
 			return Response.status(200).type(MediaType.APPLICATION_JSON)
 					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
@@ -101,8 +75,42 @@ class EDMSController {
 		}
 	}
 
+	public void packageUpload(String PackageId, String OrgName) throws Exception
+	{
+		
+		YamlConfig obj = new YamlConfig();
+		Map<String, String> sessionParameters = new HashMap<String, String>();
 
-	protected static void ZippedPackage() throws Exception
+		sessionParameters.put(SessionParameter.USER, obj.getProp("edmsuser"));
+		sessionParameters.put(SessionParameter.PASSWORD, obj.getProp("edmspwd"));
+		sessionParameters.put(SessionParameter.ATOMPUB_URL,obj.getProp("edmsURL") );
+		sessionParameters.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
+		SessionFactory sessionFactory = SessionFactoryImpl.newInstance();
+		Session lSession = sessionFactory.getRepositories(sessionParameters).get(0).createSession();
+
+		Map<String, Object> lProperties = new HashMap<String, Object>();
+		ZippedPackage(PackageId, OrgName);
+		def appendPathUrl;
+			appendPathUrl = "edmspath"+OrgName;
+		
+		log.info(appendPathUrl);
+		Folder fol = (Folder) lSession.getObjectByPath(obj.getProp(appendPathUrl));
+
+		String name = fileName;
+
+		log.info(fileName);
+		lProperties.put(PropertyIds.OBJECT_TYPE_ID, "cmis:document");
+		lProperties.put(PropertyIds.NAME, name);
+
+		byte[] content = base64File;
+		stream = new ByteArrayInputStream(content);
+		ContentStream contentStream = new ContentStreamImpl(name, new BigInteger(content), "text/plain", stream);
+		Document newContent1 =  fol.createDocument(lProperties, contentStream, null);
+		
+		
+	}
+
+	protected static void ZippedPackage(String strPackageID, String OrgName) throws Exception
 	{
 		Authenticator auth = new Authenticator();
 		EslClient Client = auth.getAuth();
