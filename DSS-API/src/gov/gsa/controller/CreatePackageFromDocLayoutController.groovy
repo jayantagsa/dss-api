@@ -27,7 +27,11 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Spliterators.AbstractDoubleSpliterator
 
-/*This API is used create Package using the layout option of eSignLive.
+/**
+ * @author SSuthrave
+ * @param docLayoutData Map of all the data required for the API request 
+ * @return messageMap Error or Success
+ * This API is used create Package using the layout option of eSignLive.
  * Following is the algorithm of the implementaion:
  * 1. Validate the json data that has been received
  * 2. Build a package, but do not create one.
@@ -45,7 +49,8 @@ import java.util.Spliterators.AbstractDoubleSpliterator
  * 10. Again retrieve package documents and iterate through them to replace temporary placeholder 
  * 11. Remove the temporary signer
  * 12. Update package document with all the signatures
- * 13. Iterate through all the empty placeholders and delete them*/
+ * 13. Iterate through all the empty placeholders and delete them
+ * */
 
 public class CreatePackageFromDocLayoutController {
 	final static Logger log =Logger.getLogger(CreatePackageFromDocLayoutController.class);
@@ -79,7 +84,9 @@ public class CreatePackageFromDocLayoutController {
 		def numSigners = 0;
 
 
-		/*Step 1- Validate the Map templateData that comes in.*/
+		/**
+		 * Step 1- Validate the Map templateData that comes in.
+		 * */
 		messageMap = validateData(docLayoutData);
 		if (!(messageMap==null)) {
 			return messageMap
@@ -295,6 +302,11 @@ public class CreatePackageFromDocLayoutController {
 
 	}
 
+	/**
+	 * 
+	 * @param data Map with original data that needs to be validated
+	 * @return messageMap is empty if no errors or contains error message if there are any validation errors
+	 */
 	def validateData(Map<String, Object> data) {
 		def messageList = [];
 		EmailValidator validator = new EmailValidator();
@@ -370,6 +382,10 @@ public class CreatePackageFromDocLayoutController {
 
 				if ((data.containsKey(signersArray[j].getAt("signerLastName")))||(StringUtils.isEmpty(signersArray[j].getAt("signerLastName")))) {
 					messageMap = exceptionHandlerService.parseValidationErrors("549");
+				}
+				
+				if ((data.containsKey(signersArray[j].getAt("placeHolderName")))||(StringUtils.isEmpty(signersArray[j].getAt("placeHolderName")))) {
+					messageMap = exceptionHandlerService.parseValidationErrors("570");
 				}
 			}
 		}
