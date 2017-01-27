@@ -32,27 +32,19 @@ public class CallbackHandler {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	//
 	/**
-	 * 
 	 * @param request HTTP Servlet Request
 	 * @param sEvent The json string which has details about the event that occurred
 	 * @return Response to the call
 	 */
 	Response executeCallbackHandler(
 			@Context HttpServletRequest request, String sEvent) {
-		Validator validator = ESAPI.validator();
-		ValidationErrorList errorList = new ValidationErrorList();
-		String validatedSEvent =null;
 
-		if (validator.isValidInput("sEvent", sEvent, "HTTPParameterValue",sEvent.length() ,false, errorList)){
-			validatedSEvent=sEvent;
-		}
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(sEvent, HashMap.class);
 
 		CallbackHandlerController callbackHandlerController = new CallbackHandlerController();
-		callbackHandlerController.routeCallback(mappedData, validatedSEvent);
+		callbackHandlerController.routeCallback(mappedData);
 		return Response.ok("{\"code\":\"success\"}", MediaType.APPLICATION_JSON).build();
 	}
 

@@ -9,6 +9,9 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.log4j.Logger;
+import org.owasp.esapi.ESAPI
+import org.owasp.esapi.ValidationErrorList
+import org.owasp.esapi.Validator
 
 import com.silanis.esl.sdk.EslClient;
 import gov.gsa.dss.helper.Authenticator
@@ -16,12 +19,19 @@ import gov.gsa.dss.helper.EmailContent;
 import gov.gsa.dss.helper.ExceptionHandlerService
 import gov.gsa.dss.helper.PackageOrgName;
 import gov.gsa.dss.views.integration.RetaCallbackHandler;
-
+/**
+ * 
+ * @author SSuthrave
+ * @param mappedData json data converted to HashMap of the sEvent
+ * @return Response success or failure
+ */
 class CallbackHandlerController {
 
 	final static Logger log =Logger.getLogger(CallbackHandlerController.class);
-	public Response routeCallback (HashMap<String,Object> mappedData, String sEvent){
-
+	public Response routeCallback (HashMap<String,Object> mappedData){
+		Validator validator = ESAPI.validator();
+		ValidationErrorList errorList = new ValidationErrorList();
+		
 		try {
 
 			Authenticator auth = new Authenticator();
