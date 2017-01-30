@@ -2,7 +2,7 @@ package gov.gsa.dss.helper
 
 import com.silanis.esl.sdk.DocumentPackage
 
-import gov.gsa.controller.RetrieveController;
+import gov.gsa.dss.controller.RetrieveController;
 import gov.gsa.dss.helper.DSSQueueManagement
 import gov.gsa.dss.helper.SignerInfo
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject

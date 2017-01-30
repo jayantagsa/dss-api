@@ -1,26 +1,22 @@
 package gov.gsa.dss.views.integration;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
-import org.glassfish.jersey.client.ClientConfig;
-
-import gov.gsa.controller.IACPPackageController;
-
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
 import org.owasp.esapi.Validator;
+
+import gov.gsa.dss.controller.IACPPackageController;
 import gov.gsa.dss.helper.staic.OrgCodes;
 
 @Path("/edms")

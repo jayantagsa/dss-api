@@ -1,4 +1,4 @@
-package gov.gsa.controller
+package gov.gsa.dss.controller
 
 import gov.gsa.dss.helper.Authenticator
 import gov.gsa.dss.helper.ResponseBuilder

@@ -3,7 +3,7 @@ import static org.junit.Assert.*
 
 import java.util.HashMap;
 
-import gov.gsa.controller.CallbackHandlerController
+import gov.gsa.dss.controller.CallbackHandlerController
 import javax.naming.InitialContext
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

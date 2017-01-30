@@ -1,4 +1,4 @@
-package gov.gsa.controller
+package gov.gsa.dss.controller
 
 import com.silanis.esl.sdk.DocumentPackage
 import com.silanis.esl.sdk.DocumentPackageAttributes

@@ -6,9 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import gov.gsa.controller.RetrieveController;
-
+import gov.gsa.dss.controller.RetrieveController;
 import org.apache.log4j.Logger;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;

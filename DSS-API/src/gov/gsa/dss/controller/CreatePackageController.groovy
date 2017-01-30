@@ -1,4 +1,4 @@
-package gov.gsa.controller;
+package gov.gsa.dss.controller;
 
 import com.itextpdf.text.pdf.PdfReader
 import com.itextpdf.text.pdf.RandomAccessFileOrArray

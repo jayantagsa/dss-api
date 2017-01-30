@@ -1,17 +1,22 @@
 package gov.gsa.dss.helper;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
-import javax.jms.*;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageListener;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.naming.NamingException;
 
-import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import gov.gsa.controller.EDMSController;
+import gov.gsa.dss.controller.EDMSController;
 
 public class EDMSQueueConsumer implements Runnable{
 	

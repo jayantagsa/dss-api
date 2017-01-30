@@ -1,4 +1,4 @@
-package gov.gsa.controller;
+package gov.gsa.dss.controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
