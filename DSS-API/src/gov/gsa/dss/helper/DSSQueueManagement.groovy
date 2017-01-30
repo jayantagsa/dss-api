@@ -63,7 +63,6 @@ import javax.jms.TextMessage
                 TextMessage textMessage = session.createTextMessage();
                 textMessage.setText(messageString);
                 producer.send(textMessage);
-
                 session.close();
                 System.out.println("Sent: " + textMessage.getText());
                 messageMap = responseBuilder.buildSuccessResponse(textMessage.getText())

@@ -19,8 +19,13 @@ import com.silanis.esl.sdk.EslClient;
 import com.silanis.esl.sdk.PackageId
 import gov.gsa.controller.CallbackHandlerController
 import gov.gsa.dss.helper.Authenticator;
-import gov.gsa.dss.helper.ExceptionHandlerService;
+import gov.gsa.dss.helper.ExceptionHandlerService
+import gov.gsa.dss.helper.staic.OrgCodes;
+
 import org.apache.commons.lang3.StringUtils
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
+import org.owasp.esapi.Validator;
 
 
 @Path ("/executeCallbackHandler")
@@ -33,6 +38,12 @@ public class CallbackHandler {
 	Response executeCallbackHandler(
 			@Context HttpServletRequest request, String sEvent) {
 
+			Validator validator = ESAPI.validator();
+			ValidationErrorList errorList = new ValidationErrorList();
+			String validatedPackageID =null;
+			String validatedOrgName =null;
+			println("\n\n\n\n"+ESAPI.encoder().encodeForHTMLAttribute(sEvent));
+			
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(sEvent, HashMap.class);
 		

@@ -13,9 +13,9 @@ import org.json.JSONObject;
 
 import gov.gsa.controller.EDMSController;
 
-public class QueueConsumer implements Runnable{
+public class EDMSQueueConsumer implements Runnable{
 	
-	final static Logger log =Logger.getLogger(QueueConsumer.class);
+	final static Logger log =Logger.getLogger(EDMSQueueConsumer.class);
 	// Name of the topic from which we will receive messages from = " DSS_EDMS_QUEUE_DEV"
 	//Starts new thread
 	public void run() {
@@ -28,7 +28,7 @@ public class QueueConsumer implements Runnable{
 			connection = connectionFactory.createConnection();
 			connection.start();
 			Session session = connection.createSession(false,
-					Session.AUTO_ACKNOWLEDGE);
+					Session.CLIENT_ACKNOWLEDGE);
 			consumer = session.createConsumer(session.createQueue("DSS_EDMS_QUEUE_DEV"));
 			MessageListener listner = new MessageListener() {
 				EDMSController edmsController = new EDMSController();
@@ -40,8 +40,10 @@ public class QueueConsumer implements Runnable{
 									+ textMessage.getText() + "'");
 							JSONObject jmsText = new JSONObject(textMessage.getText());
 							edmsController.packageUpload(jmsText.get("packageId")+"", jmsText.get("orgName")+"");
+							message.acknowledge();
 						}
 					} catch (JMSException e){
+						
 						log.error(e);
 					} catch (JSONException e){
 						log.error(e);

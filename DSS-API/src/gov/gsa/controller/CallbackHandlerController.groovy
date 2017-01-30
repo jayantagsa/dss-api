@@ -12,10 +12,11 @@ import org.apache.log4j.Logger;
 
 import com.silanis.esl.sdk.EslClient;
 import gov.gsa.dss.helper.Authenticator
+import gov.gsa.dss.helper.CallbackQueueHandler;
 import gov.gsa.dss.helper.EmailContent;
 import gov.gsa.dss.helper.ExceptionHandlerService
-import gov.gsa.dss.helper.PackageOrgName;
-import gov.gsa.dss.views.integration.RetaCallbackHandler;
+import gov.gsa.dss.helper.PackageOrgName
+
 
 class CallbackHandlerController {
 
@@ -27,7 +28,7 @@ class CallbackHandlerController {
 			Authenticator auth = new Authenticator();
 			EslClient dssEslClient = auth.getAuth();
 			EmailContent emailContent = new EmailContent();
-			RetaCallbackHandler retaCallbackHandler = new RetaCallbackHandler();
+			CallbackQueueHandler retaCallbackHandler = new CallbackQueueHandler();
 			EDMSController edmsController = new EDMSController();
 			PackageOrgName packageOrgName = new PackageOrgName();
 			def eventOccurred = mappedData.getAt("name");

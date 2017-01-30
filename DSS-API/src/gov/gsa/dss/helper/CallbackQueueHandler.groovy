@@ -1,4 +1,4 @@
-package gov.gsa.dss.views.integration
+package gov.gsa.dss.helper
 
 import com.silanis.esl.sdk.DocumentPackage
 
@@ -11,8 +11,9 @@ import org.apache.log4j.Logger;
 /**
  * Created by Sudhangi on 8/24/2016.
  */
-class RetaCallbackHandler {
-	final static Logger log =Logger.getLogger(RetaCallbackHandler.class);
+
+class CallbackQueueHandler {
+	final static Logger log =Logger.getLogger(CallbackQueueHandler.class);
 
 	/**
 	 * Structures messges for submission to RETA Queue
@@ -37,18 +38,7 @@ class RetaCallbackHandler {
 				packageDetails.put("signers",packageSigners.getSigners(packageId) )
 				myMessage.put("packageInfo", packageDetails);
 				break;
-			//Package Decline option shall be removed. to be deleted
-			/*			case "PACKAGE_DECLINE":
-			 //String declineReason = documentPackage.getMessages().get(0).getContent();
-			 PackageSigner packageDecliners= new PackageSigner();
-			 myMessage.put("orgName", orgName);
-			 myMessage.put("notificationType", eventOccurred);
-			 packageDetails.put("packageId", packageId);
-			 packageDetails.put("packageName", packageName);
-			 //packageDetails.put("declineReason",declineReason);
-			 packageDetails.put("decliner",packageDecliners.getDecliners(packageId))
-			 myMessage.put("packageInfo", packageDetails);
-			 break;*/
+			
 			case "PACKAGE_OPT_OUT":
 			//String declineReason = documentPackage.getMessages().get(0).getContent();
 				SignerInfo packageOptOut= new SignerInfo();
@@ -84,10 +74,10 @@ class RetaCallbackHandler {
 	 * @param orgName
 	 * @param documentPackage
 	 */
-	public void edmsMessageBuilder(String eventOccurred, String packageId , String packageName, String orgName, DocumentPackage documentPackage)
+	public void edmsPublishToQueue(String eventOccurred, String packageId , String packageName, String orgName, DocumentPackage documentPackage)
 	{
 		Map<String, String> myMessage = new HashMap<String, String>();
-		Map<String, String> packageDetails = new HashMap<String, String>();
+		
 
 		switch (eventOccurred) {
 			case "PACKAGE_COMPLETE":
@@ -95,7 +85,7 @@ class RetaCallbackHandler {
 				myMessage.put("orgName", orgName);
 				myMessage.put("notificationType", eventOccurred);
 				myMessage.put("packageId", packageId);
-				myMessage.put("packageInfo", packageDetails);
+				
 				break;
 		}
 		JSONObject jsonResult = new JSONObject();
