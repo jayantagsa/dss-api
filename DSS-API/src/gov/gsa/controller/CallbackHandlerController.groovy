@@ -29,8 +29,7 @@ class CallbackHandlerController {
 
 	final static Logger log =Logger.getLogger(CallbackHandlerController.class);
 	public Response routeCallback (HashMap<String,Object> mappedData){
-		Validator validator = ESAPI.validator();
-		ValidationErrorList errorList = new ValidationErrorList();
+
 		
 		try {
 
