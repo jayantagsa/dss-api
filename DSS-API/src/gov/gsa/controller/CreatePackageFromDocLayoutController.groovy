@@ -77,8 +77,6 @@ public class CreatePackageFromDocLayoutController {
 		String successMessage;
 		def numOfAttachments = 0;
 		def numSigners = 0;
-
-
 		/*Step 1- Validate the Map templateData that comes in.*/
 		messageMap = validateData(docLayoutData);
 		if (!(messageMap==null)) {
@@ -143,6 +141,7 @@ public class CreatePackageFromDocLayoutController {
 			for (int m = 0; m < layouts.size(); m++) {
 
 				DocumentPackage myLayout = layouts[m];
+				log.info(myLayout.getName()+"\t"+docLayoutName);
 				if (myLayout.getName() == docLayoutName) {
 					def docLayoutId = myLayout.getId();
 					listLayoutIds.add(docLayoutId.toString());
@@ -156,6 +155,7 @@ public class CreatePackageFromDocLayoutController {
 			/*Convert base64 encoded file String into InputStream*/
 			InputStream bufferedInputStream = null;
 			try {
+				//log.info(documentsMap[i]);
 				bufferedInputStream = fileOps.decodeBase64String(documentsMap[i].getAt("document").getAt("documentContent"));
 			}
 			catch (Exception e) {
@@ -176,6 +176,7 @@ public class CreatePackageFromDocLayoutController {
 			for (int j = 0; j < signersArray.size(); j++) {
 				for (int h = 0; h < listPlaceHolderObj.size(); h++) {
 					Signer pSigner = listPlaceHolderObj[h];
+					log.info(pSigner.getPlaceholderName());
 					/*Check to see if the received placeholder name is same as the placeholder name from the original list*/
 					if(pSigner.getPlaceholderName()==signersArray[j].getAt("placeHolderName")){
 						pholder = new Placeholder(pSigner.getPlaceholderName());

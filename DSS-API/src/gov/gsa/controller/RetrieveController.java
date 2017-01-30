@@ -47,7 +47,7 @@ public class RetrieveController {
 				{
 					Zipper zipDocs = new Zipper();
 					String base64ZIP = Base64.encodeBase64String(zipDocs.getZip(DocPackage, Client));	
-					base64ZIP= validator.getValidInput("", base64ZIP, "HTTPHeaderValue",base64ZIP.length()*2 ,false, errorList);
+					base64ZIP= validator.getValidInput("", base64ZIP, "HTTPHeaderValue",base64ZIP.length() ,false, errorList);
 					RetrieveModel obj = new RetrieveModel();	
 					String strJSON=obj.getJSONString(paramPackageId, base64ZIP, DocPackage.getName());
 					//log.info("\n\n.....");
