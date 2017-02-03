@@ -36,7 +36,7 @@ class CallbackHandlerController {
 			PackageId packageId = new PackageId(packageIdString)
 			DocumentPackage documentPackage = dssEslClient.getPackage(packageId);
 			def orgName = packageOrgName.getOrgName(documentPackage);
-			log.info(orgName);
+			log.info(orgName+"");
 			String packageName = documentPackage.getName();
 
 			switch (orgName) {
