@@ -296,17 +296,7 @@
 
             </plugin>
 
-            <!-- Define Groovy Eclipse Compiler again and set extensions=true. Thanks to this, plugin will -->
 
-            <!-- enhance default build life cycle with an extra phase which adds additional Groovy source folders -->
-
-            <!-- Thanks to this, Clover will be able to find your Groovy files. It works with Maven 3.x -->
-
-
-
-            <!-- Configure Clover for Maven plug-in. Please note that it's not bound to any execution phase, -->
-
-            <!-- so you'll have to call Clover goals from command line. -->
 
             <plugin>
 
