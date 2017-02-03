@@ -99,11 +99,9 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<resources>
-			<resource>
-				<directory>src</directory>
-			</resource>
-		</resources>
+		
+				<sourceDirectory>src</sourceDirectory>
+			
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
@@ -119,6 +117,9 @@
 				<version>3.5.1</version>
 				<configuration>
 					<!-- Bind Groovy Eclipse Compiler -->
+					<sources>
+                            <source>src</source>
+                        </sources>
 					<compilerId>groovy-eclipse-compiler</compilerId>
 					<source>1.8</source>
 					<target>1.8</target>
