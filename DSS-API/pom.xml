@@ -1,16 +1,48 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>DSS-API</groupId>
-	<artifactId>DSS-API</artifactId>
-	<version>0.1.2-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<name>dss-api</name>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-	<dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>DSSMaven</groupId>
+  <artifactId>DSSAPI</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <build>
+    <sourceDirectory>${basedir}/src</sourceDirectory>
+
+    <plugins>
+     <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <!-- 2.8.0-01 and later require maven-compiler-plugin 3.1 or higher -->
+        <version>3.5.1</version>
+        <configuration>
+          <compilerId>groovy-eclipse-compiler</compilerId>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-eclipse-compiler</artifactId>
+            <version>2.9.1-01</version>
+          </dependency>
+          <!-- for 2.8.0-01 and later you must have an explicit dependency on groovy-eclipse-batch -->
+          <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-eclipse-batch</artifactId>
+            <version>2.3.7-01</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <warSourceDirectory>WebContent</warSourceDirectory>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+    </plugins>
+
+  </build>
+  	<dependencies>
 		<dependency>
 			<groupId>com.silanis.esl</groupId>
 			<artifactId>sdk</artifactId>
@@ -98,60 +130,4 @@
 			<version>4.11</version>
 		</dependency>
 	</dependencies>
-	<build>
-		
-				<sourceDirectory>src</sourceDirectory>
-			
-		<plugins>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<warSourceDirectory>WebContent</warSourceDirectory>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<!-- Bind Groovy Eclipse Compiler -->
-					<sources>
-                            <source>src</source>
-                        </sources>
-					<compilerId>groovy-eclipse-compiler</compilerId>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-				<dependencies>
-					<!-- Define which Groovy version will be used for build (default is 
-						2.0) -->
-					<dependency>
-						<groupId>org.codehaus.groovy</groupId>
-						<artifactId>groovy-eclipse-batch</artifactId>
-						<version>1.8.6-01</version>
-					</dependency>
-					<!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-eclipse-compiler -->
-					<dependency>
-						<groupId>org.codehaus.groovy</groupId>
-						<artifactId>groovy-eclipse-compiler</artifactId>
-						<version>2.9.2-01</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>com.atlassian.maven.plugins</groupId>
-
-				<artifactId>clover-maven-plugin</artifactId>
-
-				<version>4.1.1</version>
-
-			</plugin>
-		</plugins>
-
-	</build>
-
-
-
 </project>
