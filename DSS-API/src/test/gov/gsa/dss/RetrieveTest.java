@@ -22,7 +22,7 @@ public class RetrieveTest {
 
 		
 		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloadDocuments?packageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=RETA"); //...;
+		WebTarget ret =client.target("http://localhost:7073/DSS-API/service/package/retrieve?packageId=11d78faa-6cab-4441-9685-b09d8df89691&orgName=SORN"); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
 
 		// response.readEntity(Map.class);
@@ -41,7 +41,7 @@ public class RetrieveTest {
 	public void testFailureWrongPackageRetrieveDownloadZippedDocs() throws InterruptedException{
 
 		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloadDocuments?packageId=af5a31d6-9c0d-4367-bd93-&orgName=RETA"); //...;
+		WebTarget ret =client.target("http://localhost:7073/DSS-API/service/package/retrieve?packageId=11d78faa-6cab-4441-9685-b09d8df8969&orgName=RETA"); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
 		
 		
@@ -60,7 +60,7 @@ public class RetrieveTest {
 	public void testFailureWrongOrgDownloadZippedDocs() throws InterruptedException{
 
 		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target("http://localhost:8080/DSS-API/dss/retrieve/downloadDocuments?packageId=af5a31d6-9c0d-4367-bd93-3561c0d755b8&orgName=BETA"); //...;
+		WebTarget ret =client.target("http://localhost:7073/DSS-API/service/package/retrieve?packageId=11d78faa-6cab-4441-9685-b09d8df89691&orgName=TORN"); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
 
 		// response.readEntity(Map.class);
