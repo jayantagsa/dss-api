@@ -6,7 +6,7 @@
   <packaging>war</packaging>
   <build>
     <sourceDirectory>${basedir}/src</sourceDirectory>
-
+<testSourceDirectory>${basedir}/src/test</testSourceDirectory>
     <plugins>
      <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

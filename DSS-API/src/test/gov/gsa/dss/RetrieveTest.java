@@ -1,4 +1,4 @@
-package gov.gsa.dss.test;
+package test.gov.gsa.dss;
 import static org.junit.Assert.*;
 
 
