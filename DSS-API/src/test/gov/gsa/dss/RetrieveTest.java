@@ -22,7 +22,7 @@ public class RetrieveTest {
 
 		
 		Client client = ClientBuilder.newClient();
-		WebTarget ret =client.target("http://localhost:7073/DSS-API/service/package/retrieve?packageId=11d78faa-6cab-4441-9685-b09d8df89691&orgName=SORN"); //...;
+		WebTarget ret =client.target("http://localhost:7073/DSS-API/service/package/retrieve?packageId=11d78faa-6cab-4441-9685-b09d8df89691AZ&orgName=SORN"); //...;
 		Response response = ret.request(MediaType.APPLICATION_JSON).get();
 
 		// response.readEntity(Map.class);
