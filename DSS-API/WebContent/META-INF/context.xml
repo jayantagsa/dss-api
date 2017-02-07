@@ -1,4 +1,4 @@
 <Context>
-    <!--<Environment name="config" value="/Users/jayantasinha/Documents/apache-tomcat-9.0.0.M10/bin/Config.YAML" type="java.lang.String"/>-->
-    <Environment name="config" value="/data/DSS/Test1/Tomcat/apache-tomcat-9.0.0.M10/bin/Config.YAML" type="java.lang.String"/>
+    <Environment name="config" value="/Users/jayantasinha/Documents/apache-tomcat-9.0.0.M10/bin/Config.YAML" type="java.lang.String"/>
+    <!--<Environment name="config" value="/data/DSS/Test1/Tomcat/apache-tomcat-9.0.0.M10/bin/Config.YAML" type="java.lang.String"/>-->
 </Context>
