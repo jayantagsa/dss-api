@@ -22,7 +22,10 @@ import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService
 import gov.gsa.dss.helper.staic.OrgCodes;
 
-import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang3.StringUtils;
+import org.owasp.esapi.ValidationErrorList;
+import org.owasp.esapi.Validator;
+import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
 import org.owasp.esapi.Validator;
@@ -34,7 +37,11 @@ public class CallbackHandler {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	//
+	/**
+	 * @param request HTTP Servlet Request
+	 * @param sEvent The json string which has details about the event that occurred
+	 * @return Response to the call
+	 */
 	Response executeCallbackHandler(
 			@Context HttpServletRequest request, String sEvent) {
 
@@ -46,11 +53,11 @@ public class CallbackHandler {
 			
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(sEvent, HashMap.class);
-		
+
 		CallbackHandlerController callbackHandlerController = new CallbackHandlerController();
-		callbackHandlerController.routeCallback(mappedData, sEvent);	
+		callbackHandlerController.routeCallback(mappedData);
 		return Response.ok("{\"code\":\"success\"}", MediaType.APPLICATION_JSON).build();
-		}
-			
+	}
+
 }
 

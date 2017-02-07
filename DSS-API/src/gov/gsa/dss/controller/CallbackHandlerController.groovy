@@ -9,20 +9,28 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.log4j.Logger;
+import org.owasp.esapi.ESAPI
+import org.owasp.esapi.ValidationErrorList
+import org.owasp.esapi.Validator
 
 import com.silanis.esl.sdk.EslClient;
 import gov.gsa.dss.helper.Authenticator
-import gov.gsa.dss.helper.CallbackQueueHandler;
 import gov.gsa.dss.helper.EmailContent;
 import gov.gsa.dss.helper.ExceptionHandlerService
-import gov.gsa.dss.helper.PackageOrgName
-
-
+import gov.gsa.dss.helper.PackageOrgName;
+import gov.gsa.dss.helper.CallbackQueueHandler;
+/**
+ * 
+ * @author SSuthrave
+ * @param mappedData json data converted to HashMap of the sEvent
+ * @return Response success or failure
+ */
 class CallbackHandlerController {
 
 	final static Logger log =Logger.getLogger(CallbackHandlerController.class);
-	public Response routeCallback (HashMap<String,Object> mappedData, String sEvent){
+	public Response routeCallback (HashMap<String,Object> mappedData){
 
+		
 		try {
 
 			Authenticator auth = new Authenticator();
@@ -36,7 +44,7 @@ class CallbackHandlerController {
 			PackageId packageId = new PackageId(packageIdString)
 			DocumentPackage documentPackage = dssEslClient.getPackage(packageId);
 			def orgName = packageOrgName.getOrgName(documentPackage);
-			log.info(orgName+"");
+			log.info(orgName);
 			String packageName = documentPackage.getName();
 
 			switch (orgName) {
@@ -58,8 +66,7 @@ class CallbackHandlerController {
 					log.info( "Package Name: $packageName");
 					log.info( "Package Id: $packageIdString");
 					if (eventOccurred=="PACKAGE_COMPLETE" ) {
-						retaCallbackHandler.edmsMessageBuilder(eventOccurred, packageIdString, packageName, orgName, documentPackage);
-						//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+						edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					}
 					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					//iacpCallbackHandler.handleCallback(sEvent)
@@ -69,8 +76,7 @@ class CallbackHandlerController {
 					log.info( "Package Name: $packageName");
 					log.info( "Package Id: $packageIdString");
 					if (eventOccurred=="PACKAGE_COMPLETE" ) {
-						retaCallbackHandler.edmsMessageBuilder(eventOccurred, packageIdString, packageName, orgName, documentPackage);
-						//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
+						edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					}
 					//edmsController.uploadPackagetoEDMS(packageIdString,orgName)
 					//iacpCallbackHandler.handleCallback(sEvent)
