@@ -1,6 +1,8 @@
 package gov.gsa.dss.helper;
 
 import org.apache.activemq.ActiveMQConnectionFactory
+import org.apache.log4j.Logger;
+
 import javax.jms.Connection
 import javax.jms.ConnectionFactory
 import javax.jms.Destination
@@ -16,7 +18,7 @@ import javax.jms.TextMessage
  * Migrated to Lean Framework by sudhangi on 9/19/2016.
  */
     public class DSSQueueManagement {
-
+		final static Logger log =Logger.getLogger(DSSQueueManagement.class);
 		YamlConfig yamlConfig = new YamlConfig();
 		private ConnectionFactory factory = null;
         private Connection connection = null;
@@ -64,7 +66,7 @@ import javax.jms.TextMessage
                 textMessage.setText(messageString);
                 producer.send(textMessage);
                 session.close();
-                System.out.println("Sent: " + textMessage.getText());
+                log.info("Sent: " + textMessage.getText());
                 messageMap = responseBuilder.buildSuccessResponse(textMessage.getText())
             }
             catch(JMSException jmsExp){
@@ -91,7 +93,7 @@ import javax.jms.TextMessage
                 if (message instanceof TextMessage)
                     text = (TextMessage) message;
 
-                System.out.println("Received : " + text.getText());
+                log.info("Received : " + text.getText());
 
                 consumer.close();
                 session.close();

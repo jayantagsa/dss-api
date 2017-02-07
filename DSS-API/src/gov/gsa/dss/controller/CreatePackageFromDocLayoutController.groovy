@@ -276,10 +276,6 @@ public class CreatePackageFromDocLayoutController {
 			{
 				dssEslClient.getPackageService().removeSigner(packageId, s.getId());
 			}
-
-
-			System.out.println(packageId.toString());
-
 			if(numSigners < dssEslClient.getPackage(packageId).getPlaceholders().size()){
 				messageMap = exceptionHandlerService.parseValidationErrors("568");
 				return messageMap

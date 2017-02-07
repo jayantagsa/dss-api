@@ -5,7 +5,10 @@ import java.util.Set;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.log4j.Logger;
+
 import gov.gsa.dss.helper.EDMSQueueConsumer;
+import gov.gsa.dss.helper.Mail;
 
 /**
  * 
@@ -13,7 +16,7 @@ import gov.gsa.dss.helper.EDMSQueueConsumer;
  *
  */
 public class DSSServletContextListener implements ServletContextListener {
-
+	final static Logger log =Logger.getLogger(DSSServletContextListener.class);
 	Thread thread =null;
 	@SuppressWarnings("deprecation")
 	/**
@@ -24,7 +27,7 @@ public class DSSServletContextListener implements ServletContextListener {
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
 		Thread[] threadArray = threadSet.toArray(new Thread[threadSet.size()]);
 		for(Thread t:threadArray) {
-			System.out.println(t.getName());
+			log.info(t.getName());
 			if(t.getName().contains("ActiveMQ")) {
 				synchronized(t) {
 					t.stop(); //don't complain, it works
