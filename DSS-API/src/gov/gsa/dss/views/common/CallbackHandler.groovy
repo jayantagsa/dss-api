@@ -49,7 +49,7 @@ public class CallbackHandler {
 			ValidationErrorList errorList = new ValidationErrorList();
 			String validatedPackageID =null;
 			String validatedOrgName =null;
-			println("\n\n\n\n"+ESAPI.encoder().encodeForHTMLAttribute(sEvent));
+			//println(ESAPI.encoder().encodeForHTMLAttribute(sEvent));
 			
 		HashMap<String,Object> mappedData =
 				new ObjectMapper().readValue(sEvent, HashMap.class);
