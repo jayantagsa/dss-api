@@ -104,5 +104,9 @@
       "569": {
         "type": "Validation Error.",
         "message": "Placeholder name provided does not exists or is invalid."
+      },
+      "570": {
+        "type": "Validation Error.",
+        "message": "Placeholder name not provided or is empty."
       }
 }

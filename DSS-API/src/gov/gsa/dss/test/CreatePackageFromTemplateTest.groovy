@@ -4,8 +4,9 @@ import static org.junit.Assert.*
 import java.util.HashMap;
 import org.apache.commons.codec.binary.Base64
 import org.apache.commons.io.IOUtils
-import gov.gsa.controller.CallbackHandlerController
-import gov.gsa.controller.CreatePackageFromTemplateController
+import gov.gsa.dss.controller.CallbackHandlerController
+import gov.gsa.dss.controller.CreatePackageFromTemplateController;
+
 import javax.naming.InitialContext
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

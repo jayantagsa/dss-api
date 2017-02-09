@@ -17,9 +17,9 @@ import com.silanis.esl.sdk.DocumentPackage
 import com.silanis.esl.sdk.DocumentPackageAttributes
 import com.silanis.esl.sdk.EslClient;
 import com.silanis.esl.sdk.PackageId
-import gov.gsa.controller.CallbackHandlerController
-import gov.gsa.controller.CreatePackageController
-import gov.gsa.controller.RetrieveController;
+import gov.gsa.dss.controller.CallbackHandlerController
+import gov.gsa.dss.controller.RetrieveController
+import gov.gsa.dss.controller.CreatePackageController;
 import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import org.apache.chemistry.opencmis.commons.impl.json.JSONObject
