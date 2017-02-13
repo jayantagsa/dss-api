@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import sun.misc.BASE64Decoder
 import org.apache.commons.lang3.RandomStringUtils
+import java.text.Normalizer
+import java.text.Normalizer.Form
 
 class FileOperations {
 	final static Logger log =Logger.getLogger(FileOperations.class);
@@ -23,7 +25,8 @@ class FileOperations {
     */
    InputStream decodeBase64String(String encodedString) {
        BASE64Decoder decoder = new BASE64Decoder();
-       byte[] decodedBytes = decoder.decodeBuffer(encodedString);
+	   String normalizedEncodedString = Normalizer.normalize(encodedString, Normalizer.Form.NFKC);
+	   byte[] decodedBytes = decoder.decodeBuffer(normalizedEncodedString);
        InputStream bufferedInputStream = new ByteArrayInputStream(decodedBytes);
        return bufferedInputStream;
    }
@@ -31,13 +34,14 @@ class FileOperations {
    private File writePDFFileToLocalDisk(InputStream inputStream) {
 	   String ext = "pdf"
 	   String name = String.format("%s.%s", RandomStringUtils.randomAlphanumeric(8), ext);
-	   String fullyQualifiedFiledName = System.getProperty("java.io.tmpdir") + File.separator + name
+	   String fullyQualifiedFiledNameWOSlash = System.getProperty("java.io.tmpdir") + name
+	   String normalizedFileName = Normalizer.normalize(fullyQualifiedFiledNameWOSlash, Normalizer.Form.NFKC);
 
 	   OutputStream outputStream = null
 
 	   try {
 		   // write the inputStream to a FileOutputStream
-		   outputStream = new FileOutputStream(new File(fullyQualifiedFiledName))
+		   outputStream = new FileOutputStream(new File(normalizedFileName))
 
 		   int read = 0
 		   byte[] bytes = new byte[1024]
@@ -66,7 +70,7 @@ class FileOperations {
 
 		   }
 	   }
-	   new File(fullyQualifiedFiledName)
+	   new File(normalizedFileName)
    }
 
 }
