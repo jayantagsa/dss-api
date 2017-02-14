@@ -25,7 +25,7 @@ import sun.misc.BASE64Decoder;
 import java.io.File;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.Spliterators.AbstractDoubleSpliterator
+import java.util.*
 
 /**
  * @author SSuthrave
