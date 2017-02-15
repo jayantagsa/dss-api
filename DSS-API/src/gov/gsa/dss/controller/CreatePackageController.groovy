@@ -114,35 +114,37 @@ public class CreatePackageController {
                        break;
                }
 
-               if (StringUtils.isNotEmpty(signersArray[j].getAt("searchText"))) {
-                   pdfReader = new PdfReader(new RandomAccessFileOrArray(filePath), null);
+				if (StringUtils.isNotEmpty(signersArray[j].getAt("searchText"))) {
+					pdfReader = new PdfReader(new RandomAccessFileOrArray(filePath), null);
+					/*Unchecked Return Value to NULL Pointer Dereference Solution*/
+					if (pdfReader != null) {
+						for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
+							String currentPageText = null;
+							try {
+								SimpleTextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
+								currentPageText = PdfTextExtractor.getTextFromPage(pdfReader, page, strategy);
+							} catch (Exception e) {
+								log.error(e);
+							}
+							while (currentPageText.contains(signersArray[j].getAt("searchText"))) {
+								occurrences1++;
+								currentPageText = currentPageText.substring(currentPageText.indexOf(signersArray[j].getAt
+										("searchText")) + signersArray[j].getAt("searchText").length());
+							}
+						}
+						if (occurrences1 == 0) {
+							/*If the search text does not exists in the document then an error message shoudl be displayed.
+							 The package should only be created in draft mode with the signer info.*/
+							//                       signatureInsertionData.packageOption = "create";
+							messageMap = exceptionHandlerService.parseValidationErrors("Search Text not found in the document.",
+									563,
+									"Validation Error");
+							return messageMap
 
-                   for (int page = 1; page <= pdfReader.getNumberOfPages(); page++) {
-                       String currentPageText = null;
-                       try {
-                           SimpleTextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
-                           currentPageText = PdfTextExtractor.getTextFromPage(pdfReader, page, strategy);
-                       } catch (Exception e) {
-                           log.error(e);
-                       }
-                       while (currentPageText.contains(signersArray[j].getAt("searchText"))) {
-                           occurrences1++;
-                           currentPageText = currentPageText.substring(currentPageText.indexOf(signersArray[j].getAt
-                                   ("searchText")) + signersArray[j].getAt("searchText").length());
-                       }
-                   }
-                   if (occurrences1 == 0) {
-                       /*If the search text does not exists in the document then an error message shoudl be displayed.
-                       The package should only be created in draft mode with the signer info.*/
-//                       signatureInsertionData.packageOption = "create";
-                       messageMap = exceptionHandlerService.parseValidationErrors("Search Text not found in the document.",
-                                                                                   563,
-                                                                                   "Validation Error");
-                       return messageMap
-
-                   }
-                   pdfReader.close();
-               }
+						}
+						pdfReader.close();
+					}
+				}
                if (occurrences1 > 0) {
                    TextAnchorBuilder textAnchorBuilder = TextAnchorBuilder.newTextAnchor(signersArray[j].getAt
                            ("searchText"));

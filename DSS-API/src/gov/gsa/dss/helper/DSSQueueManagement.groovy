@@ -31,9 +31,11 @@ import javax.jms.TextMessage
             try {
                 factory = new ActiveMQConnectionFactory(yamlConfig.getJmsBrokerUrl());
                 connection = factory.createConnection();
-                connection.start();
-                messageMap = responseBuilder.buildSuccessResponse("DSS Queue initialization complete.")
-
+				/*Unchecked Return Value to NULL Pointer Dereference Solution*/
+				if (connection != null) {
+	                connection.start();
+	                messageMap = responseBuilder.buildSuccessResponse("DSS Queue initialization complete.")
+				}
             }
             catch (JMSException jmsExp) {
                 messageMap = exceptionHandlerService.parseException(jmsExp);
@@ -57,18 +59,26 @@ import javax.jms.TextMessage
             Destination destination = null;
             MessageProducer producer = null;
 
-//        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            try {
-                session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE)
-                destination = session.createQueue(queueName);
-                producer = session.createProducer(destination);
-                TextMessage textMessage = session.createTextMessage();
-                textMessage.setText(messageString);
-                producer.send(textMessage);
-                session.close();
-                log.info("Sent: " + textMessage.getText());
-                messageMap = responseBuilder.buildSuccessResponse(textMessage.getText())
-            }
+		try {
+			session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE)
+			/*Unchecked Return Value to NULL Pointer Dereference Solution*/
+			if (session != null) {
+				destination = session.createQueue(queueName);
+				producer = session.createProducer(destination);
+				/*Unchecked Return Value to NULL Pointer Dereference Solution*/
+				if (producer != null) {
+					TextMessage textMessage = session.createTextMessage();
+					/*Unchecked Return Value to NULL Pointer Dereference Solution*/
+					if (textMessage != null) {
+						textMessage.setText(messageString);
+						producer.send(textMessage);
+						session.close();
+						log.info("Sent: " + textMessage.getText());
+						messageMap = responseBuilder.buildSuccessResponse(textMessage.getText())
+					}
+				}
+			}
+		}
             catch(JMSException jmsExp){
                 messageMap = exceptionHandlerService.parseException(jmsExp);
             }
@@ -84,22 +94,22 @@ import javax.jms.TextMessage
 
             try {
                 session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-//        session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-                destination = session.createQueue(queueName);
-                consumer = session.createConsumer(destination);
-                message = consumer.receive();
+				/*Unchecked Return Value to NULL Pointer Dereference Solution*/
+			if (session != null) {
+				destination = session.createQueue(queueName);
+				consumer = session.createConsumer(destination);
+				/*Unchecked Return Value to NULL Pointer Dereference Solution*/
+				if (consumer != null) {
+					message = consumer.receive();
 
-
-                if (message instanceof TextMessage)
-                    text = (TextMessage) message;
-
-                log.info("Received : " + text.getText());
-
-                consumer.close();
-                session.close();
-                messageMap = responseBuilder.buildSuccessResponse(text.getText())
-
-//                return text.getText();
+					if (message instanceof TextMessage)
+						text = (TextMessage) message;
+					log.info("Received : " + text.getText());
+					consumer.close();
+				}
+				session.close();
+				messageMap = responseBuilder.buildSuccessResponse(text.getText())
+			}
             }
             catch(JMSException jmsExp){
                 messageMap = exceptionHandlerService.parseException(jmsExp);
