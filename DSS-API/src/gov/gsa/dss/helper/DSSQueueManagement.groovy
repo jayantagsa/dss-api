@@ -38,6 +38,7 @@ import javax.jms.TextMessage
 				}
             }
             catch (JMSException jmsExp) {
+				connection.close();
                 messageMap = exceptionHandlerService.parseException(jmsExp);
             }
             return messageMap;
@@ -80,6 +81,7 @@ import javax.jms.TextMessage
 			}
 		}
             catch(JMSException jmsExp){
+				session.close();
                 messageMap = exceptionHandlerService.parseException(jmsExp);
             }
             return messageMap;
