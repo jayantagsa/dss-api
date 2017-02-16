@@ -1,51 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+
+	<session-config>
+          <cookie-config>
+             <http-only>true</http-only>
+          </cookie-config>
+          <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+      
   <display-name>com.vogella.jersey.first</display-name>
+
   <listener>
+
     <listener-class>
+
         gov.gsa.dss.listners.DSSServletContextListener
+
     </listener-class>
-</listener>
- <servlet>
+
+  </listener>
+
+  <servlet>
+
     <servlet-name>Integration</servlet-name>
+
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-     <!-- Register resources and providers under com.vogella.jersey.first package. -->
+
     <init-param>
-        <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>gov.gsa.dss.views.integration</param-value>
+
+      <param-name>jersey.config.server.provider.packages</param-name>
+
+      <param-value>gov.gsa.dss.views.integration</param-value>
+
     </init-param>
+
     <load-on-startup>1</load-on-startup>
+
   </servlet>
-   <servlet>
+
+  <servlet>
+
     <servlet-name>Service</servlet-name>
+
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-     <!-- Register resources and providers under com.vogella.jersey.first package. -->
+
     <init-param>
-        <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>gov.gsa.dss.views.service</param-value>
+
+      <param-name>jersey.config.server.provider.packages</param-name>
+
+      <param-value>gov.gsa.dss.views.service</param-value>
+
     </init-param>
+
     <load-on-startup>1</load-on-startup>
+
   </servlet>
-   <servlet>
+
+  <servlet>
+
     <servlet-name>Common</servlet-name>
+
     <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-     <!-- Register resources and providers under com.vogella.jersey.first package. -->
+
     <init-param>
-        <param-name>jersey.config.server.provider.packages</param-name>
-        <param-value>gov.gsa.dss.views.common</param-value>
+
+      <param-name>jersey.config.server.provider.packages</param-name>
+
+      <param-value>gov.gsa.dss.views.common</param-value>
+
     </init-param>
+
     <load-on-startup>1</load-on-startup>
+
   </servlet>
+
   <servlet-mapping>
+
     <servlet-name>Integration</servlet-name>
+
     <url-pattern>/integration/*</url-pattern>
+
   </servlet-mapping>
-    <servlet-mapping>
+
+  <servlet-mapping>
+
     <servlet-name>Common</servlet-name>
+
     <url-pattern>/common/*</url-pattern>
+
   </servlet-mapping>
-    <servlet-mapping>
+
+  <servlet-mapping>
+
     <servlet-name>Service</servlet-name>
+
     <url-pattern>/service/*</url-pattern>
+
   </servlet-mapping>
+
+
+
 </web-app>

@@ -32,8 +32,7 @@ public class ExceptionHandlerService {
 		}
 		else if(exc instanceof CmisContentAlreadyExistsException)
 		{
-			log.error(exc);
-			
+			log.error(exc);	
 			log.info(exc.getMessage());
 			//+"...............";
 			//exc.printStackTrace();
@@ -47,7 +46,8 @@ public class ExceptionHandlerService {
 		}
 		else
 		{
-			exc.printStackTrace();
+//			exc.printStackTrace();
+			log.error(exc);
 			message = exc.getMessage();
 			type = ErrorMessages.getType("400");
 			code =400;
@@ -61,7 +61,8 @@ public class ExceptionHandlerService {
 
 	/*This is to parse a ESL Server Exception*/
 	def parseEslServerException (EslServerException eslExc) {
-		eslExc.printStackTrace();
+		log.error(eslExc);
+//		eslExc.printStackTrace();
 		message = eslExc.getServerError().getMessage();
 		code = eslExc.getServerError().getCode();
 		type = eslExc.getServerError().getName();
