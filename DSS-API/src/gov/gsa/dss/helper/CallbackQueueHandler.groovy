@@ -58,12 +58,13 @@ class CallbackQueueHandler {
 
 		DSSQueueManagement dssQueue = new DSSQueueManagement()
 
-		dssQueue.initConnection()
-
-		def result = dssQueue.publishToQueue("DSS_RETA_QUEUE_DEV", messageString);
-		log.info ("published to queue: " + result);
-
-		dssQueue.closeConnection()
+		/*Unchecked Return Value to NULL Pointer Dereference Solution*/	
+			dssQueue.initConnection()
+			if (dssQueue != null) {
+			def result = dssQueue.publishToQueue("DSS_RETA_QUEUE_DEV", messageString);
+			log.info ("published to queue: " + result);
+			dssQueue.closeConnection()
+		}
 	}
 	
 	/**
@@ -92,15 +93,14 @@ class CallbackQueueHandler {
 		jsonResult.putAll( myMessage );
 		def messageString = jsonResult.toString();
 
+		/*Unchecked Return Value to NULL Pointer Dereference Solution*/
 		DSSQueueManagement dssQueue = new DSSQueueManagement()
-
-		dssQueue.initConnection()
-
-		def result = dssQueue.publishToQueue("DSS_EDMS_QUEUE_DEV", messageString);
-		log.info ("published to queue: " + result);
-
-		dssQueue.closeConnection()
-		
+		if (dssQueue != null) {
+			dssQueue.initConnection()
+			def result = dssQueue.publishToQueue("DSS_EDMS_QUEUE_DEV", messageString);
+			log.info ("published to queue: " + result);
+			dssQueue.closeConnection()
+		}
 	}
 
 }

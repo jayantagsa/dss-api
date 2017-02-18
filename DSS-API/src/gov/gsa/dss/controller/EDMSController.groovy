@@ -29,6 +29,8 @@ import gov.gsa.dss.helper.Authenticator;
 import gov.gsa.dss.helper.ExceptionHandlerService;
 import gov.gsa.dss.helper.YamlConfig;
 import gov.gsa.dss.helper.Zipper;
+import java.text.Normalizer
+import java.text.Normalizer.Form
 
 class EDMSController {
 	final static Logger log =Logger.getLogger(EDMSController.class);
@@ -36,8 +38,6 @@ class EDMSController {
 	protected static String fileName="";
 	protected static String strbaseURL="";
 	protected static byte [] base64File;
-	//protected static String strOrgName;
-	//protected static String strPackageID;
 	protected static int status;
 	protected static InputStream stream;
 
@@ -46,14 +46,17 @@ class EDMSController {
 	public Response uploadPackagetoEDMS(String PackageId, String OrgName)
 
 	{
-		//strOrgName=OrgName;
-		//strPackageID=PackageId;
-		try{
-			packageUpload(PackageId, OrgName);
-			
 
-			return Response.status(200).type(MediaType.APPLICATION_JSON)
-					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();
+		try{
+			/*Normalize the PackageId and OrgName before sending it over for further processing*/
+			String strOrgName = Normalizer.normalize(OrgName, Normalizer.Form.NFKC);
+			String strPackageID = Normalizer.normalize(PackageId, Normalizer.Form.NFKC);
+			packageUpload(strPackageID, strOrgName);
+			
+			/*return Response.status(200).type(MediaType.APPLICATION_JSON)
+					.entity("{\"AlfrescoDocumentID\":"+newContent1.getId()+"}").build();*/
+					return Response.status(200).type(MediaType.APPLICATION_JSON)
+					.entity("AlfrescoDocumentID").build();
 		}
 
 		catch (Exception e)

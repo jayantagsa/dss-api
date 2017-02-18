@@ -23,17 +23,19 @@ import gov.gsa.dss.helper.ExceptionHandlerService
 import gov.gsa.dss.helper.staic.OrgCodes;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger
 import org.owasp.esapi.ValidationErrorList;
 import org.owasp.esapi.Validator;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
 import org.owasp.esapi.Validator;
+import org.apache.log4j.Logger;
 
 
 @Path ("/executeCallbackHandler")
 public class CallbackHandler {
-	//@Path("")
+	final static Logger log =Logger.getLogger(CallbackHandler.class);
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -44,7 +46,7 @@ public class CallbackHandler {
 	 */
 	Response executeCallbackHandler(
 			@Context HttpServletRequest request, String sEvent) {
-
+			
 			Validator validator = ESAPI.validator();
 			ValidationErrorList errorList = new ValidationErrorList();
 			String validatedPackageID =null;

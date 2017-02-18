@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 
 import javax.naming.NamingException;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.junit.Test;
 
@@ -13,6 +14,8 @@ import gov.gsa.dss.helper.staic.EmailMessages;
 import static org.junit.Assert.*;
 
 public class MailTest {
+	final static Logger log =Logger.getLogger(MailTest.class);
+
 	@Test
 	public void testMailModule() {
 		String testSuccess = "";
@@ -24,13 +27,13 @@ public class MailTest {
 			testSuccess = "success";
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.error(e);
 			testSuccess = "failed";
 		} catch (NamingException e) {
-			e.printStackTrace();
+			log.error(e);
 			testSuccess = "failed";
 		} catch (JSONException e) {
-			e.printStackTrace();
+			log.error(e);
 			testSuccess = "failed";
 		}
 		assertEquals("Testsuccess = success", "success", testSuccess);

@@ -77,6 +77,16 @@
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.10</version>
 		</dependency>
+		<dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcprov-jdk15on</artifactId>
+        <version>1.47</version>
+    </dependency>
+    <dependency>
+        <groupId>org.bouncycastle</groupId>
+        <artifactId>bcmail-jdk15on</artifactId>
+        <version>1.47</version>
+    </dependency>
 		<!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
 		<dependency>
 			<groupId>org.yaml</groupId>
@@ -137,6 +147,7 @@
 		</dependency>
 		
 	</dependencies>
+
 	<profiles>
 	<profile>
 	<id>test</id>
@@ -185,4 +196,5 @@
    </profile>
 	
 	</profiles>
+
 </project>
