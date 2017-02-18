@@ -51,10 +51,10 @@ public class CreatePackage {
 		catch (Exception e) {
 			log.error(e);
 			ExceptionHandlerService ehs = new ExceptionHandlerService();
-			String msg = ehs.parseException(e)+"";
+			String msg = ehs.parseException(e).toString();
 			int code = Integer.parseInt( msg.split(",")[0].split("=")[1]);
 			return Response.status(code).type("text/plain")
-					.entity(ehs.parseException(e)+"").build();
+					.entity(ehs.parseException(e)).build();
 		}
 	}
 

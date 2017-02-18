@@ -34,10 +34,13 @@ public class SignerInfo {
 		List <Map<String, String>> Signers = new ArrayList <Map<String, String>>();
 		for (Audit aud: client.getAuditService().getAudit(packageId))
 		{
+			log.info(aud.getType());
+			log.info(aud.getEmail());
 			Map <String, String> SignerDetails = new HashMap<String, String>();
-			if (aud.getType().equals("Click To Sign"))
+			if (aud.getType().equals("Click To Sign")||aud.getType().equals("Click To Initial")||aud.getType().equals("Capture Signature")||aud.getType().equals("Mobile Signature"))
 			{
 				log.info(aud.getType());
+				SignerDetails.put("type",aud.getType());
 				SignerDetails.put("email",aud.getEmail());
 				SignerDetails.put("name",aud.getUser());
 				SignerDetails.put("date",aud.getDateTime());
